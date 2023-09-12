@@ -6,6 +6,7 @@
 This desktop is designed in electron structure. The main display and process logic is based on Vite. The function of this desktop software is to show the current and temprature of the controller boards. In order to communicate with the micro controller unit, use Python based websocket and pyserial to achieve data transfer and processing.
 ```
 ![软件设计的设计基本结构](img/image.png)
+
 # Result
 
 ![软件的主页面的显示展示](img/mainpage.png)
@@ -17,7 +18,8 @@ This desktop is designed in electron structure. The main display and process log
 🖥 Sider: 边栏，现在也没用，可以用于切换不同的页面，利用SVG图标来实现跳转  
 🖥 Left: Just for fun  
 🖥 Right: 这部分为显示的核心，用于显示温度和电流的实时数值，同时提供控制输出框这部分也可以用于检测温度和电流的长期变化，方便检验长期波动
- 
+
+ ![Show](showtime.gif)
 
 # Feature
 📦 Out of the box  
@@ -34,7 +36,6 @@ npm run dev
 ```
 
 
-
 # Directory
 
 ```diff
@@ -45,19 +46,14 @@ npm run dev
 + │   └── index.ts    entry of Preload-Scripts
   ├─┬ src
   │ ├── main.ts       entry of Electron-Renderer
-  │ ├── assets
-  │ ├── components
-  │ ├── section
-  │ ├── assets
+  │ ├── assets        source file
+  │ ├── components    components
+  │ └── section       section part 
   ├── index.html
   ├── package.json
   └── vite.config.ts
 ```
 
-
-# Debug
-
-![electron-vite-react-debug.gif](https://github.com/electron-vite/electron-vite-react/blob/main/electron-vite-react-debug.gif?raw=true)
 # FAQ
 
 - [C/C++ addons, Node.js modules - Pre-Bundling](https://github.com/electron-vite/vite-plugin-electron-renderer#dependency-pre-bundling)

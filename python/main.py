@@ -56,9 +56,9 @@ async def input_thread():
         send_data = {
             'type':2,
             'data':{
-                'name':'LASER_TWO',
-                'current': 100.23+int(user_input),
-                'temprature':23.3+int(user_input),
+                'name':'LASER_ONE',
+                'current': round(100.23+int(user_input), 2),
+                'temprature':round(0.23+int(user_input), 2),
             }
         }
         await server.send_msg(json.dumps(send_data))
