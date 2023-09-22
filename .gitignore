@@ -13,6 +13,8 @@ dist-ssr
 dist-electron
 release
 *.local
+# Python files
+python
 
 # Editor directories and files
 .vscode/.debug.env

@@ -2,7 +2,7 @@
 <template>
     <div class="app-container">
       <TitleBar></TitleBar>
-    <HeaderSection />
+      <HeaderSection />
         <div class="app-content">
             <SiderSection />
             <LeftSection />

@@ -2,7 +2,7 @@
 	<div class="clock">
 		<p class="date">{{ date }}</p>
 		<p class="time">{{ time }}</p>
-		<p class="text">A digital clock created by WenXiang</p>
+		<!-- <p class="text">A digital clock created by WenXiang</p> -->
 	</div>
 </template>
 
@@ -45,57 +45,72 @@ export default {
 	align-items: center;
 	justify-content: center;
 	//background-color: rgb(15,56,84);
-	background-color: rgb(15,56,84,0.1);
+	background-color: rgba(20, 45, 62, 0.1);
 	background-color: rgba(16 18 27 / 10%);
 	width: 100%;
+	height: 40%;
 	overflow: auto;
-	padding: 10px 10px;
+
 	//color: #daf6ff;
 	color: #ffffff;
 	font-family: 'Share Tech Mono', monospace;
+	border-radius: 5px;
+
 	//text-shadow: 0 0 20px rgba(10, 175, 230, 1),  0 0 20px rgba(10, 175, 230, 0);
-	text-shadow: 0 0 20px rgb(78, 179, 213),  0 0 20px rgba(10, 175, 230, 0);
+	text-shadow: 0 0 20px rgb(78, 179, 213),  0 0 20px rgba(27, 30, 30, 0);
 	p{
 		margin: 0;
 	}
 
 
+
+}
 	/* 大页面样式 */
-	@media (min-width: 768px) {
+	@media (min-width: 1501px) {
+		.clock {
+			padding: 30px 10px;	
+		}
+		.time {
+		letter-spacing: 0.05em;
+		font-size: 60px;
+		padding: 5px 0;
+		font-weight: bold;
+		}
+		.date {
+		letter-spacing: 0.1em;
+		font-size: 45px;
+		font-weight: bold;
+		font-style: italic;
+		}
+		.text {
+		letter-spacing: 0.1em;
+		font-size: 45px;
+		padding: 20px 0 0;
+		font-weight: bold;
+		}
+		}
+	@media (max-width: 1500px) {
 		.clock {
 			padding: 40px 10px;	
 		}
 		.time {
 		letter-spacing: 0.05em;
 		font-size: 60px;
-		padding: 10px 0;
+		padding: 2px 0;
+		font-weight: bold;
+		
 		}
 		.date {
 		letter-spacing: 0.1em;
-		font-size: 30px;
+		font-size: 35px;
+		font-style: italic;
+
 		}
 		.text {
 		letter-spacing: 0.1em;
-		font-size: 20px;
+		font-size: 30px;
 		padding: 20px 0 0;
 		}
-	}
-	@media (max-width: 767px) {
-	.time {
-	letter-spacing: 0.05em;
-	font-size: 20px;
-	padding: 2px 0;
-	}
-	.date {
-	letter-spacing: 0.1em;
-	font-size: 24px;
-	}
-	.text {
-	letter-spacing: 0.1em;
-	font-size: 12px;
-	padding: 20px 0 0;
-	}
-	}
-}
+		}
 
 </style>

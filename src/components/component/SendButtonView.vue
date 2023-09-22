@@ -1,40 +1,48 @@
 <template>
 
     <div class="button-container">
-      <button class="button  btn-6" :id="`${childname}-button-send`" >
-        <i class="icon-send material-icons" :id="`${childname}-button-send-icon`" >send</i>
+      <button class="button  btn-6" :id="`${childname}-${property}-button-send`" :disabled="isDisabled">
+        <i class="icon-send material-icons" :id="`${childname}-${property}-button-send-icon`" >send</i>
         <!-- <i class="icon-check material-icons">check</i> -->
-        <span class="button-text" :id="`${childname}-button-send-text`">SEND</span>
+        <span class="button-text" :id="`${childname}-${property}-button-send-text`">SEND</span>
       </button>
     </div>
     </template>
     
     
     <script lang='ts' setup>
-        import { onMounted } from 'vue';
+        import { onMounted,watch,ref } from 'vue';
         import { useTemCurSetStore } from "@/store/TenCurSet";
         import { websocket_send } from "@/utils/WebsocketFunc";
         import { TempratureCurrent_Set, SendMessageType } from "@/utils/config";
 
 
-        const store = useTemCurSetStore();       // store
-            const props = defineProps({
-              childname: { type: String, default: true },
-            });
-
+        const store = useTemCurSetStore();       // store    props.property
+        const props = defineProps({
+          childname: { type: String, default: true },
+          property:  {type:String, default:'current'},
+        });
+        let isDisabled = ref(true); // 是否失能按钮部分
         onMounted(()=>{
-          const sendbutton_name = props.childname + '-button-send';
+          const sendbutton_name = props.childname + '-' + props.property+ '-button-send';
             const sendButton = document.getElementById(sendbutton_name);
+            if(sendButton === null){
+              return;
+            }
             sendButton.addEventListener('click', handleClick);
             function handleClick() {
+              window.console.log('hand click');
+              // if(isDisabled == true){
+              //   return;
+              // }
               // 发送温度和电流的数据
               send_temprature_current_data();           
               window.console.log('handclick from '+props.childname);
               // send-button-text
-            const sendbutton_text_name = props.childname + '-button-send-text';
+            const sendbutton_text_name = props.childname + '-' + props.property+ '-button-send-text';
             const buttonText = document.getElementById(sendbutton_text_name);
               // send button icon
-            const sendbutton_icon_name = props.childname + '-button-send-icon';
+            const sendbutton_icon_name = props.childname + '-' + props.property+ '-button-send-icon';
             const sendIcon = document.getElementById(sendbutton_icon_name);
 
             setTimeout(() => {
@@ -47,10 +55,10 @@
     
             function showSentText() {
                 // send-button-text
-                const sendbutton_text_name = props.childname + '-button-send-text';
+                const sendbutton_text_name = props.childname + '-' + props.property+ '-button-send-text';
                 const buttonText = document.getElementById(sendbutton_text_name);
               // send button icon
-                const sendbutton_icon_name = props.childname + '-button-send-icon';
+                const sendbutton_icon_name = props.childname + '-' + props.property+ '-button-send-icon';
                 const sendIcon = document.getElementById(sendbutton_icon_name);
                 buttonText.style.transform = ``;
                 sendIcon.style.transform = ``;
@@ -59,15 +67,28 @@
 
         // 发送 温度和电流数据出去
       const send_temprature_current_data = () => {
-        const this_current = store.getTemCurValue(props.childname, 'current');
-        const this_temprature = store.getTemCurValue(props.childname, 'temprature');
-        const send_data_obj:TempratureCurrent_Set = {
-          name:props.childname,
-          set_current:this_current, 
-          set_temprature:this_temprature
+        let this_data= undefined; // 电流数据
+        let this_lable = undefined;  // 数据传输的标识
+        if(props.property === 'temprature'){
+          this_data = store.getTemCurValue(props.childname, 'temprature');
+      
+            this_lable = SendMessageType.Temperature;
+  
         }
-        websocket_send(SendMessageType.Order,send_data_obj); // websocket 发送数据接口
+        else if(props.property === 'current'){
+          this_data = store.getTemCurValue(props.childname, 'current');
+            
+            this_lable = SendMessageType.Current;
+          
+        } 
+        websocket_send(this_lable, this_data);
       }
+      // 监听是否使能远程调节
+      watch(() => store.getTempratureCurrentUsing(props.childname,props.property),
+        (newVal) => {
+          isDisabled.value = !newVal;
+          }
+      );
     </script>
     
     

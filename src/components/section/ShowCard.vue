@@ -16,7 +16,7 @@
         </div>
       </div>
       <template v-if="swichLineOff">
-        <ShowFoldLine  :childname="CardLabel" />
+        <ShowFoldLine  :childname="CardLabel" property="temprature"/>
       </template>
          
       <div class="project-box-content-header" v-if="!swichLineOff">
@@ -35,24 +35,45 @@
         <p class="box-progress-header">Control Section</p>
         <div class="control-pannel">
           <div class="temprature-control"> 
-            <div class="icon-control">
-               <InputView :childname="CardLabel" property="temprature"/>
+            <div class="control-pannel-header"> 
+              <div class="control-pannel-name"> Temprature</div>
+              <div class="conrol-pannel-label"> 
+              
+                  <SwitchButtons :childname="CardLabel" property="temprature"/>
+              
+              
+              </div>
             </div>
-            <div> temprature</div>
+            <div class="icon-control">
+              <div class="input-control">
+                <InputView :childname="CardLabel" property="temprature"/>
+              </div>
+               
+            </div>
+            
+            <div class="click_circle">
+              <SendButtonView  :childname="CardLabel" property="temprature"/> 
+            </div>
           </div>
           <div class="current-control"> 
+            <div class="control-pannel-header"> 
+              <div class="control-pannel-name"> Current</div>
+            <div class="conrol-pannel-label"> 
+              <SwitchButtons :childname="CardLabel" property="current"/>
+              </div>
+            </div>
             <div class="icon-control">
               <InputView :childname="CardLabel" property="current"/>
             </div>
-            <div> current</div>
-          
+            
+            <div class="click_circle">
+              <SendButtonView  :childname="CardLabel" property="current"/>
+            </div>
           </div>  
 
         </div>
-        <div class="click_circle">
-          <SendButtonView  :childname="CardLabel"/>
-        </div>
 
+        <!-- `${CardLabel}_tempratue` -->
         
         <!-- <div class="box-progress-bar">
           <span class="box-progress" style="width: 70%; background-color: #ff942e"></span>
@@ -79,6 +100,7 @@
   import ButtonGroupView from  '@/components/component/buttongroupview.vue'
   import SendButtonView from  '@/components/component/SendButtonView.vue'
   import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
+  import SwitchButtons from  '@/components/component/switchinput.vue'
   import { ref,onMounted } from 'vue'
   const this_tempratue = ref([])
   const this_current = ref([]) 
@@ -116,11 +138,19 @@ button, a {
   cursor: pointer;
 }
 
-
+.project-box-wrapper {
+  height: 100%;
+  height: 100%;
+}
+.project-box{
+  height: 100%;
+  height: 100%;
+}
 
 .project-boxes.jsGridView .project-box-wrapper {
-  width: 45%;
+  width: 90%;
   min-width: 440px;
+  height: 100%;
 }
 .project-boxes.jsListView .project-box {
   display: flex;
@@ -245,7 +275,7 @@ button, a {
   margin: 8px 0;
 }
 .box-progress-header {
-  font-size: 20px;
+  font-size: 32px;
   font-family: cursive;
   font-weight: 700;
   line-height: 16px;
@@ -551,6 +581,7 @@ $greyDark: #9baacf;
   display: flex;
   flex-direction: row;
   position: relative;
+  height: 200px;
   justify-content: space-around;
   .temprature-show {
     float: left;
@@ -561,24 +592,62 @@ $greyDark: #9baacf;
   }
 }
   .control-pannel{
-    margin-top: 10px;
+    margin-top: 15px;
     text-align: center;
     display: flex;
     flex-direction: row;
     position: relative;
     justify-content: space-around;
+    .control-pannel-header{
+      text-align: center;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+      justify-content: space-between;
+      background-color: rgb(243, 206, 213);
+      border: 1px dashed rgb(252, 178, 109);
+      border-radius: 3px;
+    .control-pannel-name{
+      font-size: 30px;
+      font-family:cursive;
+      color: rgb(245, 106, 175);
+      font-style: italic;
+      float: left;
+      margin-left: 5px;
+    }
+      .conrol-pannel-label{
+        float: right;
+        display: flex;
+        align-items: center;
+      }
+    }
+
     .temprature-control{
       float: left;
+      width: 45%;
+      background-color:rgb(254, 228, 210);
+      border: 1px solid rgb(233, 240, 181);
+      border-radius: 3px;
     }
     .current-control{
       float: right;
+      width: 45%;
+      background-color:rgb(254, 228, 210);
+      border: 1px solid rgb(233, 240, 181);
+      border-radius: 3px;
+    }
+    .icon-control{
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        text-align: center;
     }
   }
   .click_circle {
     height: 40px;
     display: flex;
     flex-direction: row;
-    margin: 0 auto;
+    margin: 10px auto;
     justify-content: space-around;
   }
 

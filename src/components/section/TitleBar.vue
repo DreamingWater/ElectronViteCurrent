@@ -8,7 +8,7 @@
       />
     </div>
     <!-- 菜单栏位置 -->
-    <div>CurrentController</div>
+    <div></div>
     <!-- 中间标题位置 -->
     <div style="-webkit-app-region: drag" class="title"></div>
     <div class="controls-container">

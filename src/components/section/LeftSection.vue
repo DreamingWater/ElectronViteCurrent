@@ -4,10 +4,10 @@
             <DigitalClock />
         </div>
        <div class="left-section-middle">
-            <p>Read more, Try more, Receive more.</p>
+            <p class="left-section-text">今天也要加油鸭</p>
        </div>
        <div class="left-section-bottom">
-        <img src="@/assets/animation/ponggo-cat.gif" class="ponggo-gif" />
+        <img src="@/assets/imgs/hurryup.png" class="ponggo-gif" />
        </div>
     </div>
 
@@ -32,6 +32,7 @@
   transition: all 300ms cubic-bezier(0.19, 1, 0.56, 1);
 }
 .left-section-top{
+    // height: 40%;
     margin-top: 20px;
     // margin-left: 10px;
 }
@@ -39,19 +40,45 @@
     display: flex;
     height: auto;
     p{
-        color: red;
-        font-size: large;
+        color: rgb(211, 178, 178);
+      
         font-style: italic;
+        font-family:cursive;
+        font-weight: bold;
+   
         align-items: center;
         margin: 5px auto;
     }
 }
 .left-section-bottom {
     bottom: 0px;
-    width: 100%;
+    margin-bottom: 0px;
+    // width: 100%;
     .ponggo-gif{
+        margin: 5px auto;
         border-radius: 8px 8px;
         width: 100%;
+       
     }
 }
+
+/* 大页面样式 */
+@media (min-width: 1501px) {
+.left-section-text{
+    font-size: 30px;
+}
+.ponggo-gif{
+    max-height: 270px;
+}
+}
+
+@media (max-width: 1500px) {
+    .left-section-text{
+        font-size: 25px;
+    }
+    .ponggo-gif{
+    max-height: 220px;
+}
+}
+
 </style>

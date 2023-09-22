@@ -1,13 +1,14 @@
 //config
-import { Laser_One, Laser_Two, SendMessageType, ReceiveMessageType } from "./config";
+import { SendMessageType, ReceiveMessageType } from "./config";
 import { useTemCurStore } from "@/store/TenCurData";
+import { useSerialStore } from "@/store/Serial";
 
 let websocket_obj:any; 
 
 
 
 export const websockt_start = () =>{            // 启动websocket连接
-    websocket_obj = new WebSocket('ws://localhost:9007');
+    websocket_obj = new WebSocket('ws://127.0.0.1:9007');
 
     websocket_obj.onopen = function () {
         console.log('WebSocket connected');
@@ -32,15 +33,22 @@ const websocketdata_hander = (message:string) =>{
         return;
     }
     switch (data.type) {
-        case ReceiveMessageType.SerialResult:
-            deal_serialresult(data.data);
-            break;
         case ReceiveMessageType.SerialValid:
             deal_serialvalid(data.data);
             break;
-        case ReceiveMessageType.ShowData:
-            deal_showdata(data.data);
+        case ReceiveMessageType.SerialResult:
+            deal_serialresult(data.data);
             break;
+        case ReceiveMessageType.Temperature:
+            deal_template_data(data.data);
+            break;
+        case ReceiveMessageType.Current:
+            deal_current_data(data.data);
+            break;
+        case ReceiveMessageType.TemperatureCurrent:
+            deal_temperature_current_data(data.data)
+            break;
+
         default:
             // 未知的消息类型
             break;
@@ -49,27 +57,50 @@ const websocketdata_hander = (message:string) =>{
 
 
 // 将数据发送到python端
-export const websocket_send = (send_type:SendMessageType, send_data_obj:object) => {
-    const send_data = JSON.stringify({'type': send_type, 'data': send_data_obj});
+export const websocket_send = (send_type:number, data:string) => {
+    const send_data = JSON.stringify({'type': send_type, 'data': data});
     websocket_obj.send(send_data);
 }
 
 
 
-// deal data
+// ###########################################                数据处理部分                 ############################################
+
 // 串口连接的申请结果
-const deal_serialresult = (data:object) =>{
-    window.console.log('deal_serialresult');
-    window.console.log(data);
+const deal_serialresult = (receive_data:object) =>{
+    window.console.log('the result of serial connect');
+    window.console.log(receive_data.data);
+    const serial_storeTemplate = useSerialStore();
+    serial_storeTemplate.SetSerialState(receive_data.data === 'true' ? true : false);  
 }
-// 可用的串口数据
-const deal_serialvalid = (data:object) =>{
-    window.console.log('deal_serialvalid');
-    window.console.log(data);
+
+// 搜索可用的串口数据
+const deal_serialvalid = (receive_data:object) =>{
+    window.console.log('find valid ports for serial');
+    window.console.log(receive_data.data);
+    const serial_storeTemplate = useSerialStore();
+    serial_storeTemplate.UpdateValidSerialPorts(receive_data.data);
+
 }
-// 串口收到的数据
-const deal_showdata = (data:object)=>{
-	const storeTemplate = useTemCurStore();
-    storeTemplate.SetTempratureValue(data.name, data.current,data.temprature);
+// 串口收到温度的数据
+const deal_template_data = (receive_data:object)=>{
+	const data_storeTemplate = useTemCurStore();
+    data_storeTemplate.SetTempratureCurrentValue(receive_data.name, receive_data.data, undefined);
+}
+
+// 串口收到电流的数据
+const deal_current_data = (receive_data:object)=>{
+	const data_storeTemplate = useTemCurStore();
+    data_storeTemplate.SetTempratureCurrentValue(receive_data.name, undefined, receive_data.data);
+}
+// 串口收到温度和电流数据 同时
+const deal_temperature_current_data = (receive_data:object)=>{
+	const data_storeTemplate = useTemCurStore();
+    let temperature_current_data = receive_data.data;
+    temperature_current_data = temperature_current_data.split(',') 
+    // 温度
+    data_storeTemplate.SetTempratureCurrentValue(receive_data.name,parseFloat( temperature_current_data[0]), undefined);
+    // 电流
+    data_storeTemplate.SetTempratureCurrentValue(receive_data.name,undefined, parseFloat(temperature_current_data[1]));
 }
 

@@ -46,6 +46,8 @@ const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml =  join(__dirname, '../../electron/loader.html')      // 启动动画
 async function createWindow() {
   win = new BrowserWindow({
+    width:1150,
+    height:750,
     frame: false, // 隐藏标题栏和窗口控制按钮
     // title: 'Main window',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
@@ -64,7 +66,7 @@ async function createWindow() {
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   } else {
     // win.loadURL(url)
     win.loadFile(indexHtml)
@@ -106,10 +108,10 @@ async function  loadingWindow() {
   startWin.loadURL(indexHtml);
   startWin.show();
   startWin.setAlwaysOnTop(true);
-  // 延迟两秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
+  // 延迟1秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
   setTimeout(() => {
     createWindow();
-  }, 1500);
+  }, 1000);
 }
 app.whenReady().then(loadingWindow)
 
