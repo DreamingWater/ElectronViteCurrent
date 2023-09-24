@@ -11,6 +11,7 @@
     
     
     <script lang='ts' setup>
+    // @ts-nocheck
         import { onMounted,watch,ref } from 'vue';
         import { useTemCurSetStore } from "@/store/TenCurSet";
         import { websocket_send } from "@/utils/WebsocketFunc";

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { TempratureCurrent_Cache } from '@/utils/config';
 

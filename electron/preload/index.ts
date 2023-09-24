@@ -20,4 +20,6 @@ contextBridge.exposeInMainWorld('RenderApi', {
   closeWindow,
   minWindow,
   maxWindow,
+  handleCounter:(callback) => ipcRenderer.on('shutdown_background', callback)     // 监听main进程传来的信号
 })
+

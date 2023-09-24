@@ -19,6 +19,7 @@
 
 
 <script lang="ts" setup>
+// @ts-nocheck
     import { ref,onMounted,watch } from 'vue'
     import { useTemCurSetStore } from "@/store/TenCurSet";
 

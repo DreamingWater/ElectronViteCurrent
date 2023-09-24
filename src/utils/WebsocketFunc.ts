@@ -1,27 +1,38 @@
-//config
+// @ts-nocheck
+
 import { SendMessageType, ReceiveMessageType } from "./config";
 import { useTemCurStore } from "@/store/TenCurData";
 import { useSerialStore } from "@/store/Serial";
 
 let websocket_obj:any; 
-
-
-
+let websocket_connection_state:boolean = false; // Websocket连接状态
+let heartPingTimer:any; // 用于存储定时器引用
+let heart_connection_times:number = 0 // websocket 错误连接的次数
+let Max_Heart_Connection_Times:number = 5 
 export const websockt_start = () =>{            // 启动websocket连接
-    websocket_obj = new WebSocket('ws://127.0.0.1:9007');
+    if(websocket_connection_state == false){
+        heart_connection_times = 0; // 重置，不然如果前面断开后，后面无法连接，必须刷新页面
+        websocket_obj = new WebSocket('ws://127.0.0.1:9007');
 
-    websocket_obj.onopen = function () {
-        console.log('WebSocket connected');
-    };
-
-    websocket_obj.onmessage = function (e) {
-        // 处理返回的对象
-        websocketdata_hander(e.data);
-    };
-    websocket_obj.onclose = function (e) {
-        console.error('WebSocket closed');
-    };
+        websocket_obj.onopen = function () {
+            console.log('WebSocket connected');
+            websocket_connection_state = true;
+            send_heart_ping(); //发送心跳包
+        };
+    
+        websocket_obj.onmessage = function (e) {
+            // 处理返回的对象
+            websocketdata_hander(e.data);
+        };
+        websocket_obj.onclose = function (e) {
+            stop_heart_ping() // 停止心跳包
+            console.error('WebSocket closed');
+            websocket_connection_state = false; 
+        };
+    }
 }
+
+
 
 // 处理收到来自python的数据
 const websocketdata_hander = (message:string) =>{
@@ -46,9 +57,11 @@ const websocketdata_hander = (message:string) =>{
             deal_current_data(data.data);
             break;
         case ReceiveMessageType.TemperatureCurrent:
-            deal_temperature_current_data(data.data)
+            deal_temperature_current_data(data.data);
             break;
-
+        case ReceiveMessageType.HeartPong:
+            deal_heart_answer();
+            break;
         default:
             // 未知的消息类型
             break;
@@ -59,7 +72,11 @@ const websocketdata_hander = (message:string) =>{
 // 将数据发送到python端
 export const websocket_send = (send_type:number, data:string) => {
     const send_data = JSON.stringify({'type': send_type, 'data': data});
-    websocket_obj.send(send_data);
+    try {
+        websocket_obj.send(send_data);
+      } catch (error) {
+        console.log('WebSocket send error: ', error);
+      }
 }
 
 
@@ -104,3 +121,28 @@ const deal_temperature_current_data = (receive_data:object)=>{
     data_storeTemplate.SetTempratureCurrentValue(receive_data.name,undefined, parseFloat(temperature_current_data[1]));
 }
 
+
+
+
+//////////////////////////////////      心跳               //////////////////
+const send_heart_ping = () => {
+    heartPingTimer = setInterval(() => {
+        console.log('heartPingTimer');
+        websocket_send(SendMessageType.HeartPing, ''); // 发送心跳包
+        heart_connection_times += 1;       // 一次心跳 记录一次连接
+        if(heart_connection_times>Max_Heart_Connection_Times){
+            websocket_obj.close()
+            clearTimeout(heartPingTimer);
+        }
+    }, 10000); // 10秒 一个心跳包
+   
+};
+
+// 在外部调用该函数来停止定时器
+const stop_heart_ping = () => {
+    clearTimeout(heartPingTimer);
+};
+
+const deal_heart_answer = () =>{
+    heart_connection_times = 0
+}

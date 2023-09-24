@@ -22,6 +22,7 @@
   <Back />
 </template>  -->
 <script setup lang="ts">
+// @ts-nocheck
     // import Back from "@/components/section/back.vue"
     // import Back from "@/components/section/testbutton.vue"
     import Back from "@/components/animation/ShowFoldLine.vue"

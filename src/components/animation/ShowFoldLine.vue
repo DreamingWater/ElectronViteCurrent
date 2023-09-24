@@ -3,7 +3,7 @@
 </template>
  
 <script lang="ts" setup>
-
+// @ts-nocheck
  import * as echarts from 'echarts';
  import { onMounted,ref, watch,watchEffect, toRefs } from 'vue';
  import { useTemCurStore } from "@/store/TenCurData";

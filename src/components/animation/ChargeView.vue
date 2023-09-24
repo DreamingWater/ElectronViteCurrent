@@ -153,7 +153,7 @@
         transform: translate(-50%, -50%);
         width: $width;
         height: $width;
-        animation: moveToTop #{random(6) + 3}s ease-in-out -#{random(5000)/1000}s infinite;
+        animation:animateMoveToTop;;
       }
     }
 
@@ -182,5 +182,12 @@
       100% {
         filter: contrast(15) hue-rotate(360deg);
       }
+    }
+
+    @mixin animateMoveToTop {
+      $randomDuration: random(6) + 3;
+      $randomDelay: random(5000) / 1000;
+
+      animation: moveToTop #{$randomDuration}s ease-in-out -#{$randomDelay}s infinite;
     }
 </style>

@@ -13,6 +13,8 @@ export const SendMessageType = {
     RealtimeControl:5,
     TemperatureChannel: 6,
     CurrentChannel: 7,
+    HeartPing:8,
+    ShutDownPython:9
 };
 export enum ReceiveMessageType {
     SerialValid = 0,
@@ -20,6 +22,7 @@ export enum ReceiveMessageType {
     Temperature= 2,
     Current= 3,
     TemperatureCurrent=4,
+    HeartPong=5,
 }
 
 

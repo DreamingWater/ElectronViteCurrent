@@ -35,7 +35,11 @@
 </template>
 
 <script setup lang="ts">
+// @ts-nocheck
 import { ref } from "vue";
+import { websocket_send } from '@/utils/WebsocketFunc'
+import { SendMessageType } from '@/utils/config'
+
 const IsUseSysTitle = ref(false);
 const mix = ref(false);
 
@@ -50,6 +54,16 @@ const MixOrReduction = () => {
 const Close = () => {
   window.RenderApi.closeWindow();
 };
+
+
+
+window.RenderApi.handleCounter(
+    (event, value) => {
+      console.log('receive shutdown signal');
+      websocket_send(SendMessageType.ShutDownPython,'');
+    }
+)
+
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

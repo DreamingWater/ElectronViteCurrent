@@ -12,9 +12,11 @@
 </template>
   
 <script lang="ts" setup>
+// @ts-nocheck
     import { useSerialStore } from "@/store/Serial";
     import UnConnectedImg from "@/assets/imgs/unconnected.png";
     import { ref, onMounted, watch,computed } from 'vue';
+    import { websockt_start } from "../../utils/WebsocketFunc";
 
     const store = useSerialStore(); // store
 
@@ -46,8 +48,8 @@
 
 
 
-    function refreshIcon(): void {
-        
+    function refreshIcon(): void {   // 点击刷新
+        websockt_start();      // 连接串口
         store.SearchValidSerialPorts();
         // 旋转90°
         rotationAngle.value += 90; // 点击时增加180度

@@ -32,6 +32,7 @@
 </template>
   
 <script lang="ts" setup>
+// @ts-nocheck
     import { useSerialStore } from "@/store/Serial";
     import ConnectedImg from "../assets/imgs/connected.png";
     import UnConnectedImg from "../assets/imgs/unconnected.png";
@@ -113,7 +114,7 @@
 </script>
 <style lang="scss" scoped>
 .serial_box {
-    width: 80%;
+    width: 85%;
     height: auto;
     /*border: 1px solid #000000;*/
     margin: 15% auto 0;
@@ -150,7 +151,7 @@
         select {
             margin-left: 20px;
             border: 0;
-            width: 180px;
+            width: 150px;
             font-size: 18px;
             border-bottom: 2px solid #443a3a;
             padding: 5px 10px;
@@ -161,10 +162,10 @@
 
     }
     .right-img{
-        width: 40%;
+        max-width: 150px;
         height: auto;
-        margin-right: 30px;
-        margin-left: 30px;
+        margin-right: 10px;
+        margin-left: 10px;
     }
     button {
         margin-top: 15px;
