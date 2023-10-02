@@ -77,6 +77,7 @@ window.RenderApi.handleCounter(
   // position: fixed;
   align-items: center;
   top: 0;
+  background-color: #f5f5ec;
   // z-index: 99999;
   .icon-logo {
     // margin-left: 0 !important;

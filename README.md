@@ -2,16 +2,26 @@
 
 🥳 Really simple `Electron` + `Vue` + `Vite` boilerplate.
 
-<!-- [![awesome-vite](https://awesome.re/mentioned-badge.svg)](https://github.com/vitejs/awesome-vite) -->
-<!-- [![Netlify Status](https://api.netlify.com/api/v1/badges/ae3863e3-1aec-4eb1-8f9f-1890af56929d/deploy-status)](https://app.netlify.com/sites/electron-vite/deploys) -->
-<!-- [![GitHub license](https://img.shields.io/github/license/caoxiemeihao/electron-vite-vue)](https://github.com/electron-vite/electron-vite-vue/blob/main/LICENSE) -->
-<!-- [![GitHub stars](https://img.shields.io/github/stars/caoxiemeihao/electron-vite-vue?color=fa6470)](https://github.com/electron-vite/electron-vite-vue) -->
-<!-- [![GitHub forks](https://img.shields.io/github/forks/caoxiemeihao/electron-vite-vue)](https://github.com/electron-vite/electron-vite-vue) -->
-[![GitHub Build](https://github.com/electron-vite/electron-vite-vue/actions/workflows/build.yml/badge.svg)](https://github.com/electron-vite/electron-vite-vue/actions/workflows/build.yml)
-[![GitHub Discord](https://img.shields.io/badge/chat-discord-blue?logo=discord)](https://discord.gg/sRqjYpEAUK)
+```
+This desktop is designed in electron structure. The main display and process logic is based on Vite. The function of this desktop software is to show the current and temprature of the controller boards. In order to communicate with the micro controller unit, use Python based websocket and pyserial to achieve data transfer and processing.
+```
+![软件设计的设计基本结构](img/image.png)
 
-## Features
+# Result
 
+![软件的主页面的显示展示](img/mainpage.png)
+显示部分的区域分块为如下框图所示：
+![软件显示区域分布](img/sectionshow.png)
+
+🖥 TitleBar: 显示菜单栏，同时显示软件的LOGO和名称  
+🖥 Header: 显示标题栏，现在瞎显示的，后面根据需要修改  
+🖥 Sider: 边栏，现在也没用，可以用于切换不同的页面，利用SVG图标来实现跳转  
+🖥 Left: Just for fun  
+🖥 Right: 这部分为显示的核心，用于显示温度和电流的实时数值，同时提供控制输出框这部分也可以用于检测温度和电流的长期变化，方便检验长期波动
+
+ ![Show](img//showtime.gif)
+
+# Feature
 📦 Out of the box  
 🎯 Based on the official [template-vue-ts](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-vue-ts), less invasive  
 🌱 Extensible, really simple directory structure  
@@ -19,61 +29,34 @@
 🔩 Support C/C++ native addons  
 🖥 It's easy to implement multiple windows  
 
-## Quick Setup
+# Quick Start
 
 ```sh
-# clone the project
-git clone https://github.com/electron-vite/electron-vite-vue.git
-
-# enter the project directory
-cd electron-vite-vue
-
-# install dependency
 npm install
-
-# develop
 npm run dev
 ```
 
-## Debug
 
-![electron-vite-react-debug.gif](https://github.com/electron-vite/electron-vite-react/blob/main/electron-vite-react-debug.gif?raw=true)
-
-## Directory
+# Directory
 
 ```diff
+  ├─┬ python         Python后台，这里不提供，但是public有Python的exe执行文件
 + ├─┬ electron
 + │ ├─┬ main
 + │ │ └── index.ts    entry of Electron-Main
 + │ └─┬ preload
 + │   └── index.ts    entry of Preload-Scripts
   ├─┬ src
-  │ └── main.ts       entry of Electron-Renderer
+  │ ├── main.ts       entry of Electron-Renderer
+  │ ├── assets        source file
+  │ ├── components    components
+  │ └── section       section part 
   ├── index.html
   ├── package.json
   └── vite.config.ts
 ```
 
-<!--
-## Be aware
-
-🚨 By default, this template integrates Node.js in the Renderer process. If you don't need it, you just remove the option below. [Because it will modify the default config of Vite](https://github.com/electron-vite/vite-plugin-electron-renderer#config-presets-opinionated).
-
-```diff
-# vite.config.ts
-
-export default {
-  plugins: [
--   // Use Node.js API in the Renderer-process
--   renderer({
--     nodeIntegration: true,
--   }),
-  ],
-}
-```
--->
-
-## FAQ
+# FAQ
 
 - [C/C++ addons, Node.js modules - Pre-Bundling](https://github.com/electron-vite/vite-plugin-electron-renderer#dependency-pre-bundling)
 - [dependencies vs devDependencies](https://github.com/electron-vite/vite-plugin-electron-renderer#dependencies-vs-devdependencies)
