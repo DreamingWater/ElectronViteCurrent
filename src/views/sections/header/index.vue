@@ -64,7 +64,8 @@
             if( store.Serial_State.isOpen)
             {
                 window.console.log('在0.1秒后执行的任务');
-                websocket_send(SendMessageType.DataUpload, '');
+                websocket_send(SendMessageType.Amplifier_OPEN_STATUS, 0);
+                // websocket_send(SendMessageType.DataUpload, ''); // 启动数据上传，用于 我的电流源
             }
           }, 100);
           }

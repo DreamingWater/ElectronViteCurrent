@@ -2,8 +2,10 @@
     <!-- <div class="mycomponents"> -->
       <div class="circle">
       <span class="circle__btn">
-        <ion-icon class="pause" name="pause">P</ion-icon>
-        <ion-icon class="play" name="play">S</ion-icon>
+        <ion-icon class="pause" name="pause">
+            <div class="circle-content">Start</div>
+        </ion-icon>
+        <ion-icon class="play" name="play"><div class="circle-content">Pause</div></ion-icon>
       </span>
       <span class="circle__back-1"></span>
       <span class="circle__back-2"></span>
@@ -11,13 +13,54 @@
   <!-- </div> -->
 </template>
 
-<script setup>
-    import { circleWaveAnimation } from './circlewave'
-    import { onMounted } from 'vue';
+<script lang="ts" setup>
+    // @ts-nocheck
+    import { onMounted,ref } from 'vue';
+    import { useAmplifierStore } from "@/store/Amplifier";
+    import { websocket_send } from "@/utils/WebsocketFunc";
+    const store = useAmplifierStore();       // store
+    import { useSerialStore } from "@/store/Serial";
+    import { TempratureCurrent_Set, SendMessageType } from "@/utils/config";
+    const Start_status = ref(false)      // 开关状态
+    const serail_store = useSerialStore();
+
+    const change_circle_status = () => {
+            /*  play button */
+            const play = document.querySelector('.play');
+            const pause = document.querySelector('.pause');
+            const playBtn = document.querySelector('.circle__btn');
+            const wave1 = document.querySelector('.circle__back-1');
+            const wave2 = document.querySelector('.circle__back-2');
+            pause.classList.toggle('visibility');
+            play.classList.toggle('visibility');
+            playBtn.classList.toggle('shadow');
+            wave1.classList.toggle('paused');
+            wave2.classList.toggle('paused');
+    };
     onMounted(()=>{
         console.log('onmountd');
-        circleWaveAnimation();
-    })
+        change_circle_status();
+        wave_effect();
+    })  
+    const wave_effect= () =>{
+
+        const play = document.querySelector('.play');
+            const pause = document.querySelector('.pause');
+            const playBtn = document.querySelector('.circle__btn');
+            const wave1 = document.querySelector('.circle__back-1');
+            const wave2 = document.querySelector('.circle__back-2');
+        /*  play button  */
+        playBtn.addEventListener('click', function(e) {
+            if(serail_store.getSerialOpenOrNot()!==false){
+                e.preventDefault();
+                change_circle_status();
+                Start_status.value = ! Start_status.value; //取反
+                websocket_send(SendMessageType.Amplifier_OPEN_STATUS, Start_status.value===true?1:0);
+            }
+         })
+       
+    }
+    
 </script>
 
 
@@ -31,11 +74,11 @@ $greyLight-2: #c8d0e7;
 $greyLight-3: #bec8e4;
 $greyDark: #9baacf;
 
-$circle-width: 1.8rem;
-$circle-height: 1.8rem;
-$circle-btn-width: 1.8rem;
-$circle-btn-height: 1.8rem;
-$circle-btn-font-size: 2rem;
+$circle-width: 6rem;
+$circle-height: 6rem;
+$circle-btn-width: 4rem;
+$circle-btn-height: 4rem;
+$circle-btn-font-size: 3rem;
 
 /* PLAY BUTTON */
 .circle {
@@ -134,5 +177,10 @@ $circle-btn-font-size: 2rem;
     transform: scale(2);
     opacity: 0;
   }
+}
+
+.circle-content{
+    font-size: 16px;
+    color: red;
 }
 </style>
