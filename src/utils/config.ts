@@ -27,7 +27,11 @@ export enum ReceiveMessageType {
     TemperatureCurrent=4,
     HeartPong=5,
     AmplifierCurrent=10,
-    AmplifierTemperature=11
+    AmplifierTemperature=11,
+    AmplifierWorkingStatus=12,  // 放大器的开关状态
+    AmplifierOpenStatus=13,  // 放大器的工作状态
+
+
 }
 
 

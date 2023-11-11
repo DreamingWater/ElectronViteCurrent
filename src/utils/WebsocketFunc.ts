@@ -62,6 +62,12 @@ const websocketdata_hander = (message:string) =>{
         case ReceiveMessageType.HeartPong:
             deal_heart_answer();
             break;
+        case ReceiveMessageType.AmplifierCurrent:
+            deal_amplifier_current(data.data)
+            break;
+        case ReceiveMessageType.AmplifierTemperature:
+            deal_amplifier_temperature(data.data)
+            break;
         default:
             // 未知的消息类型
             break;
@@ -123,11 +129,17 @@ const deal_temperature_current_data = (receive_data:object)=>{
 
 
 // 放大器部分的代码如下
-const deal_amplifier_current = () =>{
+const deal_amplifier_current = (receive_data:object) =>{
     const amplifier_store = useAmplifierStore();
     let amplifier_current_data = receive_data.data;
     amplifier_current_data = amplifier_current_data.split(',')
     amplifier_store.SetAmplifierCurrent(amplifier_current_data[0],amplifier_current_data[1],amplifier_current_data[2])
+} 
+// 放大器部分的代码如下
+const deal_amplifier_temperature = (receive_data:object) =>{
+    const amplifier_store = useAmplifierStore();
+    let amplifier_current_temperature = receive_data.data;
+    amplifier_store.SetAmplifierTemperature(amplifier_current_temperature)
 } 
 
 
