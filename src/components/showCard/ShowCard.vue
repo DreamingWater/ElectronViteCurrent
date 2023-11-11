@@ -26,10 +26,7 @@
         <div class="current-show"> 
           <ChargeView :childname="CardLabel"> </ChargeView>
         </div>
-      </div>
-
-
-         
+      </div>    
   
       <div class="box-progress-wrapper">
         <p class="box-progress-header">Control Section</p>
@@ -38,10 +35,7 @@
             <div class="control-pannel-header"> 
               <div class="control-pannel-name"> Temprature</div>
               <div class="conrol-pannel-label"> 
-              
-                  <SwitchButtons :childname="CardLabel" property="temprature"/>
-              
-              
+                <SwitchButtons :childname="CardLabel" property="temprature"/>
               </div>
             </div>
             <div class="icon-control">
@@ -92,40 +86,40 @@
     </div>
 </template>
 <script lang='ts' setup>
-  import ChargeView from '@/components/animation/ChargeView.vue'
-  import TempratureView from '@/components/animation/TempratureView.vue'
-  import CircleWaveView from '@/components/animation/CircleWave.vue'
-  import InputView from  '@/components/component/InputView.vue'
-  import SwitchButtonView from  '@/components/component/switchview.vue'
-  import ButtonGroupView from  '@/components/component/buttongroupview.vue'
-  import SendButtonView from  '@/components/component/SendButtonView.vue'
-  import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
-  import SwitchButtons from  '@/components/component/switchinput.vue'
-  import { ref,onMounted } from 'vue'
-  const this_tempratue = ref([])
-  const this_current = ref([]) 
+    import ChargeView from '@/components/animation/ChargeView.vue'
+    import TempratureView from '@/components/animation/TempratureView.vue'
+    import CircleWaveView from '@/components/animation/CircleWave.vue'
+    import InputView from  '@/components/component/DataInputView.vue'
+    import SwitchButtonView from  '@/components/showCard/Switch/SwitchShowThings.vue'
+    import ButtonGroupView from  '@/components/component/buttongroupview.vue'
+    import SendButtonView from  '@/components/animation/SendButtonView.vue'
+    import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
+    import SwitchButtons from  '@/components/showCard/Switch/SwitchRadioGroupEnableSetSteps.vue'
+    import { ref,onMounted } from 'vue'
+    const this_tempratue = ref([])
+    const this_current = ref([]) 
 
-  // 父子接口
-  const props = defineProps({
-     CardLabel: { type: String, default: true },
-  });
+    // 父子接口
+    const props = defineProps({
+      CardLabel: { type: String, default: true },
+    });
 
-  // swith 处理
-  const swichLineOff = ref(false);
-  const changeSwitchValue = (value: boolean) => {
-    swichLineOff.value = value;
-    window.console.log(swichLineOff.value);
-}
-// const transValue = () => {
-//         switchvalue.value = !switchvalue.value;
-//         // window.console.log('checked');
-//         emit("props.childname", switchvalue.value)
-//     }
+    // swith 处理
+    const swichLineOff = ref(false);
+    const changeSwitchValue = (value: boolean) => {
+      swichLineOff.value = value;
+      window.console.log(swichLineOff.value);
+  }
+  // const transValue = () => {
+  //         switchvalue.value = !switchvalue.value;
+  //         // window.console.log('checked');
+  //         emit("props.childname", switchvalue.value)
+  //     }
 
-// onMounted
-onMounted(()=>{
-  window.console.log(props.CardLabel);
-})
+  // onMounted
+  onMounted(()=>{
+    window.console.log(props.CardLabel);
+  })
 
 </script>
 

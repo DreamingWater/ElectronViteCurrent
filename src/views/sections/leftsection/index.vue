@@ -14,7 +14,7 @@
       
 </template>
 <script setup> 
-    import DigitalClock from "@/components/animation/DigitalClockView.vue";
+    import DigitalClock from "./DigitClock/DigitalClockView.vue";
 </script>
 <style lang="scss" scoped>
     

@@ -15,7 +15,7 @@ export const useSerialStore = defineStore({
     } as SerialState,
     Serial_Config: {
         port: 'COM1',
-        baudrate:115200
+        baudrate:9600
     } as SerialConfig,
   }),
   getters: {

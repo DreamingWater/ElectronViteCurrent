@@ -5,7 +5,8 @@ import PracticalTableView from "@/views/useless/JunkTest.vue";
 
 const router= createRouter({
   routes: [
-    { path: '/', component: () => import('@/components/section/MainContent.vue') },
+    { path: '/', component: () => import('@/views/amplifier/index.vue') },
+    { path: '/index', component: () => import('@/views/home/index.vue') },
     { path: '/serial', component: () => import('@/views/serial.vue') }
   ],
   history:createWebHashHistory(),

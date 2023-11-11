@@ -56,13 +56,13 @@ const Close = () => {
 };
 
 
-
-window.RenderApi.handleCounter(
-    (event, value) => {
-      console.log('receive shutdown signal');
-      websocket_send(SendMessageType.ShutDownPython,'');
-    }
-)
+// 用于在关闭electron时候关闭后端python
+// window.RenderApi.handleCounter(
+//     (event, value) => {
+//       console.log('receive shutdown signal');
+//       websocket_send(SendMessageType.ShutDownPython,'');
+//     }
+// )
 
 </script>
 

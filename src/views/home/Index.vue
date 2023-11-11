@@ -42,9 +42,8 @@
     </div>
 </template>
 
-
 <script setup>
-    import ShowCard from './ShowCard.vue';
+    import ShowCard from '@/components/ShowCard/ShowCard.vue';
 </script>
 <style lang="css" scoped>
 

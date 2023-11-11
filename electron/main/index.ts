@@ -90,7 +90,7 @@ async function createWindow() {
     // 阻止窗口直接关闭
     event.preventDefault();
     // 发送消息给渲染进程
-    win.webContents.send('shutdown_background', '');
+    //win.webContents.send('shutdown_background', '');
     // 延迟一段时间后关闭窗口
     setTimeout(() => {
     // 停止正在运行的子进程或服务
@@ -121,15 +121,15 @@ async function  loadingWindow() {
   startWin.show();
   startWin.setAlwaysOnTop(true);
 
- 
-  child = spawn(join(process.env.PUBLIC, 'management.exe'));
-    child.on('error', (err) => {
-      console.log('Spawn error: ', err);
-    });
-    child.on('exit', (code, signal) => {
-      console.log('Child process exited with code: ', code);
-      console.log('Child process exited with signal: ', signal);
-    });
+  //启动python子进程
+  // child = spawn(join(process.env.PUBLIC, 'management.exe'));
+  //   child.on('error', (err) => {
+  //     console.log('Spawn error: ', err);
+  //   });
+  //   child.on('exit', (code, signal) => {
+  //     console.log('Child process exited with code: ', code);
+  //     console.log('Child process exited with signal: ', signal);
+  //   });
   
   // 延迟2秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
   setTimeout(() => {

@@ -3,7 +3,7 @@
     <div class="app-container">
       <TitleBar></TitleBar>
       <HeaderSection />
-        <div class="app-content">
+      <div class="app-content">
             <SiderSection />
             <LeftSection />
             <div class="main-content-section">
@@ -13,7 +13,8 @@
             
 
 
-        </div>
+      </div>
+      <FooterSection />
     </div>
 </template>
 
@@ -25,13 +26,13 @@
 // @ts-nocheck
     // import Back from "@/components/section/back.vue"
     // import Back from "@/components/section/testbutton.vue"
-    import Back from "@/components/animation/ShowFoldLine.vue"
-    import HeaderSection from "@/components/section/HeaderSection.vue";
-    import SiderSection from "@/components/section/SiderSection.vue";
-    import LeftSection from "@/components/section/LeftSection.vue";
-    import MainContent from "@/components/section/MainContent.vue";
-    import TitleBar from "@/components/section/TitleBar.vue";
-    import FooterSection from "@/components/section/FooterSection.vue";
+    // import Back from "@/components/animation/ShowFoldLine.vue"
+    import HeaderSection from "@/views/sections/header/index.vue";
+    import SiderSection from "@/views/sections/sidersection/index.vue";
+    import LeftSection from "@/views/sections/leftsection/index.vue";
+    // import MainContent from "@/components/section/MainContent.vue";
+    import TitleBar from "@/views/sections/title/index.vue";
+    import FooterSection from "@/views/sections/footer/index.vue";
     // import TitleBar from "@/components/HelloWorld.vue";
     // websocket
     import { websockt_start } from '@/utils/WebsocketFunc'

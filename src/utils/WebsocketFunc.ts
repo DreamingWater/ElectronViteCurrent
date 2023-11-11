@@ -3,7 +3,7 @@
 import { SendMessageType, ReceiveMessageType } from "./config";
 import { useTemCurStore } from "@/store/TenCurData";
 import { useSerialStore } from "@/store/Serial";
-
+import { useAmplifierStore } from "@/store/Amplifier";
 let websocket_obj:any; 
 let websocket_connection_state:boolean = false; // Websocket连接状态
 let heartPingTimer:any; // 用于存储定时器引用
@@ -122,6 +122,14 @@ const deal_temperature_current_data = (receive_data:object)=>{
 }
 
 
+// 放大器部分的代码如下
+const deal_amplifier_current = () =>{
+    const amplifier_store = useAmplifierStore();
+    let amplifier_current_data = receive_data.data;
+    amplifier_current_data = amplifier_current_data.split(',')
+    amplifier_store.SetAmplifierCurrent(amplifier_current_data[0],amplifier_current_data[1],amplifier_current_data[2])
+} 
+
 
 
 //////////////////////////////////      心跳               //////////////////
@@ -134,7 +142,7 @@ const send_heart_ping = () => {
             websocket_obj.close()
             clearTimeout(heartPingTimer);
         }
-    }, 10000); // 10秒 一个心跳包
+    }, 5000); // 5秒 一个心跳包
    
 };
 

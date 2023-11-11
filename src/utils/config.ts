@@ -14,7 +14,10 @@ export const SendMessageType = {
     TemperatureChannel: 6,
     CurrentChannel: 7,
     HeartPing:8,
-    ShutDownPython:9
+    ShutDownPython:9,
+    Amplifier_ONE:20,
+    Amplifier_TWO:21,
+    Amplifier_THREE:22,
 };
 export enum ReceiveMessageType {
     SerialValid = 0,
@@ -23,6 +26,8 @@ export enum ReceiveMessageType {
     Current= 3,
     TemperatureCurrent=4,
     HeartPong=5,
+    AmplifierCurrent=10,
+    AmplifierTemperature=11
 }
 
 
@@ -66,4 +71,14 @@ export interface SerialConfig {
 export interface SerialState {
     isOpen: boolean;
     validPorts?:string[];
+  }
+
+
+  // 放大器部分设置
+
+  export interface AmplifierState{
+    Amplifier_ONE : number;
+    Amplifier_TWO : number;
+    Amplifier_THREE : number;
+    AmplifierTemperature:number;
   }
