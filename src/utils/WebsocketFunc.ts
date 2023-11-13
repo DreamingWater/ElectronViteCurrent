@@ -8,7 +8,7 @@ let websocket_obj:any;
 let websocket_connection_state:boolean = false; // Websocket连接状态
 let heartPingTimer:any; // 用于存储定时器引用
 let heart_connection_times:number = 0 // websocket 错误连接的次数
-let Max_Heart_Connection_Times:number = 5 
+let Max_Heart_Connection_Times:number = 10 
 export const websockt_start = () =>{            // 启动websocket连接
     if(websocket_connection_state == false){
         heart_connection_times = 0; // 重置，不然如果前面断开后，后面无法连接，必须刷新页面
@@ -177,10 +177,11 @@ const send_heart_ping = () => {
         console.log('heartPingTimer');
         websocket_send(SendMessageType.HeartPing, ''); // 发送心跳包
         heart_connection_times += 1;       // 一次心跳 记录一次连接
-        if(heart_connection_times>Max_Heart_Connection_Times){
-            websocket_obj.close()
-            clearTimeout(heartPingTimer);
-        }
+        // if(heart_connection_times>Max_Heart_Connection_Times){
+        //     console.log('心跳检测失败，断开连接');
+        //     websocket_obj.close()
+        //     clearTimeout(heartPingTimer);
+        // }
     }, 5000); // 5秒 一个心跳包
    
 };
