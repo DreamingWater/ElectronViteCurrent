@@ -5,8 +5,16 @@
             <div class="card-head">
                 {{ CardLabel }}
             </div>
+            <div class="card_current">
+              <div class="title">
+                Current(mA)
+              </div>
+              <div class="value">
+              {{ this_current }}
+              </div>
+            </div>
             <div class="card-input">
-                <div class="title">Power</div>
+                <div class="title">Power(mW)</div>
                 <div class="value" >
                     <InputView  :childname="CardLabel"/>
                 </div>
@@ -20,34 +28,30 @@
     </div>
 </template>
 <script lang='ts' setup>
-    import InputView from  '../inputData/InputData.vue'
+   // @ts-nocheck
+    import InputView from  '@/views/amplifier/InputData/InputData.vue'
     import SendButtonView from  '../SendButton/sendbutton.vue'
-
-    import { ref,onMounted } from 'vue'
-    const this_tempratue = ref([])
-    const this_current = ref([]) 
+    import { useAmplifierStore } from "@/store/Amplifier";
+    const store = useAmplifierStore();       // store
+    import { ref,onMounted ,watch} from 'vue'
+    const this_current = ref(0) 
 
     // 父子接口
     const props = defineProps({
       CardLabel: { type: String, default: true },
     });
 
-    // swith 处理
-    const swichLineOff = ref(false);
-    const changeSwitchValue = (value: boolean) => {
-      swichLineOff.value = value;
-      window.console.log(swichLineOff.value);
-  }
-  // const transValue = () => {
-  //         switchvalue.value = !switchvalue.value;
-  //         // window.console.log('checked');
-  //         emit("props.childname", switchvalue.value)
-  //     }
+  
 
   // onMounted
   onMounted(()=>{
     window.console.log(props.CardLabel);
-  })
+  });
+  watch(() => store.getTargetCurrent(props.CardLabel),
+        (newVal, oldVal) => {
+          this_current.value = newVal;
+        }
+      );
 
 </script>
 
@@ -75,11 +79,12 @@ button, a {
     .card-head{
         color: red;
         font-style: italic;
-
+        font-size: 24px;
+        font-weight: bold;
    
     }
     .card-input {
-        margin-top: 30px;
+        margin-top: 20px;
         background-color: #f0f8f8;
         padding: 10px 10px;
         border-radius: 3px;
@@ -89,8 +94,8 @@ button, a {
         flex-direction: column;
         align-items: flex-start;
         .title{
-            font-size: 24px;
-            color: red;
+            font-size: 22px;
+            color: rgb(250, 138, 138);
             justify-content: center;
             text-align: center;
         }
@@ -102,7 +107,23 @@ button, a {
     }
   }
 }
-
+  .card_current{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    .title{
+      margin-top: 5px;
+      font-size: 22px;
+      color: rgb(250, 138, 138);
+    }
+    .value{
+      font-size: 23px;
+      color: rgb(12, 12, 12);
+      font-weight:  bold;
+      margin: 10px auto;
+  
+    }
+  }
 
 @media screen and (max-width: 980px) {
  .project-box-wrapper {

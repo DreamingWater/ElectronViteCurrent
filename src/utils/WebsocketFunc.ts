@@ -8,7 +8,7 @@ let websocket_obj:any;
 let websocket_connection_state:boolean = false; // Websocket连接状态
 let heartPingTimer:any; // 用于存储定时器引用
 let heart_connection_times:number = 0 // websocket 错误连接的次数
-let Max_Heart_Connection_Times:number = 5 
+let Max_Heart_Connection_Times:number = 10 
 export const websockt_start = () =>{            // 启动websocket连接
     if(websocket_connection_state == false){
         heart_connection_times = 0; // 重置，不然如果前面断开后，后面无法连接，必须刷新页面
@@ -18,6 +18,7 @@ export const websockt_start = () =>{            // 启动websocket连接
             console.log('WebSocket connected');
             websocket_connection_state = true;
             send_heart_ping(); //发送心跳包
+            read_realtime_order(); // 获取下位机运行参数
         };
     
         websocket_obj.onmessage = function (e) {
@@ -68,6 +69,13 @@ const websocketdata_hander = (message:string) =>{
         case ReceiveMessageType.AmplifierTemperature:
             deal_amplifier_temperature(data.data)
             break;
+
+        case ReceiveMessageType.AmplifierWorkingStatus:
+            deal_amplifier_realtime_working_status(data.data)
+            break
+        case ReceiveMessageType.AmplifierOpenStatus:
+            deal_amplifier_openstatus(data.data)
+            break            
         default:
             // 未知的消息类型
             break;
@@ -142,6 +150,25 @@ const deal_amplifier_temperature = (receive_data:object) =>{
     amplifier_store.SetAmplifierTemperature(amplifier_current_temperature)
 } 
 
+// 放大器部分的代码如下
+const deal_amplifier_openstatus = (receive_data:object) =>{
+    const amplifier_store = useAmplifierStore();
+    let amplifier_open_status = receive_data.data;
+    amplifier_store.SetAmplifierOpenStatus(amplifier_open_status)
+} 
+// 放大器部分的代码如下
+const deal_amplifier_realtime_working_status = (receive_data:object) =>{
+    const amplifier_store = useAmplifierStore();
+    let amplifier_working_status = receive_data.data;
+    amplifier_store.SetAmplifierRealtimeWorkingStatus(amplifier_working_status)
+} 
+// 读取下位机参数
+const read_realtime_order = () => {
+    heartPingTimer = setInterval(() => {
+        websocket_send(SendMessageType.Amplifier_Realtime_Data_Upload, ''); // 发送读取状态信息
+    }, 1000); // 1秒 一个心跳包
+   
+};
 
 
 //////////////////////////////////      心跳               //////////////////
@@ -150,10 +177,11 @@ const send_heart_ping = () => {
         console.log('heartPingTimer');
         websocket_send(SendMessageType.HeartPing, ''); // 发送心跳包
         heart_connection_times += 1;       // 一次心跳 记录一次连接
-        if(heart_connection_times>Max_Heart_Connection_Times){
-            websocket_obj.close()
-            clearTimeout(heartPingTimer);
-        }
+        // if(heart_connection_times>Max_Heart_Connection_Times){
+        //     console.log('心跳检测失败，断开连接');
+        //     websocket_obj.close()
+        //     clearTimeout(heartPingTimer);
+        // }
     }, 5000); // 5秒 一个心跳包
    
 };

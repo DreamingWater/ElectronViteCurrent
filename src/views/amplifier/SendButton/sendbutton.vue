@@ -83,8 +83,9 @@
             this_lable = SendMessageType.Amplifier_THREE;
           
         }    
-        
-        websocket_send(this_lable, this_data);
+        var set_value = localStorage.getItem(props.childname) // 获取设定值
+        // console.log(set_value?set_value:0);
+        websocket_send(this_lable, set_value?set_value:0);
       }
     
     </script>

@@ -5,10 +5,17 @@
                 <TemperatureShow />
                </div>
         </div>
+        <div class="middle-box">
+               <div class="status-box">
+                <div class="status">
+                    {{ working_status }}
+                </div> 
+            </div>
+        </div>
         <div class="right-box">
                <div class="status-box">
                 <div class="status">
-                    正常
+                  <CirlceButton />
                 </div> 
             </div>
         </div>
@@ -16,15 +23,30 @@
 </template>
 <script lang='ts' setup>
     import TemperatureShow from  '@/components/animation/TemperatureShow.vue'
-    import { ref,onMounted } from 'vue'
-    const this_tempratue = ref([])
-    const this_current = ref([]) 
-
+    import CirlceButton from   '@/components/animation/circleButton.vue'
+    import { ref,onMounted, watch } from 'vue'
+    import { useAmplifierStore } from "@/store/Amplifier";
+    const store = useAmplifierStore();       // store
+    const StautsArray = ['Perfect well' , 'An Error Check!!!']
+    const working_status = ref('Perfect well')
     // 父子接口
     const props = defineProps({
       CardLabel: { type: String, default: true },
     });
 
+    const show_temperature_value = ref(20); // 用于显示的温度
+
+    watch(() => store.getTargetWorkingStatus(),
+        (newVal, oldVal) => {
+            if(newVal!== 0 ){
+                working_status.value = StautsArray[1];
+          }
+         else if(newVal === 0){
+            working_status.value = StautsArray[0];
+         }
+        }
+       
+      );
 
 </script>
 
@@ -49,15 +71,15 @@
             justify-content: center;
             // border-style: dotted;
             // border-color: antiquewhite;
-            width: 30%;
+            width: 20%;
             height: 100%;
             .temperature{
                 width: 100%;
                 height: 100%;
             }
         }
-        .right-box{
-            width: 65%;
+        .middle-box{
+            width: 40%;
             height: 100%;
        
             margin-right: 20px;
@@ -65,7 +87,7 @@
   
             .status-box{
                 height: 80px;
-                background-color: rgb(240, 238, 235);
+                background-color: rgb(255, 255, 255);
                 display: flex;
                 align-content: center;
                 justify-content: center;
@@ -74,10 +96,27 @@
                 border-style: dotted;
                 border-color: antiquewhite;
                 .status{
-                    font-size: 25px;
+                    font-size: 30px;
+                    color:rgb(223, 126, 126);
+                    
                 }
             }
             
+        }
+        .right-box{
+            width: 25%;
+            height: 100%;
+            .status-box{
+                height: 80px;
+                display: flex;
+                align-content: center;
+                justify-content: center;
+                align-items: center;
+
+                .status{
+                    font-size: 25px;
+                }
+            }
         }
     }
 </style>

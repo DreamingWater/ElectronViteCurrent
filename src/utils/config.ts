@@ -18,6 +18,8 @@ export const SendMessageType = {
     Amplifier_ONE:20,
     Amplifier_TWO:21,
     Amplifier_THREE:22,
+    Amplifier_OPEN_STATUS: 23,
+    Amplifier_Realtime_Data_Upload: 24,
 };
 export enum ReceiveMessageType {
     SerialValid = 0,
@@ -30,8 +32,11 @@ export enum ReceiveMessageType {
     AmplifierTemperature=11,
     AmplifierWorkingStatus=12,  // 放大器的开关状态
     AmplifierOpenStatus=13,  // 放大器的工作状态
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 13ad9c4551e136f572e86658fdaa5d4a7985774d
 }
 
 
@@ -85,4 +90,6 @@ export interface SerialState {
     Amplifier_TWO : number;
     Amplifier_THREE : number;
     AmplifierTemperature:number;
+    AmplifierWorkingStatus:number,  // 放大器的开关状态
+    AmplifierOpenStatus:number,  // 放大器的工作状态
   }

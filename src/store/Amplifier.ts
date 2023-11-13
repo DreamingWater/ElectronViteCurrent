@@ -12,6 +12,8 @@ export const useAmplifierStore = defineStore({
         Amplifier_TWO : 0,
         Amplifier_THREE : 0,
         AmplifierTemperature:0,
+        AmplifierWorkingStatus:0,
+        AmplifierOpenStatus:0,
     } as AmplifierState,
   }),
   getters: {
@@ -31,7 +33,12 @@ export const useAmplifierStore = defineStore({
     getTargetTemperature: (state) => () => {
         return state.Amplifier_Data.AmplifierTemperature
         },
-    
+    getTargetOpenStatus: (state) => () => {
+        return state.Amplifier_Data.AmplifierOpenStatus
+        },
+    getTargetWorkingStatus: (state) => () => {
+        return state.Amplifier_Data.AmplifierWorkingStatus
+        },
     },
 
     
@@ -45,6 +52,12 @@ export const useAmplifierStore = defineStore({
         SetAmplifierTemperature(value:number){
             this.Amplifier_Data.AmplifierTemperature=value;
         },
+        SetAmplifierOpenStatus(value:number){            // 0 关闭 1 开启
+            this.Amplifier_Data.AmplifierOpenStatus = value;
+        },
+        SetAmplifierRealtimeWorkingStatus(value:number){ // 0 关闭 1 开启
+            this.Amplifier_Data.AmplifierWorkingStatus = value;
+        }
     },
 })
 

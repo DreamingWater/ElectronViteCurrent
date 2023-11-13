@@ -14,7 +14,7 @@
 
 <script setup>
     import ShowCard from './Card/card.vue';
-    import TemperatureCard from './TemperatureCard/TemperatureCard.vue'
+    import TemperatureCard from './CardHead/TemperatureCard.vue'
 </script>
 <style lang="css" scoped>
 
