@@ -32,6 +32,7 @@ export enum ReceiveMessageType {
     AmplifierTemperature=11,
     AmplifierWorkingStatus=12,  // 放大器的开关状态
     AmplifierOpenStatus=13,  // 放大器的工作状态
+    AmplifierWholeStatus=14 // 放大器整体状态
 }
 
 
@@ -85,6 +86,16 @@ export interface SerialState {
     Amplifier_TWO : number;
     Amplifier_THREE : number;
     AmplifierTemperature:number;
-    AmplifierWorkingStatus:number,  // 放大器的开关状态
-    AmplifierOpenStatus:number,  // 放大器的工作状态
+    AmplifierWorkingStatus:number; // 放大器的开关状态
+    AmplifierOpenStatus:number;  // 放大器的工作状态
   }
+
+  // 温度控制部分
+  export interface TemperatureState {
+    name:   string;
+    TSV :   number;
+    PID_P : number;
+    PID_I : number;
+    PID_D:  number;
+    Voltage_Proportion:number;
+} 
