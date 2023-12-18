@@ -20,6 +20,13 @@ export const SendMessageType = {
     Amplifier_THREE:22,
     Amplifier_OPEN_STATUS: 23,
     Amplifier_Realtime_Data_Upload: 24,
+
+    Temperature_TEC_Setting:30,
+    Temperature_TEC_Pid_P:31,
+    Temperature_TEC_Pid_I:32,
+    Temperature_TEC_Pid_D:33,
+    Temperature_TEC_OPEN_STATUS:34,
+    Temperature_TEC_Data_Upload:35,
 };
 export enum ReceiveMessageType {
     SerialValid = 0,
@@ -31,12 +38,10 @@ export enum ReceiveMessageType {
     AmplifierCurrent=10,
     AmplifierTemperature=11,
     AmplifierWorkingStatus=12,  // 放大器的开关状态
-    AmplifierOpenStatus=13,  // 放大器的工作状态
-<<<<<<< HEAD
+    AmplifierOpenStatus=13,     // 放大器的工作状态
+    AmplifierWholeStatus=14 ,    // 放大器整体状态
 
-
-=======
->>>>>>> 13ad9c4551e136f572e86658fdaa5d4a7985774d
+    TemperatureTPV=20,     // 上传 TPV温度
 }
 
 
@@ -90,6 +95,6 @@ export interface SerialState {
     Amplifier_TWO : number;
     Amplifier_THREE : number;
     AmplifierTemperature:number;
-    AmplifierWorkingStatus:number,  // 放大器的开关状态
-    AmplifierOpenStatus:number,  // 放大器的工作状态
+    AmplifierWorkingStatus:number; // 放大器的开关状态
+    AmplifierOpenStatus:number;  // 放大器的工作状态
   }

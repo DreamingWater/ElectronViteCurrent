@@ -4,6 +4,8 @@ import { SendMessageType, ReceiveMessageType } from "./config";
 import { useTemCurStore } from "@/store/TenCurData";
 import { useSerialStore } from "@/store/Serial";
 import { useAmplifierStore } from "@/store/Amplifier";
+import { TemperatureShowValue, useTemperatureDataStore } from "@/store/TemperatureData";
+  
 let websocket_obj:any; 
 let websocket_connection_state:boolean = false; // Websocket连接状态
 let heartPingTimer:any; // 用于存储定时器引用
@@ -17,7 +19,7 @@ export const websockt_start = () =>{            // 启动websocket连接
         websocket_obj.onopen = function () {
             console.log('WebSocket connected');
             websocket_connection_state = true;
-            send_heart_ping(); //发送心跳包
+            // send_heart_ping(); //发送心跳包
             read_realtime_order(); // 获取下位机运行参数
         };
     
@@ -26,7 +28,8 @@ export const websockt_start = () =>{            // 启动websocket连接
             websocketdata_hander(e.data);
         };
         websocket_obj.onclose = function (e) {
-            stop_heart_ping() // 停止心跳包
+            // stop_heart_ping() // 停止心跳包
+            update_serial_connection_state(false);
             console.error('WebSocket closed');
             websocket_connection_state = false; 
         };
@@ -75,7 +78,12 @@ const websocketdata_hander = (message:string) =>{
             break
         case ReceiveMessageType.AmplifierOpenStatus:
             deal_amplifier_openstatus(data.data)
-            break            
+            break   
+        case ReceiveMessageType.AmplifierWholeStatus:
+            deal_amplifier_wholestatus(data.data)       
+        
+        case ReceiveMessageType.TemperatureTPV:
+            deal_temperature_tec_value(data.data)
         default:
             // 未知的消息类型
             break;
@@ -101,8 +109,12 @@ export const websocket_send = (send_type:number, data:string) => {
 const deal_serialresult = (receive_data:object) =>{
     window.console.log('the result of serial connect');
     window.console.log(receive_data.data);
+    update_serial_connection_state(receive_data.data === 'true' ? true : false);
+}
+
+const update_serial_connection_state = (data:boolean) =>{
     const serial_storeTemplate = useSerialStore();
-    serial_storeTemplate.SetSerialState(receive_data.data === 'true' ? true : false);  
+    serial_storeTemplate.SetSerialState(data);  
 }
 
 // 搜索可用的串口数据
@@ -142,6 +154,8 @@ const deal_amplifier_current = (receive_data:object) =>{
     let amplifier_current_data = receive_data.data;
     amplifier_current_data = amplifier_current_data.split(',')
     amplifier_store.SetAmplifierCurrent(amplifier_current_data[0],amplifier_current_data[1],amplifier_current_data[2])
+    console.log('current is');
+    console.log(amplifier_current_data)
 } 
 // 放大器部分的代码如下
 const deal_amplifier_temperature = (receive_data:object) =>{
@@ -162,11 +176,33 @@ const deal_amplifier_realtime_working_status = (receive_data:object) =>{
     let amplifier_working_status = receive_data.data;
     amplifier_store.SetAmplifierRealtimeWorkingStatus(amplifier_working_status)
 } 
+
+const deal_amplifier_wholestatus = (receive_data:object) =>{
+    const amplifier_store = useAmplifierStore();
+    let amplifier_whole_data = receive_data.data;
+    let amplifier_data = amplifier_whole_data.split(',')
+    amplifier_store.SetAmplifierOpenStatus(Number(amplifier_data[0]))
+    amplifier_store.SetAmplifierRealtimeWorkingStatus(Number(amplifier_data[1]))
+    amplifier_store.SetAmplifierTemperature(Number(amplifier_data[2]))
+    amplifier_store.SetAmplifierCurrent(Number(amplifier_data[3]),Number(amplifier_data[4]),Number(amplifier_data[5]))
+} 
+
+// 处理温控板上传的温控数据
+const deal_temperature_tec_value =  (receive_data:object) =>{
+    const temperature_store = useTemperatureDataStore(); 
+    let received_data = receive_data.data;
+    let received_name = receive_data.name;
+
+    temperature_store.SetTPVValue(received_name, Number(received_data));
+    temperature_store.SetTPVList(received_name, Number(received_data));
+}
+
+
 // 读取下位机参数
 const read_realtime_order = () => {
-    heartPingTimer = setInterval(() => {
+    const ReadStatusTimer = setInterval(() => {
         websocket_send(SendMessageType.Amplifier_Realtime_Data_Upload, ''); // 发送读取状态信息
-    }, 1000); // 1秒 一个心跳包
+    }, 3000); // 3秒 一个心跳包
    
 };
 

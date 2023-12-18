@@ -73,9 +73,9 @@ button, a {
   .section_card{
 
     margin: 5px;
-    padding: 20px 20px;
+    padding: 20px 5px;
     border-radius: 5px;
-    background-color: #f0f8ff;
+    background-color: #f9f9fa;
     .card-head{
         color: red;
         font-style: italic;
@@ -102,7 +102,7 @@ button, a {
 
     }
     .card-button{
-        margin: 80px auto;
+        margin: 20px auto;
 
     }
   }

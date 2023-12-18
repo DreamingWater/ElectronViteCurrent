@@ -82,7 +82,7 @@
         return;
     }
     // 跟新配置到pinia
-    store.SetSerialConfig({'port': selectedPort.value,'baudrate':115200});
+    store.SetSerialConfig({'port': selectedPort.value,'baudrate':9600});
     // 发送串口连接信号
     store.AskForConnectSerial();
     }

@@ -1,7 +1,8 @@
 import { app, BrowserWindow, shell, Menu, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-import { spawn } from 'child_process';  // 启动python进程
+// import { spawn } from 'child_process';  // 启动python进程
+const { execFile } = require("cross-spawn");
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -55,6 +56,19 @@ const url = process.env.VITE_DEV_SERVER_URL
 const indexHtml = join(process.env.DIST, 'index.html')
 // const indexHtml =  join(__dirname, '../../electron/loader.html')      // 启动动画
 async function createWindow() {
+  // let script_file = join('exeFiles', 'management.exe');
+  // child = execFile(script_file);
+  // let script = join('exeFiles', 'management.exe')
+  // child = require('child_process').execFile(script)
+  // child.on('error', (err) => {
+  //   console.log('Spawn error: ', err);
+  // });
+  // child.on('exit', (code, signal) => {
+  //   console.log('Child process exited with code: ', code);
+  //   console.log('Child process exited with signal: ', signal);
+  // });
+
+
   win = new BrowserWindow({
     width:1150,
     height:750,
@@ -90,7 +104,7 @@ async function createWindow() {
     // 阻止窗口直接关闭
     event.preventDefault();
     // 发送消息给渲染进程
-    //win.webContents.send('shutdown_background', '');
+    win.webContents.send('shutdown_background', '');
     // 延迟一段时间后关闭窗口
     setTimeout(() => {
     // 停止正在运行的子进程或服务
@@ -121,15 +135,8 @@ async function  loadingWindow() {
   startWin.show();
   startWin.setAlwaysOnTop(true);
 
-  //启动python子进程
-  // child = spawn(join(process.env.PUBLIC, 'management.exe'));
-  //   child.on('error', (err) => {
-  //     console.log('Spawn error: ', err);
-  //   });
-  //   child.on('exit', (code, signal) => {
-  //     console.log('Child process exited with code: ', code);
-  //     console.log('Child process exited with signal: ', signal);
-  //   });
+ 
+
   
   // 延迟2秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
   setTimeout(() => {

@@ -2,7 +2,7 @@
     <div class="window-footer">
       <!-- 软件logo预留位置 -->
         <div class="designer">
-            Designed by Xwx
+            Designed by XWX
         </div>
     </div>
   </template>
