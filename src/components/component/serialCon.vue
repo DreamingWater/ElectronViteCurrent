@@ -15,25 +15,28 @@
 // @ts-nocheck
     import { useSerialStore } from "@/store/Serial";
     import UnConnectedImg from "@/assets/imgs/unconnected.png";
-    import { ref, onMounted, watch,computed } from 'vue';
+    import { ref, onMounted, watch,computed,unref } from 'vue';
     import { websockt_start } from "../../utils/WebsocketFunc";
-
+    import {PageStateEnum, useCurrentPageState } from '@/views/data'
+    const { setCurrentPageState, getCurrentPagestate} = useCurrentPageState();
+    
     const store = useSerialStore(); // store
 
     const portList= ref([]); // replace with your actual port list
     const selectedPort = ref('');
     const rotationAngle = ref(0); // 初始角度为0度
-    
     watch(() => store.getSerialValidList(),
         (newVal, oldVal) => {
             window.console.log('changed value');
             window.console.log(newVal);
-      
+    
                 setValidPorts();
                 setDefaultPort();
           }
       );
     onMounted(() => {
+
+        // 更新icon
         setTimeout(() => {
             refreshIcon();
         }, 200);
@@ -72,19 +75,22 @@
     function setValidPorts(): void {
     // 设置端口列表
     portList.value = store.getSerialValidList();
-    window.console.log(portList.value);
+    // window.console.log(portList.value);
     }
 
     function click_serial(){
+        const this_page = computed(() => unref(getCurrentPagestate));
+
     // Validate the form
     if (!selectedPort.value ) {
         alert('Please select the ports');
         return;
     }
+
     // 跟新配置到pinia
-    store.SetSerialConfig({'port': selectedPort.value,'baudrate':9600});
+    store.SetSerialPortWithDefaults(this_page.value as number, selectedPort.value);
     // 发送串口连接信号
-    store.AskForConnectSerial();
+    store.ChangeConnectSerialState(this_page.value as number);
     }
 
 

@@ -79,7 +79,7 @@ button, a {
     .card-head{
         color: red;
         font-style: italic;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: bold;
    
     }

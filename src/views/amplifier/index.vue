@@ -15,6 +15,12 @@
 <script setup>
     import ShowCard from './Card/card.vue';
     import TemperatureCard from './CardHead/TemperatureCard.vue'
+    import {PageStateEnum, useCurrentPageState } from '@/views/data'
+    const { setCurrentPageState, getCurrentPagestate} = useCurrentPageState();
+    import { onMounted } from 'vue'; 
+    onMounted (()=>{
+      setCurrentPageState(PageStateEnum.Amplifier);
+    })
 </script>
 <style lang="css" scoped>
 
@@ -27,5 +33,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    justify-content: space-evenly;
+
   }
 </style>

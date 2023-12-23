@@ -66,7 +66,7 @@
                   e.preventDefault();
                   change_circle_status();
                   Start_status.value = ! Start_status.value; //取反
-                  websocket_send(SendMessageType.Temperature_TEC_OPEN_STATUS, Start_status.value===true?'1':'0');
+                  websocket_send(SendMessageType.Oscillator_OPEN_STATUS, Start_status.value===true?'1':'0');
               }
            })
          

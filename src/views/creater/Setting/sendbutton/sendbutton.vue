@@ -15,23 +15,22 @@
       import { onMounted,watch,ref } from 'vue';
       import { websocket_send } from "@/utils/WebsocketFunc";
       import { TemperatureState, SendMessageType } from "@/utils/config";
-      import { useTemperatureStore } from "@/store/Temperature";
+      import { useOscillatorStore } from "@/store/CreaterSet";
       import { useTemperatureDataStore } from "@/store/TemperatureData";
-      const store = useTemperatureStore();       // store
-      const ControlType = ['TSV' , 'PID_P',  'PID_I', 'PID_D', 'Voltage_Proportion']
-      const TenmperatueValue = {
-              name:   'Tec_One',
-              TSV :   25,
+      const store = useOscillatorStore();       // store
+      const ControlType = ['SettingCurrent' , 'PID_P',  'PID_I', 'PID_D']
+      const CreaterValue = {
+              name:   'Creater',
+              SettingCurrent :   25,
               PID_P : 10,
               PID_I : 10,
               PID_D:  10,
-              Voltage_Proportion:1, 
-          } as TemperatureState;
+          } as OscillatorState;
 
 
 
       const props = defineProps({
-        childname: { type: String, default: 'Tec-One' },
+        childname: { type: String, default: 'Creater' },
         property:{type: String, default: 'temperature'}
       });
       let isDisabled = ref(false); // 是否失能按钮部分
@@ -94,12 +93,11 @@
       const send_temprature_controller_data = () => {
         // 读取本地存储
         read_localstorage();
-        judge_data_changed(store.getTSVStatus, store.SetTempratureValue,TenmperatueValue.TSV,SendMessageType.Temperature_TEC_Setting);
-        judge_data_changed(store.getPID_PStatus, store.SetPID_PValue,TenmperatueValue.PID_P,SendMessageType.Temperature_TEC_Pid_P);
-        judge_data_changed(store.getPID_IStatus, store.SetPID_IValue,TenmperatueValue.PID_I,SendMessageType.Temperature_TEC_Pid_I);
-        judge_data_changed(store.getPID_DStatus, store.SetPID_DValue,TenmperatueValue.PID_D,SendMessageType.Temperature_TEC_Pid_D);
-       
-     
+        judge_data_changed(store.getCurrentStatus, store.SetCurrentValue,CreaterValue.SettingCurrent,SendMessageType.Oscillator_Current_Setting);
+        judge_data_changed(store.getPID_PStatus, store.SetPID_PValue,CreaterValue.PID_P,SendMessageType.Oscillator_Pid_P);
+        judge_data_changed(store.getPID_IStatus, store.SetPID_IValue,CreaterValue.PID_I,SendMessageType.Oscillator_Pid_I);
+        judge_data_changed(store.getPID_DStatus, store.SetPID_DValue,CreaterValue.PID_D,SendMessageType.Oscillator_Pid_D);
+
         // 保存到storage
         // store.SetTempratureValue(props.childname, TenmperatueValue.TSV);
         // store.SetPID_PValue(props.childname, TenmperatueValue.PID_P);
@@ -116,7 +114,7 @@
       if (tsv_value === null){
         // 设置初始缓冲数据
         for(var i = 0, len = ControlType.length; i < len; i++) {
-          localStorage.setItem(`${props.childname}-${ControlType[0]}`, TenmperatueValue[ControlType[i]]);
+          localStorage.setItem(`${props.childname}-${ControlType[0]}`, CreaterValue[ControlType[i]]);
       }
       }   
     }
@@ -124,7 +122,7 @@
     const read_localstorage = () => {
       for(var i = 0, len = ControlType.length; i < len; i++) {
         const temp_value = localStorage.getItem(`${props.childname}-${ControlType[i]}`) || '0';
-        TenmperatueValue[ControlType[i]] = temp_value;
+        CreaterValue[ControlType[i]] = temp_value;
       }
     }
 

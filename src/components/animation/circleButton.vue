@@ -47,7 +47,6 @@
             wave2.classList.toggle('paused');
     };
     onMounted(()=>{
-        console.log('onmountd');
         change_circle_status();
         wave_effect();
     })  

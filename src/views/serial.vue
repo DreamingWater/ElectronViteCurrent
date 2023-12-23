@@ -37,6 +37,9 @@
     import ConnectedImg from "../assets/imgs/connected.png";
     import UnConnectedImg from "../assets/imgs/unconnected.png";
     import { ref, onMounted, watch,computed } from 'vue';
+    import {PageStateEnum, useCurrentPageState } from '@/views/data'
+    const { setCurrentPageState, getCurrentPagestate} = useCurrentPageState();
+    
 
     const store = useSerialStore(); // store
 
@@ -55,6 +58,7 @@
           }
       );
     onMounted(() => {
+        setCurrentPageState(PageStateEnum.Others),
         setTimeout(() => {
             refreshIcon();
         }, 200);

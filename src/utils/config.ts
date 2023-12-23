@@ -27,6 +27,12 @@ export const SendMessageType = {
     Temperature_TEC_Pid_D:33,
     Temperature_TEC_OPEN_STATUS:34,
     Temperature_TEC_Data_Upload:35,
+    // 振荡器部分
+    Oscillator_Current_Setting: 40,
+    Oscillator_Pid_P: 41,
+    Oscillator_Pid_I: 42,
+    Oscillator_Pid_D: 43,
+    Oscillator_OPEN_STATUS: 44,
 };
 export enum ReceiveMessageType {
     SerialValid = 0,
@@ -42,6 +48,8 @@ export enum ReceiveMessageType {
     AmplifierWholeStatus=14 ,    // 放大器整体状态
 
     TemperatureTPV=20,     // 上传 TPV温度
+    //振荡器部分
+    Oscillator_Res_Voltage= 30  // 上传 放大器的电阻值和电压
 }
 
 
@@ -79,11 +87,12 @@ export interface TempratureCurrent_Set{
 export interface SerialConfig {
     port: string;
     baudrate: number;
+    target?:number;
+    isOpen: boolean;
   }
   
 // 串口设置
 export interface SerialState {
-    isOpen: boolean;
     validPorts?:string[];
   }
 

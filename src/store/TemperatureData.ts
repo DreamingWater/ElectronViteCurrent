@@ -53,7 +53,7 @@ export const useTemperatureDataStore = defineStore({
         PID_D:  10,
         Voltage_Proportion:1, 
     }] as TemperatureShowValue[],
-    MaxDataCacheLength:20,
+    MaxDataCacheLength:60,
   }),
   getters: {
     getTargetObject: (state) => (name:string) => {

@@ -27,7 +27,7 @@
                               <path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
                           </button>
                           <button class="profile-btn">
-                              <img src="@/assets/imgs/stable.jpg" />
+                              <img src="@/assets/imgs/stable.jpg" @click="click_icon" />
                               <span>Just for stabilization</span>
                           </button>
                       </div>
@@ -46,6 +46,10 @@
     import { useSerialStore } from "@/store/Serial";
     import { websocket_send } from "@/utils/WebsocketFunc"
     import { SendMessageType } from "@/utils/config"
+    import {PageStateEnum, useCurrentPageState } from '@/views/data'
+    const { setCurrentPageState, getCurrentPagestate} = useCurrentPageState();
+    import { unref } from 'vue'
+
 
     const store = useSerialStore(); // store
     let portList: string[] = ['COM1','COM2']; // replace with your actual port list
@@ -56,20 +60,31 @@
     const oppositeValue = computed(() => {
       return !ConnectOrShow.value;
     });
-    watch(() => store.getSerialOpenOrNot(),
+    const this_page = computed(() => unref(getCurrentPagestate));
+    // watch(this_page ,  (newVal, oldVal) => {
+    //   console.log(`change page ${newVal}`)
+    // }
+    // )
+    watch(() => store.getSerialOpenOrNot(this_page.value),
         (newVal, oldVal) => {
+          console.log(`changed page ${newVal}`)
           ConnectOrShow.value = newVal;
-
     setTimeout(() => {// 在一秒后执行的任务
             if( store.Serial_State.isOpen)
             {
                 window.console.log('在0.1秒后执行的任务');
-                websocket_send(SendMessageType.Amplifier_OPEN_STATUS, 0);
+                // websocket_send(SendMessageType.Amplifier_OPEN_STATUS, 0); // 放大器
                 // websocket_send(SendMessageType.DataUpload, ''); // 启动数据上传，用于 我的电流源
             }
           }, 100);
           }
       );
+      function click_icon(){
+        const this_page = computed(() => unref(getCurrentPagestate));
+      // 发送串口连接信号
+      store.ChangeConnectSerialState(this_page.value as number);
+    }
+
 
 </script>
 

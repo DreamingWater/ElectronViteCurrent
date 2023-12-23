@@ -18,7 +18,8 @@
 
 
         const props = defineProps({
-          childname: { type: String, default: true },
+          childname: { type: String, default: 'Amplifier' },
+          property:{ type:String, default:'Amplifier'}
         });
         let isDisabled = ref(false); // 是否失能按钮部分
         onMounted(()=>{

@@ -1,53 +1,81 @@
 <template>
-    <div class="personal-bests-container">
-        <div class="best-item box-one">
-        <p>Fastest 5K Run: 22min</p>
-        <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/05dfc444-9ed3-44cc-96af-a9cf195f5820" alt="" />
-        </div>
-    </div>
+<div>
+  <div id="c1"></div>
+</div>
 </template>
 
-<style lang="css" scoped>
+<script lang="ts" setup>
+// @ts-nocheck
+import { Chart } from '@antv/g2';
 
+const data = [
+  { month: 'Jan', city: 'Tokyo', temperature: 7 },
+  { month: 'Jan', city: 'London', temperature: 3.9 },
+  { month: 'Feb', city: 'Tokyo', temperature: 6.9 },
+  { month: 'Feb', city: 'London', temperature: 4.2 },
+  { month: 'Mar', city: 'Tokyo', temperature: 9.5 },
+  { month: 'Mar', city: 'London', temperature: 5.7 },
+  { month: 'Apr', city: 'Tokyo', temperature: 14.5 },
+  { month: 'Apr', city: 'London', temperature: 8.5 },
+  { month: 'May', city: 'Tokyo', temperature: 18.4 },
+  { month: 'May', city: 'London', temperature: 11.9 },
+  { month: 'Jun', city: 'Tokyo', temperature: 21.5 },
+  { month: 'Jun', city: 'London', temperature: 15.2 },
+  { month: 'Jul', city: 'Tokyo', temperature: 25.2 },
+  { month: 'Jul', city: 'London', temperature: 17 },
+  { month: 'Aug', city: 'Tokyo', temperature: 26.5 },
+  { month: 'Aug', city: 'London', temperature: 16.6 },
+  { month: 'Sep', city: 'Tokyo', temperature: 23.3 },
+  { month: 'Sep', city: 'London', temperature: 14.2 },
+  { month: 'Oct', city: 'Tokyo', temperature: 18.3 },
+  { month: 'Oct', city: 'London', temperature: 10.3 },
+  { month: 'Nov', city: 'Tokyo', temperature: 13.9 },
+  { month: 'Nov', city: 'London', temperature: 6.6 },
+  { month: 'Dec', city: 'Tokyo', temperature: 9.6 },
+  { month: 'Dec', city: 'London', temperature: 4.8 },
+];
 
-/* MAIN MENU */
+const chart = new Chart({
+  container: 'container',
+  autoFit: true,
+  height: 500,
+});
 
+chart.data(data);
+chart.scale({
+  month: {
+    range: [0, 1],
+  },
+  temperature: {
+    nice: true,
+  },
+});
 
+chart.tooltip({
+  showCrosshairs: true,
+  shared: true,
+});
 
+chart.axis('temperature', {
+  label: {
+    formatter: (val) => {
+      return val + ' °C';
+    },
+  },
+});
 
-.personal-bests-container {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: repeat(2, 150px);
-  gap: 10px;
-  margin-top: 10px;
-}
+chart
+  .line()
+  .position('month*temperature')
+  .color('city')
+  .shape('smooth');
 
-.best-item {
-  display: flex;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
-  border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 3px;
-}
+chart
+  .point()
+  .position('month*temperature')
+  .color('city')
+  .shape('circle');
 
-.box-one {
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  grid-area: 1 / 1 / 2 / 3;
-  background-color: rgba(185, 159, 237, 0.6);
-  padding: 15px;
-  font-size: 1rem;
-  font-weight: 700;
-}
+chart.render();
 
-.box-one img {
-  max-width: 100px;
-  aspect-ratio: 4/3;
-}
-
-
-
-</style>
+</script>

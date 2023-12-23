@@ -5,7 +5,8 @@ import { useTemCurStore } from "@/store/TenCurData";
 import { useSerialStore } from "@/store/Serial";
 import { useAmplifierStore } from "@/store/Amplifier";
 import { TemperatureShowValue, useTemperatureDataStore } from "@/store/TemperatureData";
-  
+
+import { OscillatorDataState, useOscillatorDataStore } from "@/store/CreaterData";
 let websocket_obj:any; 
 let websocket_connection_state:boolean = false; // Websocket连接状态
 let heartPingTimer:any; // 用于存储定时器引用
@@ -84,6 +85,8 @@ const websocketdata_hander = (message:string) =>{
         
         case ReceiveMessageType.TemperatureTPV:
             deal_temperature_tec_value(data.data)
+        case ReceiveMessageType.Oscillator_Res_Voltage:
+            deal_oscillator_data(data.data)
         default:
             // 未知的消息类型
             break;
@@ -107,20 +110,19 @@ export const websocket_send = (send_type:number, data:string) => {
 
 // 串口连接的申请结果
 const deal_serialresult = (receive_data:object) =>{
-    window.console.log('the result of serial connect');
-    window.console.log(receive_data.data);
-    update_serial_connection_state(receive_data.data === 'true' ? true : false);
+    let receive_result = receive_data.data
+    let result = receive_result.split(',')
+    console.log(result[0] == 'true' ? true : false) 
+    update_serial_connection_state(eval(result[1]),result[0] == 'true' ? true : false);
 }
 
-const update_serial_connection_state = (data:boolean) =>{
+const update_serial_connection_state = (page:number, data:boolean) =>{
     const serial_storeTemplate = useSerialStore();
-    serial_storeTemplate.SetSerialState(data);  
+    serial_storeTemplate.SetSerialState(page, data);  
 }
 
 // 搜索可用的串口数据
 const deal_serialvalid = (receive_data:object) =>{
-    window.console.log('find valid ports for serial');
-    window.console.log(receive_data.data);
     const serial_storeTemplate = useSerialStore();
     serial_storeTemplate.UpdateValidSerialPorts(receive_data.data);
 
@@ -197,11 +199,23 @@ const deal_temperature_tec_value =  (receive_data:object) =>{
     temperature_store.SetTPVList(received_name, Number(received_data));
 }
 
+// 处理振荡器的数据
+const deal_oscillator_data = (receive_data:object) =>{
+    const oscillator_store = useOscillatorDataStore(); 
+    let received_package = receive_data.data;
+    let received_name = receive_data.name;
+    let oscillator_data = received_package.split(',')
+    oscillator_store.SetResistanceVoltageValue(received_name, Number(oscillator_data[0]),Number(oscillator_data[1]));
+    oscillator_store.SetVoltageList(received_name,Number(oscillator_data[1]));
+    
+}
+
+
 
 // 读取下位机参数
 const read_realtime_order = () => {
     const ReadStatusTimer = setInterval(() => {
-        websocket_send(SendMessageType.Amplifier_Realtime_Data_Upload, ''); // 发送读取状态信息
+        // websocket_send(SendMessageType.Amplifier_Realtime_Data_Upload, ''); // 发送读取状态信息
     }, 3000); // 3秒 一个心跳包
    
 };

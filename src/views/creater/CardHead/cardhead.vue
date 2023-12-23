@@ -1,7 +1,7 @@
 <template>
     <div class="card-box-warpper">
-            <ValueShow :childname="CardLabel" property="TPV" :value="TSV_Value"></ValueShow>
-            <ValueShow :childname="CardLabel" property="TSV" :value="TPV_Value"></ValueShow>
+            <ValueShow :childname="CardLabel" property="Reg" :value="Register_Value"></ValueShow>
+            <ValueShow :childname="CardLabel" property="Vol" :value="Voltage_Value"></ValueShow>
             <CirlceButton />
         <!-- <div class="left-box"> -->
 
@@ -17,38 +17,35 @@
     </div>
 </template>
 <script lang='ts' setup>
-    import TemperatureShow from  '@/components/animation/TemperatureShow.vue'
+
     import CirlceButton from   './CircleButton/circlebutton.vue'
     import ValueShow from '@/components/animation/Ringvalue.vue'
     import { ref,onMounted, watch } from 'vue'
-    import { TemperatureShowValue, useTemperatureDataStore } from "@/store/TemperatureData";
-    import { useTemperatureStore } from "@/store/Temperature";
-    const temperature_setting_store = useTemperatureStore();       // store
-    const temperature_data_store = useTemperatureDataStore(); // store
-    const TSV_Value = ref(0);
-    const TPV_Value = ref(0);
+    import { OscillatorDataState, useOscillatorDataStore } from "@/store/CreaterData";
+    const oscillator_data_store = useOscillatorDataStore(); // store
+    const Register_Value = ref(0);
+    const Voltage_Value = ref(0);
     // 父子接口
     const props = defineProps({
-      CardLabel: { type: String, default: true },
+      CardLabel: { type: String, default: 'Creater' },
     });
 
-    const show_temperature_value = ref(20); // 用于显示的温度
 
-    watch(() => temperature_data_store.getTPVStatus(props.CardLabel),
+
+    watch(() => oscillator_data_store.getVoltageStatus(props.CardLabel),
         (newVal, oldVal) => {
-            TSV_Value.value = newVal;
+            Voltage_Value.value = newVal;
         }       
       );
-    watch(() => temperature_setting_store.getTSVStatus(props.CardLabel),
+    watch(() => oscillator_data_store.getResistanceStatus(props.CardLabel),
     (newVal, oldVal) => {
-        TPV_Value.value = newVal;
-        console.log(`Tsv value updated as ${newVal}`)
+        Register_Value.value = newVal;
     }       
     );
     onMounted(()=>{
         // 设置初始值
-        TSV_Value.value = temperature_data_store.getTPVStatus(props.CardLabel);
-        TPV_Value.value = temperature_setting_store.getTSVStatus(props.CardLabel);
+        Register_Value.value = oscillator_data_store.getResistanceStatus(props.CardLabel);
+        Voltage_Value.value = oscillator_data_store.getVoltageStatus(props.CardLabel);
     })
 
 </script>

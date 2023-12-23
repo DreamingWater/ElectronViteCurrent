@@ -49,7 +49,7 @@
 </template>
 <script lang='ts' setup>
    // @ts-nocheck
-    import InputView from  '@/views/temperature/Setting/input/input.vue'
+    import InputView from '@/components/component/inputItem.vue'
     import SendButtonView from  '@/views/temperature/Setting/sendbutton/sendbutton.vue'
     import { useTemperatureStore } from "@/store/Temperature";
     const store = useTemperatureStore();       // store
