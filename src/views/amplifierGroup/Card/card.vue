@@ -10,30 +10,61 @@
                 Current(mA)
               </div>
               <div class="value">
-              {{ this_current }}
+                <ValueShow :data_store="amplifier_store" :store_getter_key="testdata" />
+<!--              {{ this_current }}-->
               </div>
             </div>
             <div class="card-input">
                 <div class="title">Power(mW)</div>
                 <div class="value" >
-                    <InputView  :childname="CardLabel"/>
+                    <InputBox  :data_store="amplifier_store" :store_setting_key="setting_data" />
                 </div>
-                
             </div>
             
             <div class="card-button">
-                <SendButtonView :childname="CardLabel"/>
+                <SendAirPlane :childname="CardLabel"/>
             </div>
         </div>
     </div>
 </template>
 <script lang='ts' setup>
    // @ts-nocheck
-    import InputView from  '@/views/amplifier/InputData/InputData.vue'
+   import { ref,onMounted ,watch} from 'vue' ;
+   import InputView from '@/views/amplifier1/InputData/InputData.vue'
+    import InputBox from "@/components/TextBox/InputBox.vue";
+    import ValueShow from "@/components/showContent/ValueShow.vue";
     import SendButtonView from  '../SendButton/sendbutton.vue'
+    import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
     import { useAmplifierStore } from "@/store/Amplifier";
     const store = useAmplifierStore();       // store
-    import { ref,onMounted ,watch} from 'vue'
+
+
+   import { useAmplifierGroupStore } from "@/store/amplifierGroup";
+   import {
+     AmplifierSettingDataModel,
+     AmplifierGettingDataModel,
+     DataTypeModel,
+     AmplifierChannelModel, CurrentPowerValueModel
+   } from '@/types/amplifier';
+   const amplifier_store = useAmplifierGroupStore();       // store
+   // amplifier_store
+   // setting
+   const setting_data:AmplifierSettingDataModel = {
+     data_type: 'PowerCurrent',
+     value: 0,
+     channel_name: 'ONE',
+     value_model:'SetPower',
+   };
+
+   const testdata:AmplifierGettingDataModel = {
+     data_type: 'PowerCurrent',
+     channel_name: 'ONE',
+     value_model: 'Current'
+   };
+
+
+
+
     const this_current = ref(0) 
 
     // 父子接口
@@ -63,8 +94,6 @@
 button, a {
   cursor: pointer;
 }
-
-
 
 .project-box-wrapper {
     margin: 5px;
@@ -118,10 +147,10 @@ button, a {
     }
     .value{
       font-size: 23px;
-      color: rgb(12, 12, 12);
+      color: rgb(203, 61, 61);
       font-weight:  bold;
       margin: 10px auto;
-  
+      font-family: lemon;
     }
   }
 

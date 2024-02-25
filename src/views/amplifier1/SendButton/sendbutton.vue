@@ -63,7 +63,30 @@
                 sendIcon.style.transform = ``;
             }
         }) 
-
+        const delayed_execution = (element,index,this_lable)=>{
+            let delayed_time = index * 2000;
+            setTimeout(function(){
+                //1秒后执行刷新
+                websocket_send(this_lable, element?element:0);
+                localStorage.setItem(`${props.childname}-current`,element)
+                }, delayed_time); //单位是毫秒
+        }
+      const send_data_cache = (this_lable) =>{
+        var value = parseFloat(localStorage.getItem(`${props.childname}-current`)|| 0.0) ;
+        var set_value = parseFloat(localStorage.getItem(props.childname)||0.0); // 获取设定值
+        var once_step = 3000;
+        let value_list = [];
+        if (value !== set_value) {
+        let step = value > set_value ?-1* once_step : 1*once_step;
+        for (let i = value + step; (i-set_value)*step<0; i += step) {
+          value_list.push(i);
+        }
+        value_list.push(set_value);
+        }
+        value_list.forEach(function (element, index, array) {
+          delayed_execution(element,index,this_lable)
+        });
+      }
         // 发送 温度和电流数据出去
       const send_temprature_current_data = () => {
        
@@ -84,9 +107,9 @@
             this_lable = SendMessageType.Amplifier_THREE;
           
         }    
-        var set_value = localStorage.getItem(props.childname) // 获取设定值
+        // var set_value = localStorage.getItem(props.childname) // 获取设定值
         // console.log(set_value?set_value:0);
-        websocket_send(this_lable, set_value?set_value:0);
+        send_data_cache(this_lable);
       }
     
     </script>

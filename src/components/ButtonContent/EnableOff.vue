@@ -1,11 +1,10 @@
 <template>
   <!-- <div class="mycomponents"> -->
-    <div class="circle">
+  <div class="circle">
     <span class="circle__btn">
       <ion-icon class="pause" name="pause">
           <div class="circle-content">
             <svg class="icon" style="width: 3em;height: 3em;vertical-align: middle;fill: rgb(170, 170, 248);overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4838"><path d="M352 768c-17.664 0-32-14.304-32-32L320 288c0-17.664 14.336-32 32-32s32 14.336 32 32l0 448C384 753.696 369.664 768 352 768z" fill="rgb(170, 170, 248)" p-id="4839"></path><path d="M672 768c-17.696 0-32-14.304-32-32L640 288c0-17.664 14.304-32 32-32s32 14.336 32 32l0 448C704 753.696 689.696 768 672 768z" fill="rgb(170, 170, 248)" p-id="4840"></path></svg>
-
           </div>
       </ion-icon>
       <ion-icon class="play" name="play">
@@ -18,57 +17,59 @@
     <span class="circle__back-1"></span>
     <span class="circle__back-2"></span>
   </div>
-<!-- </div> -->
+  <!-- </div> -->
 </template>
 
 
 <script lang="ts" setup>
-    // @ts-nocheck
-    import { onMounted,ref } from 'vue';
-    import { useAmplifierStore } from "@/store/Amplifier";
-    import { websocket_send } from "@/utils/WebsocketFunc";
-    const store = useAmplifierStore();       // store
-    import { useSerialStore } from "@/store/Serial";
-    import { TempratureCurrent_Set, SendMessageType } from "@/utils/config";
-    const Start_status = ref(false)      // 开关状态
-    const serail_store = useSerialStore();
+// @ts-nocheck
+import { onMounted,ref } from 'vue';
+// import { useAmplifierStore } from "@/store/Amplifier";
+// import { websocket_send } from "@/utils/WebsocketFunc";
+// const store = useAmplifierStore();       // store
+// import { useSerialStore } from "@/store/Serial";
+// import { TempratureCurrent_Set, SendMessageType } from "@/utils/config";
+// const Start_status = ref(false)      // 开关状态
+// const serail_store = useSerialStore();
 
-    const change_circle_status = () => {
-            /*  play button */
-            const play = document.querySelector('.play');
-            const pause = document.querySelector('.pause');
-            const playBtn = document.querySelector('.circle__btn');
-            const wave1 = document.querySelector('.circle__back-1');
-            const wave2 = document.querySelector('.circle__back-2');
-            pause.classList.toggle('visibility');
-            play.classList.toggle('visibility');
-            playBtn.classList.toggle('shadow');
-            wave1.classList.toggle('paused');
-            wave2.classList.toggle('paused');
-    };
-    onMounted(()=>{
-        change_circle_status();
-        wave_effect();
-    })  
-    const wave_effect= () =>{
+const change_circle_status = () => {
+  /*  play button */
+  const play = document.querySelector('.play');
+  const pause = document.querySelector('.pause');
+  const playBtn = document.querySelector('.circle__btn');
+  const wave1 = document.querySelector('.circle__back-1');
+  const wave2 = document.querySelector('.circle__back-2');
+  pause.classList.toggle('visibility');
+  play.classList.toggle('visibility');
+  playBtn.classList.toggle('shadow');
+  wave1.classList.toggle('paused');
+  wave2.classList.toggle('paused');
+};
+onMounted(()=>{
+  change_circle_status();
+  wave_effect();
+})
+const wave_effect= () =>{
 
-        const play = document.querySelector('.play');
-            const pause = document.querySelector('.pause');
-            const playBtn = document.querySelector('.circle__btn');
-            const wave1 = document.querySelector('.circle__back-1');
-            const wave2 = document.querySelector('.circle__back-2');
-        /*  play button  */
-        playBtn.addEventListener('click', function(e) {
-            if(serail_store.getSerialOpenOrNot()!==false){
-                e.preventDefault();
-                change_circle_status();
-                Start_status.value = ! Start_status.value; //取反
-                websocket_send(SendMessageType.Amplifier_OPEN_STATUS, Start_status.value===true?1:0);
-            }
-         })
-       
-    }
-    
+  const play = document.querySelector('.play');
+  const pause = document.querySelector('.pause');
+  const playBtn = document.querySelector('.circle__btn');
+  const wave1 = document.querySelector('.circle__back-1');
+  const wave2 = document.querySelector('.circle__back-2');
+  /*  play button  */
+  playBtn.addEventListener('click', function(e) {
+    e.preventDefault()
+    console.log('clicked');
+    // if(serail_store.getSerialOpenOrNot()!==false){
+    //   e.preventDefault();
+    //   change_circle_status();
+    //   Start_status.value = ! Start_status.value; //取反
+    //   websocket_send(SendMessageType.Amplifier_OPEN_STATUS, Start_status.value===true?1:0);
+    // }
+  })
+
+}
+
 </script>
 
 
@@ -188,7 +189,7 @@ $circle-btn-font-size: 3rem;
 }
 
 .circle-content{
-    font-size: 16px;
-    color: red;
+  font-size: 16px;
+  color: red;
 }
 </style>

@@ -55,7 +55,7 @@
     let portList: string[] = ['COM1','COM2']; // replace with your actual port list
     let selectedPort: string = '';
     import { ref, watch,computed } from 'vue'
-    const ConnectOrShow = ref(false);
+    const ConnectOrShow = ref(false); //store.getSerialOpenOrNot(this_page.value)
 
     const oppositeValue = computed(() => {
       return !ConnectOrShow.value;

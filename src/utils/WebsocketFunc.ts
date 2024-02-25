@@ -48,7 +48,7 @@ const websocketdata_hander = (message:string) =>{
         // 数据解析失败或不是一个对象
         return;
     }
-    switch (data.type) {
+    switch (eval(data.type)) {
         case ReceiveMessageType.SerialValid:
             deal_serialvalid(data.data);
             break;
@@ -76,17 +76,19 @@ const websocketdata_hander = (message:string) =>{
 
         case ReceiveMessageType.AmplifierWorkingStatus:
             deal_amplifier_realtime_working_status(data.data)
-            break
+            break;
         case ReceiveMessageType.AmplifierOpenStatus:
             deal_amplifier_openstatus(data.data)
-            break   
+            break;
         case ReceiveMessageType.AmplifierWholeStatus:
             deal_amplifier_wholestatus(data.data)       
-        
+            break;
         case ReceiveMessageType.TemperatureTPV:
             deal_temperature_tec_value(data.data)
+            break;
         case ReceiveMessageType.Oscillator_Res_Voltage:
             deal_oscillator_data(data.data)
+            break;
         default:
             // 未知的消息类型
             break;
@@ -194,7 +196,7 @@ const deal_temperature_tec_value =  (receive_data:object) =>{
     const temperature_store = useTemperatureDataStore(); 
     let received_data = receive_data.data;
     let received_name = receive_data.name;
-
+    console.log(`${received_name} deal tec data`)
     temperature_store.SetTPVValue(received_name, Number(received_data));
     temperature_store.SetTPVList(received_name, Number(received_data));
 }

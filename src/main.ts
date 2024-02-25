@@ -7,8 +7,9 @@ import App from './App.vue'
 import router from '@/router/index'
 import 'normalize.css' //reset.css
 import './assets/css/common.css'
-
-// websocket
+// import ElementPlus from 'element-plus'
+// import 'element-plus/dist/index.css'
+// .use(ElementPlus)
 
 
 const store = createPinia()

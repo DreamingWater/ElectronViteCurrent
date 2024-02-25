@@ -5,3 +5,13 @@ html, body{
 * {
     box-sizing: border-box;
 }
+
+@font-face {
+    font-family: 'lemon';
+    src: url('@/assets/ttf/Lemon-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'salsa';
+    src: url('@/assets/ttf/Salsa-Regular.ttf') format('truetype');
+}
