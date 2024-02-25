@@ -2,14 +2,8 @@
     <div class="projects-section">
         <div class="section-head">
           <TemperatureHead ></TemperatureHead>
-<!--            <TemperatureCard :data_store="amplifier_store" :/>-->
-<!--            <div>fdsfdf</div>-->
-<!--            <EnableOff/>-->
-
-
-<!--            <RingVariationCard childname="Amplifier" property="amplifier" value="20"></RingVariationCard>-->
-        </div>
-        <div class="project-boxes jsGridView">
+       </div>
+        <div class="section-body">
             <ShowCard :CardLabel="ModuleName" name="ONE"/>
             <ShowCard :CardLabel="ModuleName" name="TWO"/>
             <ShowCard :CardLabel="ModuleName" name="THREE"/>
@@ -31,24 +25,26 @@
       setCurrentPageLocationState(PageLocationStateEnum.Amplifier); // set current page location as amplifier
     })
 </script>
-<style lang="css" scoped>
+<style lang="scss" scoped>
 
-.projects-section {
-  width: 100%;
-  height: 100%;
-
-  .section-head{
-    justify-content: space-around;
-    display: flex;
-    align-items: center;
-  }
-}
-  
-  .project-boxes  {
+  .projects-section {
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-evenly;
 
+      .section-head{
+        justify-content: space-around;
+        display: flex;
+        align-items: center;
+      }
+
+      .section-body  {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: space-evenly;
+
+      }
   }
+  
+
 </style>

@@ -8,32 +8,27 @@
 
 
 <script lang="ts" setup>
-  import { useAmplifierGroupStore } from "@/store/amplifierGroup";
-  import { useTemperatureDataStore } from "@/store/TemperatureData";
-  import {  AmplifierSettingDataModel,AmplifierGettingDataModel } from '@/types/amplifier';
+import {useTemperatureGroupStore} from "@/store/TemperatureGroup";
+  import {  TemperatureSettingDataModel,TemperatureGettingDataModel } from '@/types/temperature';
   import { ref } from  'vue'
   const num3 = ref(3);
 
-  const store = useAmplifierGroupStore();       // store
+  const store = useTemperatureGroupStore();       // store
   const clickbutton = ()=>{
-    const data:AmplifierGettingDataModel = {
-      data_type: 'PowerCurrent',
-      channel_name: 'ONE',
-      value_model: 'SetPower'
+    const data:TemperatureGettingDataModel = {
+      data_type: 'SetDerivative',
     }
     console.log(store.getTargetParameter(data) );
     // console.log(store.getTargetParameter() );
   }
   const set_value = ()=>{
-    const data:AmplifierSettingDataModel = {
-      data_type: 'PowerCurrent',
+    const data:TemperatureSettingDataModel = {
+      data_type: 'SetDerivative',
       value: 532,
-      channel_name: 'ONE',
-      value_model: 'SetPower'
     }
 
     // store.SetTargetData('Current', 100,100,100,'ONE');
-    store.SetTargetData(data);
+    store.setTargetParameter(data);
   }
 
 

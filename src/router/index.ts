@@ -11,7 +11,7 @@ const router= createRouter({
     { path: '/index', component: () => import('@/views/home/index.vue') },
     { path: '/serial', component: () => import('@/views/serial.vue') },
     { path: '/test', component: () => import('@/views/test/test.vue') },
-    { path: '/temperature', component: () => import('@/views/temperature/index.vue') },
+    { path: '/temperature', component: () => import('@/views/temperatureGroup/index.vue') },
     {path: '/creater', component: () => import('@/views/creater/index.vue') }
   ],
   history:createWebHashHistory(),

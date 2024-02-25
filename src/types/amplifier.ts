@@ -1,20 +1,20 @@
 export interface CurrentPowerType{
-    Amplifier_SetPower : number;     // 希望发送给放大器设定的功率
-    Amplifier_WorkingPower : number; // 放大器目前状态的功率
-    Amplifier_Current : number;
+    SetPower : number;     // 希望发送给放大器设定的功率
+    WorkingPower : number; // 放大器目前状态的功率
+    Current : number;
 }
 export type CurrentPowerValueModel = 'SetPower' | 'Current' | 'WorkingPower';
 export interface AmplifierGroupState{
-    Amplifier_Channel_ONE : CurrentPowerType;
-    Amplifier_Channel_TWO : CurrentPowerType;
-    Amplifier_Channel_THREE : CurrentPowerType;
-    AmplifierTemperature:number;
-    AmplifierWorkingStatus:number; // 放大器的开关状态
-    AmplifierOpenStatus:number;    // 放大器的工作状态
+    Channel_ONE : CurrentPowerType;
+    Channel_TWO : CurrentPowerType;
+    Channel_THREE : CurrentPowerType;
+    Temperature:number;
+    WorkingStatus:number; // 放大器的工作状态
+    EnableStatus:number;    // 放大器的开关状态
 }
 export type AmplifierChannelModel = 'ONE' | 'TWO' | 'THREE';
 
-export type DataTypeModel = 'PowerCurrent' | 'Temperature' | 'WorkingStatus' | 'OpenStatus';
+export type DataTypeModel = 'PowerCurrent' | 'Temperature' | 'WorkingStatus' | 'EnableStatus';
 
 export interface AmplifierSettingDataModel {
     data_type: DataTypeModel;

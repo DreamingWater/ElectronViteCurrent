@@ -12,13 +12,15 @@
   <div class="personal-bests-container">
 
     <div class="best-item box-one">
-      <p class="title">{{ props.property }}</p>
+      <p class="title">{{ name }}</p>
       <div class="value_show">
         <!-- <p class="title">{{ props.property }}</p> -->
-        <div class="value">  {{ value }}</div>
+        <div class="value">
+          <ValueShow :name="props.name" :proto_type="props.proto_type" :data_store="props.data_store" :store_getter_key="props.store_getter_key" />
+        </div>
       </div>
       <div class="name">
-        <div class="circles" id="circles">
+        <div class="circles">
           <div class="circle"></div>
           <div class="circle"></div>
           <div class="circle"></div>
@@ -36,16 +38,20 @@
 
 
 
-<script lang="ts" setup>
-import { number } from 'echarts';
-import { ref } from 'vue'
+
+<script  setup>
+import ValueShow from "@/components/showContent/ValueShow.vue";
+// 父子接口
 const props = defineProps({
-  childname: { type: String, default: 'Tec-One' },
-  property: { type: String,  default: 'TSV' },
-  value:    { type:Number,   default:0  },
+  name:  { type: String, default: 'None-name' },
+  proto_type: { type: null, default: 'None-type' },
+  data_store: { type: null , required: true},
+  store_getter_key:{type:null,required:true},
 });
-const show_value = ref(0); // 显示的数值
+
 </script>
+
+
 
 <style lang="scss" scoped>
 

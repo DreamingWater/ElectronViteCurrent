@@ -73,7 +73,7 @@ import {reactive, ref} from 'vue'
 
       search_key.value = parseFloat(item_quantity.value.toFixed(props.precision)) ;// // 两位小数;)
       console.log(search_key)
-      props.data_store.SetTargetData(search_key);
+      props.data_store.setTargetParameter(search_key);
     }
 
 
