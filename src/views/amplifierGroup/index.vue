@@ -10,9 +10,9 @@
 <!--            <RingVariationCard childname="Amplifier" property="amplifier" value="20"></RingVariationCard>-->
         </div>
         <div class="project-boxes jsGridView">
-            <ShowCard CardLabel="Amplifier_ONE"/>
-            <ShowCard CardLabel="Amplifier_TWO"/>
-            <ShowCard CardLabel="Amplifier_THREE"/>
+            <ShowCard :CardLabel="ModuleName" name="ONE"/>
+            <ShowCard :CardLabel="ModuleName" name="TWO"/>
+            <ShowCard :CardLabel="ModuleName" name="THREE"/>
             <!-- <ShowCard CardLabel="LASER_TWO"/> -->
         </div>
     </div>
@@ -21,23 +21,14 @@
 <script setup>
     import ShowCard from './Card/card.vue';
     import TemperatureHead from './CardHead/TemperatureCard.vue'
-    // import TemperatureShow from "";
-    import EnableOff from "@/components/ButtonContent/EnableOff.vue";
-    import TemperatureCard from "@/components/showContent/TemperatureCard.vue";
-    import RingVariationCard from "@/components/showContent/RingVariationCard.vue";
-    import { PageLocationStateEnum, usePageLocationState } from '@/api/pageLocation'
+    import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
-    import { onMounted } from 'vue';
+    import { onMounted,ref } from 'vue';
 
-    import { useAmplifierGroupStore } from "@/store/amplifierGroup";
-    // import {  AmplifierSettingDataModel,AmplifierGettingDataModel } from '@/types/amplifier';
-
-
-    const amplifier_store = useAmplifierGroupStore();       // store
-
+    const ModuleName = ref(PageModulesNames.Amplifier);
 
     onMounted (()=>{
-      setCurrentPageLocationState(PageLocationStateEnum.Amplifier);
+      setCurrentPageLocationState(PageLocationStateEnum.Amplifier); // set current page location as amplifier
     })
 </script>
 <style lang="css" scoped>

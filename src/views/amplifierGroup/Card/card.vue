@@ -3,21 +3,21 @@
 
         <div class="section_card">
             <div class="card-head">
-                {{ CardLabel }}
+                {{ CardLabel }}_{{name}}
             </div>
             <div class="card_current">
               <div class="title">
                 Current(mA)
               </div>
               <div class="value">
-                <ValueShow :data_store="amplifier_store" :store_getter_key="testdata" />
-<!--              {{ this_current }}-->
+                <ValueShow :data_store="amplifier_store" :store_getter_key="show_current_data" />
+
               </div>
             </div>
             <div class="card-input">
                 <div class="title">Power(mW)</div>
                 <div class="value" >
-                    <InputBox  :data_store="amplifier_store" :store_setting_key="setting_data" />
+                    <InputBox  :data_store="amplifier_store" :store_setting_key="set_power_data" />
                 </div>
             </div>
             
@@ -38,6 +38,12 @@
     import { useAmplifierStore } from "@/store/Amplifier";
     const store = useAmplifierStore();       // store
 
+   // 父子接口
+   const props = defineProps({
+     CardLabel: { type: String, default: 'None-label'},
+     name: { type: String, default: 'None-name' },
+   });
+
 
    import { useAmplifierGroupStore } from "@/store/amplifierGroup";
    import {
@@ -47,42 +53,21 @@
      AmplifierChannelModel, CurrentPowerValueModel
    } from '@/types/amplifier';
    const amplifier_store = useAmplifierGroupStore();       // store
-   // amplifier_store
-   // setting
-   const setting_data:AmplifierSettingDataModel = {
+
+   // @ts-nocheck
+   const set_power_data:AmplifierSettingDataModel = {
      data_type: 'PowerCurrent',
      value: 0,
-     channel_name: 'ONE',
+     channel_name: props.name as string,
      value_model:'SetPower',
    };
-
-   const testdata:AmplifierGettingDataModel = {
+   // @ts-nocheck
+   const show_current_data:AmplifierGettingDataModel = {
      data_type: 'PowerCurrent',
-     channel_name: 'ONE',
+     channel_name:  props.name as string,
      value_model: 'Current'
    };
 
-
-
-
-    const this_current = ref(0) 
-
-    // 父子接口
-    const props = defineProps({
-      CardLabel: { type: String, default: true },
-    });
-
-  
-
-  // onMounted
-  onMounted(()=>{
-    window.console.log(props.CardLabel);
-  });
-  watch(() => store.getTargetCurrent(props.CardLabel),
-        (newVal, oldVal) => {
-          this_current.value = newVal;
-        }
-      );
 
 </script>
 

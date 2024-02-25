@@ -1,5 +1,13 @@
 import { ref, computed, unref, Ref } from 'vue';
 
+
+export const PageModulesNames = {
+    'Oscillator' : 'Oscillator',
+    'Temperature': 'Temperature',
+    'Amplifier' : 'Amplifier',
+    'Others' : 'Others',
+}
+
 export enum PageLocationStateEnum {
     Oscillator = 0,
     Temperature= 1,

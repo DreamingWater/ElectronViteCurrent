@@ -19,16 +19,10 @@
 
 
 <script lang="ts" setup>
-    // @ts-nocheck
-    import { ref,onMounted,watch } from 'vue'
-    import {
-      AmplifierChannelModel,
-      AmplifierSettingDataModel,
-      CurrentPowerValueModel,
-      DataTypeModel
-    } from "@/types/amplifier";
+// @ts-nocheck
+import {reactive, ref} from 'vue'
 
-    // 父子接口
+// 父子接口
     const props = defineProps({
       name: {type:String, default:'None-name'},
       data_store: { type: null , required: true},
@@ -43,7 +37,7 @@
     let item_quantity = ref(0);   // 显示的数值
     const isDisabled = ref(props.disabled); // 是否失能整个部分
     const minis_tune_range = ref(props.step); // 调节步长
-    const search_key = ref(props.store_setting_key);
+    const search_key = reactive(props.store_setting_key);
     //数量的表单元素的change回调
     function onchangeSetValue(e: any) {
       //通过event事件对象获取用户输入内容[用户输入的内容一定是字符串类型的数据]
@@ -65,20 +59,21 @@
         item_quantity.value = 0;
       } else {
         //正常情况
-        item_quantity.value = parseFloat(value).toFixed(props.precision); // 两位小数
+        item_quantity.value = value;
+        // 更新数据到pinia中
+        save_data_2_store();
       }
-      // 更新数据到pinia中
-      console.log('item_quantity.value:',item_quantity.value)
-      save_data_2_store();
+
     }
 
     function save_data_2_store(){
       // if(!search_key.value.hasOwnProperty('this_statement')){
       //   console.log('No this_statement as key in store_setting_key')
       // }
-      search_key.value['value'] = item_quantity.value as number;
-      console.log('search_key:',search_key.value)
-      props.data_store.SetTargetData(search_key.value);
+
+      search_key.value = parseFloat(item_quantity.value.toFixed(props.precision)) ;// // 两位小数;)
+      console.log(search_key)
+      props.data_store.SetTargetData(search_key);
     }
 
 

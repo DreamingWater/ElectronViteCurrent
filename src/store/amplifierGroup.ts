@@ -47,7 +47,7 @@ export const useAmplifierGroupStore = defineStore({
         SetAmplifierPowerCurrentValue(value_model:CurrentPowerValueModel,value?:number,value_TWO?:number,value_THREE?:number,channel_name?:AmplifierChannelModel){
             if (channel_name){
                 // 给定通道就只设定单个通道的值
-                this.Amplifier_Data[`Amplifier_Channel_${channel_name}`][`Amplifier_${value_model}`] = channel_name === 'ONE' ? value : channel_name === 'TWO' ? value_TWO : value_THREE;
+                this.Amplifier_Data[`Amplifier_Channel_${channel_name}`][`Amplifier_${value_model}`] =  value;
                 return;
             }
             // 没有给定通道就设定所有通道的值

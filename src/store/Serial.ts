@@ -17,7 +17,7 @@ function GetObjIndexByTargetPage(SerialConfigData:SerialConfig[], current_page: 
 
 
 export const useSerialStore = defineStore({
-  id: 'useserial',
+  id: 'use-serial',
   state: () => ({
     Serial_State: {
         validPorts:[''],
