@@ -37,22 +37,24 @@
 <script setup lang="ts">
 // @ts-nocheck
 import { ref } from "vue";
-import { websocket_send } from '@/utils/WebsocketFunc'
-import { SendMessageType } from '@/utils/config'
+
 
 const IsUseSysTitle = ref(false);
 const mix = ref(false);
 
 const Mini = () => {
-  window.RenderApi.minWindow();
+  setMinWindow();
+  // window.RenderApi.minWindow();
 };
 const MixOrReduction = () => {
-  window.RenderApi.maxWindow().then((res) => {
-    mix.value = res.status;
-  });
+  setMaxWindow();
+  // window.RenderApi.maxWindow().then((res) => {
+  //   mix.value = res.status;
+  // });
 };
 const Close = () => {
-  window.RenderApi.closeWindow();
+  setCloseWindow();
+  // window.RenderApi.closeWindow();
 };
 
 

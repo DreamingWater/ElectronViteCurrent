@@ -76,12 +76,12 @@ async function createWindow() {
     // title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
-      preload,
+      // preload,
       // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
       // Consider using contextBridge.exposeInMainWorld
       // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
       nodeIntegration: true,
-      contextIsolation: true,
+      contextIsolation: false,
     },
     show:false,
   })
@@ -89,7 +89,7 @@ async function createWindow() {
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
     // Open devTool if the app is not packaged
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
   } else {
     win.loadFile(indexHtml)
     // win.webContents.openDevTools()
@@ -114,7 +114,10 @@ async function createWindow() {
       win.destroy();
     }, 1000); // 延迟1秒后关闭窗口
   });
-  
+  // win.webContents.on('WindowMini', (event) => {
+  //   BrowserWindow.fromWebContents(event.sender)?.minimize();
+  // })
+
 
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
@@ -171,13 +174,15 @@ app.on('activate', () => {
 })
 
 
+// 使用ipcMain.on方法监听 renderer-send 事件
+ipcMain.on("WindowMini", (event) => {
+  BrowserWindow.fromWebContents(event.sender)?.minimize();
 
+});
 
 // New window example arg: new windows url
-ipcMain.handle('WindowMini', (event) => {
-  BrowserWindow.fromWebContents(event.sender)?.minimize();
-})
-ipcMain.handle('WindowMax', (event) => {
+
+ipcMain.on('WindowMax', (event) => {
   if (BrowserWindow.fromWebContents(event.sender)?.isMaximized()) {
       BrowserWindow.fromWebContents(event.sender)?.restore();
       return { status: false };
@@ -186,9 +191,9 @@ ipcMain.handle('WindowMax', (event) => {
       return { status: true };
     }
 })
-ipcMain.handle('WindowClose', (event) => {
+ipcMain.on('WindowClose', (event) => {
 
-  win?.webContents.send('shutdown_background', '');
+  // win?.webContents.send('shutdown_background', '');
   setTimeout(()=>{
     BrowserWindow.fromWebContents(event.sender)?.minimize();
     BrowserWindow.fromWebContents(event.sender)?.close();

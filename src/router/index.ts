@@ -12,7 +12,8 @@ const router= createRouter({
     { path: '/serial', component: () => import('@/views/serial.vue') },
     { path: '/test', component: () => import('@/views/test/test.vue') },
     { path: '/temperature', component: () => import('@/views/temperatureGroup/index.vue') },
-    {path: '/creater', component: () => import('@/views/creater/index.vue') }
+    {path: '/creater', component: () => import('@/views/creater/index.vue') },
+    {path: '/serial1', component: () => import('@/views/serialControl/test.vue') }
   ],
   history:createWebHashHistory(),
   // 优化跳转 点击首页 直接回到首页顶部
