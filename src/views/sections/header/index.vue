@@ -42,7 +42,7 @@
 
 <script lang="ts" setup>
 // @ts-nocheck
-    import serialCon from '@/components/component/serialCon.vue';
+    import serialCon from '@/components/connections/serialConn.vue';
     import { useSerialStore } from "@/store/Serial";
     import { websocket_send } from "@/utils/WebsocketFunc"
     import { SendMessageType } from "@/utils/config"

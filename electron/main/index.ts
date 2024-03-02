@@ -1,6 +1,13 @@
 import { app, BrowserWindow, shell, Menu, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
+
+// 调试
+import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
+// import electronDevtoolsInstaller, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
+// import { session } from 'electron'
+// import {resolve} from "path";
+
 // import { spawn } from 'child_process';  // 启动python进程
 const { execFile } = require("cross-spawn");
 // The built directory structure
@@ -20,7 +27,7 @@ const setMenu = ()=> {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
-setMenu();
+// setMenu();
 
 
 
@@ -72,7 +79,7 @@ async function createWindow() {
   win = new BrowserWindow({
     width:1150,
     height:750,
-    frame: false, // 隐藏标题栏和窗口控制按钮
+    // frame: false, // 隐藏标题栏和窗口控制按钮
     // title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
@@ -88,6 +95,7 @@ async function createWindow() {
 
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
+
     // Open devTool if the app is not packaged
     win.webContents.openDevTools()
   } else {
@@ -147,8 +155,23 @@ async function  loadingWindow() {
   }, 1000);
 }
 // 程序开始时候启动loading 效果
-app.whenReady().then(loadingWindow)
-
+app.whenReady().then(() => {
+  installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
+      .then(ext => console.log(`Added Extension:  ${ext.name}`))
+      .catch(err => console.log('An error occurred: ', err));
+  // try{
+  //   electronDevtoolsInstaller(VUEJS_DEVTOOLS).then((name) =>
+  //     console.log(`Added Extension: ${name}`)).catch((err) => console.log('An error occurred: ', err))
+  //   }catch (err){
+  //       console.log('Unable to install `vue-devtools`: \n', err)
+  // }
+  loadingWindow();
+  // session.defaultSession.loadExtension(
+  //     resolve(__dirname, "../../extentions/devtools/6.6.1_0"),
+  //     { allowFileAccess: true,}
+  // )
+})
+// app.whenReady().then(loadingWindow)
 // app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
