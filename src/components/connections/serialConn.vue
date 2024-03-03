@@ -63,6 +63,8 @@
       });
 
       function click_connect_serial(){
+        let use_port:any = null;
+        let use_parser:any = null;
         const current_control_page = computed(() => unref(getCurrentPageLocationState));
       // 解构对应的 store
         const store = getStoreByPageLocation(current_control_page.value)();
@@ -81,17 +83,18 @@
           console.error('setTargetParameter method does not exist on the store instance');
         }
 
-        store.setTargetParameter(setting_key);
         const baudRate:number = store.getTargetParameter(search_key);
         // 获取当前页面的串口配置
         if (!selectedPort.value ) {
           alert('Please select the ports');
           return;
         }
-        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate));
+        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate.value));
+        console.log('use_port:',use_port)
         if(use_port){
           // 跟新配置到pinia,连接成功
-          store.changeSerialConnectState({'serial_object':use_port,'serial_parser':use_parser,'isOpen_value':true});
+          store.changeSerialConnectState(use_port,use_parser,true);
+          add_serial_data_parser(use_parser);
         }
       }
 

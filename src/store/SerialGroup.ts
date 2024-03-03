@@ -37,16 +37,17 @@ function createSerialGroupStore(id: string,target:PageLocationStateEnum) {
             },
             // 发送串口数据
             sendSerialData(data: string) {
-                if (this.Serial_Data.Serial_object) {
-                    try {const send_data = data+'\r\n';
-                        this.Serial_Data.Serial_object.write(send_data);
-                    }catch (e) {console.log(e);}
-                }
+                // if (this.Serial_Data.Serial_object) {
+                //     try {
+                //         this.Serial_Data.Serial_object.write(data);
+                //     }catch (e) {console.log(e);}
+                // }
+                console.log('模拟串口发送：',data);
             },
             // 成功连接、断开串口后配置store
             changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean) {
-                this.Serial_Data.Serial_object = serial_object;
-                this.Serial_Data.Serial_parser = serial_parser;
+                this.Serial_Data.SerialObject = serial_object;
+                this.Serial_Data.SerialParser = serial_parser;
                 this.Serial_Data.IsOpen = isOpen_value;
             },
         },

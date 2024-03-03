@@ -1,7 +1,7 @@
 <template>
     <div class="projects-section">
       <div class="section-head">
-            <CardHead CardLabel="Tec_One"/>
+            <CardHead :module_name="ModuleName" />
         </div>
 
       <div class="section-body">
@@ -15,13 +15,15 @@
     import SettingValue from './Setting/setting.vue';
     import CardHead from './CardHead/cardhead.vue'
     import LinePlot from './LinePlot/lineplot.vue'
-    import { onMounted,ref } from 'vue';
+    import {computed, onMounted, ref, unref} from 'vue';
 
     // 页面位置 和 页面 module
     import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
 
     const ModuleName = ref(PageModulesNames.TemperaturePPLN);
+    // const current_control_page = computed(() => unref(ModuleName));
+    // console.log('current_control_page')
 
     onMounted (()=>{
       setCurrentPageLocationState(PageLocationStateEnum.TemperaturePPLN); // set current page location as amplifier

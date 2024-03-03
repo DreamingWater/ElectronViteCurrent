@@ -1,8 +1,8 @@
 <template>
     <div class="card-box-warpper">
-      <RingVariationCard :name="CardLabel" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
-      <RingVariationCard :name="CardLabel" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
-      <EnableOff :CardLabel="CardLabel" />
+      <RingVariationCard :name="name" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
+      <RingVariationCard :name="name" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
+      <EnableOff :module_name="module_name" :name="name" :data_package="send_data_package" />
     </div>
 </template>
 
@@ -11,15 +11,16 @@ import { ref,onMounted, watch } from 'vue'
   import RingVariationCard from "@/components/showContent/RingVariationCard.vue";
   import EnableOff from "@/components/ButtonContent/EnableOff.vue";
   import { TemperatureSettingDataModel, TemperatureGettingDataModel } from '@/types/temperature';
-    import { useTemperatureGroupStore } from "@/store/temperatureGroup";
-    const temperature_store = useTemperatureGroupStore();       // store
+  import { useTemperatureGroupStore } from "@/store/temperatureGroup";
+import {number} from "echarts";
+  const temperature_store = useTemperatureGroupStore();       // store
 
 
     // 父子接口
     const props = defineProps({
-      CardLabel: { type: String, default: true },
+      module_name: { type: null, required: true },
+      name: { type: String, default: 'none-Name' },
     });
-
 
     const show_sample_temperature_data:TemperatureGettingDataModel = {
       data_type: 'SamplingTemperature',
@@ -28,9 +29,11 @@ import { ref,onMounted, watch } from 'vue'
     const show_working_temperature_data:TemperatureGettingDataModel = {
       data_type: 'WorkingTemperature',
     }
-
-
-
+    const set_enable_status_data:TemperatureSettingDataModel = {
+      data_type: 'EnableStatus',
+      value:1,
+    }
+const send_data_package = ref([set_enable_status_data]); // 发送的数据包
 </script>
 
 <style lang="scss" scoped>

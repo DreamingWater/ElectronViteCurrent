@@ -13,7 +13,7 @@
             </div> -->
             </div>
                     
-          <section v-show="ConnectOrShow">
+          <section v-if="CurConnectStatus">
             <div class="app-header-right">
                           <button class="mode-switch" title="Switch Theme">
                               <svg class="moon" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="24" height="24" viewBox="0 0 24 24">
@@ -32,7 +32,7 @@
                           </button>
                       </div>
           </section>
-          <section v-show="oppositeValue">
+          <section v-else>
             <serialCon ></serialCon>
           </section>
             
@@ -43,47 +43,32 @@
 <script lang="ts" setup>
 // @ts-nocheck
     import serialCon from '@/components/connections/serialConn.vue';
-    import { useSerialStore } from "@/store/Serial";
-    import { websocket_send } from "@/utils/WebsocketFunc"
-    import { SendMessageType } from "@/utils/config"
-    import {PageStateEnum, useCurrentPageState } from '@/views/data'
-    const { setCurrentPageState, getCurrentPagestate} = useCurrentPageState();
-    import { unref } from 'vue'
+    import { PageLocationStateEnum,usePageLocationState } from "@/api/pageLocation";
+    import { unref, ref, watch, computed } from 'vue'
+    import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
+    import { SerialGettingDataModel } from '@/types/serial';
+
+    const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
 
 
-    const store = useSerialStore(); // store
-    let portList: string[] = ['COM1','COM2']; // replace with your actual port list
-    let selectedPort: string = '';
-    import { ref, watch,computed } from 'vue'
-    const ConnectOrShow = ref(false); //store.getSerialOpenOrNot(this_page.value)
+    const current_control_page = computed(() => unref(getCurrentPageLocationState));
+    // 解构对应的 store
+    const store = getStoreByPageLocation(current_control_page.value)();
 
-    const oppositeValue = computed(() => {
-      return !ConnectOrShow.value;
-    });
-    const this_page = computed(() => unref(getCurrentPagestate));
-    // watch(this_page ,  (newVal, oldVal) => {
-    //   console.log(`change page ${newVal}`)
+    const search_serial_status:SerialGettingDataModel = { 'data_type' : 'IsOpen'};
+    const CurConnectStatus = ref(store.getTargetParameter(search_serial_status)); //store.getSerialOpenOrNot(this_page.value)
+
+    watch(() => store.getTargetParameter(search_serial_status),
+            (newVal, oldVal) => {
+              console.log(`changed page ${newVal}`)
+              CurConnectStatus.value = newVal;
+              }
+          );
+    //   function click_icon(){
+    //     const this_page = computed(() => unref(getCurrentPagestate));
+    //   // 发送串口连接信号
+    //   store.ChangeConnectSerialState(this_page.value as number);
     // }
-    // )
-    watch(() => store.getSerialOpenOrNot(this_page.value),
-        (newVal, oldVal) => {
-          console.log(`changed page ${newVal}`)
-          ConnectOrShow.value = newVal;
-    setTimeout(() => {// 在一秒后执行的任务
-            if( store.Serial_State.isOpen)
-            {
-                window.console.log('在0.1秒后执行的任务');
-                // websocket_send(SendMessageType.Amplifier_OPEN_STATUS, 0); // 放大器
-                // websocket_send(SendMessageType.DataUpload, ''); // 启动数据上传，用于 我的电流源
-            }
-          }, 100);
-          }
-      );
-      function click_icon(){
-        const this_page = computed(() => unref(getCurrentPagestate));
-      // 发送串口连接信号
-      store.ChangeConnectSerialState(this_page.value as number);
-    }
 
 
 </script>
