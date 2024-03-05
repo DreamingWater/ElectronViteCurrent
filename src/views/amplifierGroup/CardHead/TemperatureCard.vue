@@ -32,7 +32,7 @@
     const working_status = ref('Perfect well')
     // 父子接口
     const props = defineProps({
-      CardLabel: { type: String, default: true },
+      CardLabel: { type: String, default: 'none-Lable' },
     });
 
     import { useAmplifierGroupStore } from "@/store/amplifierGroup";

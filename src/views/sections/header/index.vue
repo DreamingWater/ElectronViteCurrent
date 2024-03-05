@@ -27,7 +27,7 @@
                               <path d="M13.73 21a2 2 0 0 1-3.46 0" /></svg>
                           </button>
                           <button class="profile-btn">
-                              <img src="@/assets/imgs/stable.jpg" @click="click_icon" />
+                              <img src="@/assets/imgs/stable.jpg" @click="click_close_icon" />
                               <span>Just for stabilization</span>
                           </button>
                       </div>
@@ -42,33 +42,34 @@
 
 <script lang="ts" setup>
 // @ts-nocheck
-    import serialCon from '@/components/connections/serialConn.vue';
-    import { PageLocationStateEnum,usePageLocationState } from "@/api/pageLocation";
-    import { unref, ref, watch, computed } from 'vue'
-    import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
-    import { SerialGettingDataModel } from '@/types/serial';
+import serialCon from '@/components/connections/serialConn.vue';
+import {usePageLocationState} from "@/api/pageLocation";
+import {computed, ref, unref, watch} from 'vue'
+import {getStoreByPageLocation} from "@/store/SerialGroup";
+import {SerialGettingDataModel} from '@/types/serial';
 
-    const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
-
-
+const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
     const current_control_page = computed(() => unref(getCurrentPageLocationState));
-    // 解构对应的 store
-    const store = getStoreByPageLocation(current_control_page.value)();
-
     const search_serial_status:SerialGettingDataModel = { 'data_type' : 'IsOpen'};
-    const CurConnectStatus = ref(store.getTargetParameter(search_serial_status)); //store.getSerialOpenOrNot(this_page.value)
+    const cur_store_status = computed(
+        () => {
+          const store =  getStoreByPageLocation(current_control_page.value)();
+          return store.getTargetParameter(search_serial_status)
+    })
 
-    watch(() => store.getTargetParameter(search_serial_status),
+
+    const CurConnectStatus = ref(cur_store_status); //store.getSerialOpenOrNot(this_page.value)
+
+    watch(() => cur_store_status,
             (newVal, oldVal) => {
               console.log(`changed page ${newVal}`)
               CurConnectStatus.value = newVal;
               }
           );
-    //   function click_icon(){
-    //     const this_page = computed(() => unref(getCurrentPagestate));
-    //   // 发送串口连接信号
-    //   store.ChangeConnectSerialState(this_page.value as number);
-    // }
+      function click_close_icon(){
+        const store =  getStoreByPageLocation(current_control_page.value)();
+        return store.changeSerialConnectState(null,null,false);
+    }
 
 
 </script>

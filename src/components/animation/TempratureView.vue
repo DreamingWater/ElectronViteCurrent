@@ -16,7 +16,7 @@ const props = defineProps({
     const store = useTemCurStore();       // store
     let myChart;
     onMounted (()=>{
-    const this_canvas_name = props.childname + '-temprature-container';
+    const this_canvas_name = props.name + '-temprature-container';
     var dom = document.getElementById(this_canvas_name);
     myChart = echarts.init(dom, null, {
         renderer: 'canvas',
@@ -149,7 +149,7 @@ const props = defineProps({
 //   console.log('New value:', newValue);
 //   console.log('Old value:', oldValue);
 // });
-  watch(() => store.getLatestTemprature(props.childname),
+  watch(() => store.getLatestTemprature(props.name),
         (newVal, oldVal) => {
           window.console.log('store changed in temprature');
           myChart.setOption({

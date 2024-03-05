@@ -6,7 +6,7 @@ import {SerialSettingDataModel} from "../types/serial";
 
 
 
-function createSerialGroupStore(id: string,target:PageLocationStateEnum) {
+function createSerialGroupStore(id: string,baudRate:number,target:PageLocationStateEnum) {
     return defineStore({
         id,
         state: () => ({
@@ -14,7 +14,7 @@ function createSerialGroupStore(id: string,target:PageLocationStateEnum) {
                 Target: target,
                 IsOpen: false,
                 Port: 'COM1',
-                BaudRate: 115200,
+                BaudRate: baudRate,
                 SerialObject: null,   // 串口对象
                 SerialParser: null,    // 串口解析对象
             } as SerialGroupState,
@@ -37,27 +37,32 @@ function createSerialGroupStore(id: string,target:PageLocationStateEnum) {
             },
             // 发送串口数据
             sendSerialData(data: string) {
-                // if (this.Serial_Data.Serial_object) {
-                //     try {
-                //         this.Serial_Data.Serial_object.write(data);
-                //     }catch (e) {console.log(e);}
-                // }
+                if (this.Serial_Data.SerialObject) {
+                    try {
+                        this.Serial_Data.SerialObject.write(data);
+                    }catch (e) {console.log(e);}
+                }
                 console.log('模拟串口发送：',data);
             },
             // 成功连接、断开串口后配置store
             changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean) {
-                this.Serial_Data.SerialObject = serial_object;
                 this.Serial_Data.SerialParser = serial_parser;
                 this.Serial_Data.IsOpen = isOpen_value;
+                if (serial_object){
+                    this.Serial_Data.SerialObject = serial_object;
+                }else {
+                    this.Serial_Data.SerialObject.close(); // 首先关闭串口
+                    this.Serial_Data.SerialObject = null;
+                }
             },
         },
     })
 }
 
 
-export const useSerialOscillatorStore = createSerialGroupStore('use-serial-oscillator',PageLocationStateEnum.Oscillator);
-export const useSerialAmplifierStore = createSerialGroupStore('use-serial-amplifier',PageLocationStateEnum.Amplifier);
-export const useSerialTemperaturePPLNStore = createSerialGroupStore('use-serial-temperature-ppln',PageLocationStateEnum.TemperaturePPLN);
+export const useSerialOscillatorStore = createSerialGroupStore('use-serial-oscillator',115200,PageLocationStateEnum.Oscillator);
+export const useSerialAmplifierStore = createSerialGroupStore('use-serial-amplifier',115200,PageLocationStateEnum.Amplifier);
+export const useSerialTemperaturePPLNStore = createSerialGroupStore('use-serial-temperature-ppln',9600,PageLocationStateEnum.TemperaturePPLN);
 
 export  const getStoreByPageLocation = (pageLocation: PageLocationStateEnum) => {
     switch (pageLocation) {

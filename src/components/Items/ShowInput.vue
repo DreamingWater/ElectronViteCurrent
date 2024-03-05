@@ -5,7 +5,7 @@
       <div class="current_value">
         <ValueShow :data_store="data_store" :store_getter_key="show_data" />
       </div>
-      <InputBox :data_store="data_store" :store_setting_key="set_data" />
+      <InputBox :data_store="data_store" :store_setting_key="set_data" :store_getter_key="show_data"/>
     </div>
   </div>
 </template>

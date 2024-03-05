@@ -17,7 +17,7 @@ export interface TemperatureGroupState{
     SamplingTemperatureList?: [];
 
     PIDParameter?: PidParameter;
-    SetHeaterCooler:number;    //  0 双向； 1 制热；2 单制冷
+    HeaterCoolerStatus:number;    //  0 双向； 1 制热；2 单制冷
     WorkingStatus:number;      // 工作状态
     EnableStatus:number;       // 工作状态
 }

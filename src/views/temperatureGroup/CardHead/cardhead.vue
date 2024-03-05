@@ -1,8 +1,8 @@
 <template>
     <div class="card-box-warpper">
-      <RingVariationCard :name="name" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
-      <RingVariationCard :name="name" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
-      <EnableOff :module_name="module_name" :name="name" :data_package="send_data_package" />
+      <RingVariationCard name="TSV" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
+      <RingVariationCard name="TPV" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
+      <EnableOff :module_name="module_name" :name="name"  :data_store="temperature_store"  :data_package="send_data_package" :store_key="enable_status"/>
     </div>
 </template>
 
@@ -29,11 +29,11 @@ import {number} from "echarts";
     const show_working_temperature_data:TemperatureGettingDataModel = {
       data_type: 'WorkingTemperature',
     }
-    const set_enable_status_data:TemperatureSettingDataModel = {
+    const enable_status:TemperatureSettingDataModel = {
       data_type: 'EnableStatus',
       value:1,
     }
-const send_data_package = ref([set_enable_status_data]); // 发送的数据包
+const send_data_package = ref([]); // 发送的数据包
 </script>
 
 <style lang="scss" scoped>

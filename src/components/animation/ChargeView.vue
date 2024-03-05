@@ -46,7 +46,7 @@
     // window.console.log(this_canvas_name);})
 
 
-    watch(() => store.getLatestCurrent(props.childname),
+    watch(() => store.getLatestCurrent(props.name),
         (newVal, oldVal) => {
           show_current_value.value = newVal;   //更新值
           }

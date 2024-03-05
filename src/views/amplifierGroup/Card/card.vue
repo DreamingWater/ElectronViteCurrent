@@ -10,19 +10,19 @@
                 Current(mA)
               </div>
               <div class="value">
-                <ValueShow :data_store="amplifier_store" :store_getter_key="show_current_data" />
+                <ValueShow :data_store="amplifier_store" :store_getter_key="show_current_data"  />
 
               </div>
             </div>
             <div class="card-input">
                 <div class="title">Power(mW)</div>
                 <div class="value" >
-                    <InputBox  :data_store="amplifier_store" :store_setting_key="set_power_data" />
+                    <InputBox  :data_store="amplifier_store" :store_setting_key="set_power_data" :store_getter_key="show_power_data"/>
                 </div>
             </div>
             
             <div class="card-button">
-                <SendAirPlane :childname="CardLabel"/>
+                <SendAirPlane :name="CardLabel"/>
             </div>
         </div>
     </div>
@@ -61,6 +61,12 @@
      channel_name: props.name as string,
      value_model:'SetPower',
    };
+   const show_power_data:AmplifierGettingDataModel = {
+     data_type: 'PowerCurrent',
+     channel_name:  props.name as string,
+     value_model: 'WorkingPower'
+   };
+
    // @ts-nocheck
    const show_current_data:AmplifierGettingDataModel = {
      data_type: 'PowerCurrent',

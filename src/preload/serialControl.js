@@ -14,7 +14,7 @@ async function listAvailablePorts() {
 function askForSerialConnection(portPath, baudRate) {
     console.log('Connecting to port', portPath, 'at baud rate', baudRate);
     try {
-        let port = new SerialPort({ path: 'COM8', baudRate: 9600 }); // 使用全局变量port
+        let port = new SerialPort({ path: portPath, baudRate: baudRate }); // 使用全局变量port
         let parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
         return {port ,parser};
     }catch (e)  {

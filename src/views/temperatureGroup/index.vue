@@ -5,14 +5,14 @@
         </div>
 
       <div class="section-body">
-          <SettingValue CardLabel="Tec_One"/>
+          <SettingValue  name="temperature_setting_panel" :module_name="ModuleName"/>
           <LinePlot > </LinePlot>
       </div>
     </div>
 </template>
 
 <script setup>
-    import SettingValue from './Setting/setting.vue';
+    import SettingValue from './Setting/paramsSettingPannel.vue';
     import CardHead from './CardHead/cardhead.vue'
     import LinePlot from './LinePlot/lineplot.vue'
     import {computed, onMounted, ref, unref} from 'vue';

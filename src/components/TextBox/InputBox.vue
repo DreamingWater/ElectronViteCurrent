@@ -20,13 +20,14 @@
 
 <script lang="ts" setup>
 // @ts-nocheck
-import {reactive, ref} from 'vue'
+import {reactive, ref, onMounted} from 'vue'
 
 // 父子接口
     const props = defineProps({
       name: {type:String, default:'None-name'},
       data_store: { type: null , required: true},
       store_setting_key:{type:null,required:true},
+      store_getter_key:{type:null,required:true},
 
       proto_type: { type: null, default: 'None-type' },
       step: {type:Number, default:1          },
@@ -76,7 +77,9 @@ import {reactive, ref} from 'vue'
       props.data_store.setTargetParameter(search_key);
     }
 
-
+    onMounted(()=>{
+       item_quantity.value = props.data_store.getTargetParameter(props.store_getter_key);
+    })
 
 
 </script>

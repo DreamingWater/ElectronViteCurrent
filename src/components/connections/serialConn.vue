@@ -16,7 +16,7 @@
       import UnConnectedImg from "@/assets/imgs/unconnected.png";
       import { ref, onMounted, watch,computed,unref } from 'vue';
       import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
-
+      import { append_serial_data_parser } from "@/api/SerialParser/index"
 
       // 获取当前在哪个页面
       import { usePageLocationState } from "@/api/pageLocation";
@@ -26,7 +26,8 @@
       const portList= ref([]);  // replace with your actual port list
       const selectedPort = ref('');
       const rotationAngle = ref(0); // 初始角度为0度
-
+      let use_port:any = null;
+      let use_parser:any = null;
       // 旋转 logo 角度
       const rotateStyle = computed(() => {
         return `rotate(${rotationAngle.value}deg)`;
@@ -61,10 +62,13 @@
           click_refresh_logo();
         }, 200);
       });
-
+      function add_parser(this_parser:any) {
+        this_parser.on('data', data => {
+          console.log('Received data from port:', data);
+        });
+      }
       function click_connect_serial(){
-        let use_port:any = null;
-        let use_parser:any = null;
+
         const current_control_page = computed(() => unref(getCurrentPageLocationState));
       // 解构对应的 store
         const store = getStoreByPageLocation(current_control_page.value)();
@@ -72,29 +76,19 @@
         const search_key:SerialGettingDataModel = {
           'data_type':'BaudRate',
         } ;
-        const setting_key:SerialSettingDataModel = {
-          'data_type':'BaudRate',
-          'value':9600,
-        } ;
 
-        if (typeof store.setTargetParameter === 'function') {
-          store.setTargetParameter(setting_key);
-        } else {
-          console.error('setTargetParameter method does not exist on the store instance');
-        }
-
-        const baudRate:number = store.getTargetParameter(search_key);
+        const baudRate = store.getTargetParameter(search_key);
+        console.log('baudRate',baudRate)
         // 获取当前页面的串口配置
         if (!selectedPort.value ) {
           alert('Please select the ports');
           return;
         }
-        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate.value));
-        console.log('use_port:',use_port)
+        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate));
         if(use_port){
           // 跟新配置到pinia,连接成功
           store.changeSerialConnectState(use_port,use_parser,true);
-          add_serial_data_parser(use_parser);
+          append_serial_data_parser(use_parser,current_control_page.value);
         }
       }
 

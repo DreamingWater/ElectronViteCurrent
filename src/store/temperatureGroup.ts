@@ -8,23 +8,23 @@ function createTemperatureStore(id: string) {
         id,
         state: () => ({
             Temperature_Data: {
-                SetTemperature: 0,
+                SetTemperature: 20,
                 WorkingTemperature: 20,
                 SamplingTemperature: 30,
-                SamplingTemperatureList:[1,2,3,4,5,6,5,4,3,2,1,3,6],
+                SamplingTemperatureList:[0,0,0],
                 PIDParameter: {
-                    SetProportional: 0,
-                    SetIntegral: 0,
-                    SetDerivative: 0,
-                    WorkingProportional: 0,
-                    WorkingIntegral: 0,
-                    WorkingDerivative: 0,
+                    SetProportional: 50,
+                    SetIntegral: 10,
+                    SetDerivative: 20,
+                    WorkingProportional: 50,
+                    WorkingIntegral: 10,
+                    WorkingDerivative: 20,
                 } as PidParameter,
-                SetHeaterCooler: 0,
+                HeaterCoolerStatus: 1,
                 WorkingStatus: 0,
                 EnableStatus: 0,
             } as TemperatureGroupState,
-            MaxLength: 200,
+            MaxLength: 80,
         }),
         getters: {
             getTargetParameter: (state) => (data:TemperatureGettingDataModel) => {
@@ -39,10 +39,10 @@ function createTemperatureStore(id: string) {
         },
         actions: {
             // 更新数据到list中
-            setWorkingTemperatureList(value:number){
-                this.Temperature_Data.WorkingTemperatureList.push(value);
-                if (this.Temperature_Data.WorkingTemperatureList.length > this.MaxLength) {
-                    this.Temperature_Data.WorkingTemperatureList.shift();
+            setSampleTemperatureList(value:number){
+                this.Temperature_Data.SamplingTemperatureList.push(value);
+                if (this.Temperature_Data.SamplingTemperatureList.length > this.MaxLength) {
+                    this.Temperature_Data.SamplingTemperatureList.shift();
                 }
             },
             // 设置参数
@@ -50,7 +50,7 @@ function createTemperatureStore(id: string) {
                 if (data.data_type in this.Temperature_Data) {
                     this.Temperature_Data[data.data_type] = data.value;
                     if (data.data_type === 'SamplingTemperature') { // 如果是采样电阻采集的温度，更新list
-                        this.setWorkingTemperatureList(data.value)
+                        this.setSampleTemperatureList(data.value)
                     }
                 }
                 if (data.data_type in this.Temperature_Data.PIDParameter) {

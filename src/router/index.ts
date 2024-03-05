@@ -5,7 +5,7 @@ import PracticalTableView from "@/views/useless/JunkTest.vue";
 
 const router= createRouter({
   routes: [
-    { path: '/', component: () => import('@/views/serial.vue') },
+    { path: '/', component: () => import('@/views/temperatureGroup/index.vue')},
     { path: '/amplifier', component: () => import('@/views/amplifierGroup/index.vue') },
     { path: '/amplifier1', component: () => import('@/views/amplifier1/index.vue') },
     { path: '/index', component: () => import('@/views/home/index.vue') },

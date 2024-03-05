@@ -1,118 +1,72 @@
 <template>
 
   <div class="button-container">
-    <button class="button  btn-6" :id="`${childname}-${property}-button-send`" :disabled="isDisabled">
-      <i class="icon-send material-icons" :id="`${childname}-${property}-button-send-icon`" >send</i>
+    <button class="button  btn-6" :id="`${name}-${proto_type}-button-send`" :disabled="disableButton" @click="handleSendClick">
+      <i class="icon-send material-icons" :id="`${name}-${proto_type}-button-send-icon`" >send</i>
       <!-- <i class="icon-check material-icons">check</i> -->
-      <span class="button-text" :id="`${childname}-${property}-button-send-text`">SEND</span>
+      <span class="button-text" :id="`${name}-${proto_type}-button-send-text`">SEND</span>
     </button>
   </div>
 </template>
 
 
 <script lang='ts' setup>
-// @ts-nocheck
-import { onMounted,watch,ref } from 'vue';
-import { websocket_send } from "@/utils/WebsocketFunc";
-import { TempratureCurrent_Set, SendMessageType } from "@/utils/config";
+    // @ts-nocheck
+    import { onMounted, watch, ref } from 'vue';
+    import {getStoreByPageLocation} from "@/store/SerialGroup";
+    import {PageLocationStateEnum} from "@/api/pageLocation";
+    import { serial_data_package_factory, cut_data_package_list } from "@/api/SerialSendPackage/index";
+
+    const props = defineProps({
+      module_name: { type: null, required: true },
+      name: { type: String, default: 'None-name' },
+      data_package: { type: Array,required:true },
+      data_store: { type: null , required: true},
+      proto_type: { type: null, default: 'None-type' },
+    });
+
+    let disableButton = ref(false); // 是否失能按钮部分
 
 
-const props = defineProps({
-  childname: { type: String, default: 'Amplifier' },
-  property:{ type:String, default:'Amplifier'}
-});
-let isDisabled = ref(false); // 是否失能按钮部分
-onMounted(()=>{
-  const sendbutton_name = props.childname + '-' + props.property+ '-button-send';
-  const sendButton = document.getElementById(sendbutton_name);
-  if(sendButton === null){
-    return;
-  }
-  sendButton.addEventListener('click', handleClick);
-  function handleClick() {
-    //   window.console.log('hand click');
-    // if(isDisabled == true){
-    //   return;
-    // }
-    // 发送温度和电流的数据
-    console.log('hand click');
-    // send_temprature_current_data();
-    //   window.console.log('handclick from '+props.childname);
-    // send-button-text
-    const sendbutton_text_name = props.childname + '-' + props.property+ '-button-send-text';
-    const buttonText = document.getElementById(sendbutton_text_name);
-    // send button icon
-    const sendbutton_icon_name = props.childname + '-' + props.property+ '-button-send-icon';
-    const sendIcon = document.getElementById(sendbutton_icon_name);
-
-    setTimeout(() => {
-      buttonText.style.transform = `translateY(80px)`;
-      sendIcon.style.transition = `800ms ease 200ms`;
-      sendIcon.style.transform = `scale(2) translateX(120px)`;
-      sendIcon.addEventListener("webkitTransitionEnd", showSentText);
-    }, 500);
-  }
-
-  function showSentText() {
-    // send-button-text
-    const sendbutton_text_name = props.childname + '-' + props.property+ '-button-send-text';
-    const buttonText = document.getElementById(sendbutton_text_name);
-    // send button icon
-    const sendbutton_icon_name = props.childname + '-' + props.property+ '-button-send-icon';
-    const sendIcon = document.getElementById(sendbutton_icon_name);
-    buttonText.style.transform = ``;
-    sendIcon.style.transform = ``;
-  }
-})
-const delayed_execution = (element,index,this_lable)=>{
-  let delayed_time = index * 2000;
-  setTimeout(function(){
-    //1秒后执行刷新
-    websocket_send(this_lable, element?element:0);
-    localStorage.setItem(`${props.childname}-current`,element)
-  }, delayed_time); //单位是毫秒
-}
-const send_data_cache = (this_lable) =>{
-  var value = parseFloat(localStorage.getItem(`${props.childname}-current`)|| 0.0) ;
-  var set_value = parseFloat(localStorage.getItem(props.childname)||0.0); // 获取设定值
-  var once_step = 3000;
-  let value_list = [];
-  if (value !== set_value) {
-    let step = value > set_value ?-1* once_step : 1*once_step;
-    for (let i = value + step; (i-set_value)*step<0; i += step) {
-      value_list.push(i);
+    const button_effect_function = ()=>{
+      // 按钮特效
+      const send_button_text_name = props.name + '-' + props.proto_type+ '-button-send-text';
+      const buttonText = document.getElementById(send_button_text_name);
+      // send button icon
+      const send_button_icon_name = props.name + '-' + props.proto_type+ '-button-send-icon';
+      const sendIcon = document.getElementById(send_button_icon_name);
+      const  clicked_hideSendText = ()=> {
+        // send-button-text
+        buttonText.style.transform = ``;
+        sendIcon.style.transform = ``;
+      }
+      setTimeout(() => {
+        buttonText.style.transform = `translateY(80px)`;
+        sendIcon.style.transition = `800ms ease 200ms`;
+        sendIcon.style.transform = `scale(2) translateX(120px)`;
+        sendIcon.addEventListener("webkitTransitionEnd", clicked_hideSendText);
+      }, 500);
     }
-    value_list.push(set_value);
-  }
-  value_list.forEach(function (element, index, array) {
-    delayed_execution(element,index,this_lable)
-  });
-}
-// 发送 温度和电流数据出去
-const send_temprature_current_data = () => {
-
-  const value = localStorage.getItem(props.childname)
-  var this_lable = 0;
-  // websocket_send(this_lable, this_data);Amplifier_ONE
-  if(props.childname.indexOf('ONE')!== -1){
-    this_lable = SendMessageType.Amplifier_ONE;
-
-
-
-  }
-  else if(props.childname.indexOf('TWO')!== -1){
-    this_lable = SendMessageType.Amplifier_TWO;
-
-  }
-  else if(props.childname.indexOf('THREE')!== -1){
-    this_lable = SendMessageType.Amplifier_THREE;
-
-  }
-  // var set_value = localStorage.getItem(props.childname) // 获取设定值
-  // console.log(set_value?set_value:0);
-  send_data_cache(this_lable);
-}
-
+    function handleSendClick() {
+      // 按钮其它事件处理
+      deal_packaged_data();
+      // 按钮效果实现
+      button_effect_function();
+    }
+    const deal_packaged_data= () => {
+      // 处理数据
+      const data_package_list = cut_data_package_list(props.data_package,props.data_store);
+      console.log('data_package_list',data_package_list);
+      for(const [index, data_package] of data_package_list.entries()){
+          setTimeout(()=>{
+            const packaged_data = serial_data_package_factory(data_package, PageLocationStateEnum[props.module_name]);
+            const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
+            for (let i = 0; i < packaged_data.length; i++) {
+              store.sendSerialData(packaged_data[i]);
+            }
+          },3000 * index)
+      }
+    }
 </script>
 
 

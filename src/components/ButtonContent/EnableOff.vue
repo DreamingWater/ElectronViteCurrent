@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="mycomponents"> -->
-  <div class="circle">
+  <div class="circle" @click="click_sender_circle_">
     <span class="circle__btn">
       <ion-icon class="pause" name="pause">
           <div class="circle-content">
@@ -22,59 +22,65 @@
 
 
 <script lang="ts" setup>
+    // @ts-nocheck
+    import { onMounted,ref, watch,computed } from 'vue';
+    // import { append_serial_data_parser } from '@/api/SerialSendPackage/index'
+    import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
+    import {PageLocationStateEnum} from "@/api/pageLocation";
+    import {serial_data_package_factory} from "@/api/SerialSendPackage";
 
-// @ts-nocheck
-import { onMounted,ref } from 'vue';
-import { list_package_parser } from '@/api/SerialSender/Temperature/dataPackage'
-import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
-import {PageLocationStateEnum} from "@/api/pageLocation";
+    const props = defineProps({
+      module_name: { type: null, required: true },
+      name: { type: String, default: true },
+      data_package: { type: Array,required:true },
+      data_store: { type: null , required: true},
+      store_key:  { type: null,  required:true},
+    });
+
+    const enable_status = ref(props.data_store.getTargetParameter(props.store_key));
+
+    const change_circle_animation = () => {
+      /*  play button */
+      const play = document.querySelector('.play');
+      const pause = document.querySelector('.pause');
+      const playBtn = document.querySelector('.circle__btn');
+      const wave1 = document.querySelector('.circle__back-1');
+      const wave2 = document.querySelector('.circle__back-2');
+      pause.classList.toggle('visibility');
+      play.classList.toggle('visibility');
+      playBtn.classList.toggle('shadow');
+      wave1.classList.toggle('paused');
+      wave2.classList.toggle('paused');
+    };
 
 
-
-const props = defineProps({
-  module_name: { type: null, required: true },
-  name: { type: String, default: true },
-  data_package: { type: Array,required:true },
-});
-
-
-const change_circle_status = () => {
-  /*  play button */
-  const play = document.querySelector('.play');
-  const pause = document.querySelector('.pause');
-  const playBtn = document.querySelector('.circle__btn');
-  const wave1 = document.querySelector('.circle__back-1');
-  const wave2 = document.querySelector('.circle__back-2');
-  pause.classList.toggle('visibility');
-  play.classList.toggle('visibility');
-  playBtn.classList.toggle('shadow');
-  wave1.classList.toggle('paused');
-  wave2.classList.toggle('paused');
-};
-onMounted(()=>{
-  change_circle_status();
-  wave_effect();
-})
-const wave_effect= () =>{
-
-  const playBtn = document.querySelector('.circle__btn');
-  /*  play button  */
-    playBtn.addEventListener('click', function(e) {
-      e.preventDefault()
-      const packaged_data = list_package_parser(props.data_package);
+    watch(() => props.data_store.getTargetParameter(props.store_key),
+        (newVal, oldVal) => {
+          change_circle_animation();
+          enable_status.value = newVal;
+          console.log(`changed circle status ${newVal}`)
+        }
+    );
+    const click_sender_circle_ = ()=>{
+      // enable_status.value = enable_status.value === 1 ? 0 : 1;
+      const send_value_package = props.data_package;  // 除开关之外的包数据
+      const enable_data_package = props.store_key;    // 开关的包数据
+      enable_data_package.value = enable_status.value === 1 ? 0 : 1  // 修改开关状态
+      send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
+      const packaged_data = serial_data_package_factory(send_value_package,PageLocationStateEnum[props.module_name],enable_status.value===1);
       const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
-     for (let i = 0; i < packaged_data.length; i++) {
-       store.sendSerialData(packaged_data[i]);
-     };
-    // if(serail_store.getSerialOpenOrNot()!==false){
-    //   e.preventDefault();
-    //   change_circle_status();
-    //   Start_status.value = ! Start_status.value; //取反
-    //   websocket_send(SendMessageType.Amplifier_OPEN_STATUS, Start_status.value===true?1:0);
-    // }
-  })
+      for (let i = 0; i < packaged_data.length; i++) {
+        store.sendSerialData(packaged_data[i]);
+      }
+      // 设置 enable_off 按钮
+      // props.data_store.setTargetParameter(enable_data_package)
+    }
 
-}
+    onMounted(()=>{
+      if(!enable_status.value){
+        change_circle_animation();         //  默认状态是关闭
+      }
+    })
 
 </script>
 

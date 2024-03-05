@@ -9,8 +9,11 @@
           :show_data="item.show_data"
           :set_data="item.set_data"
       />
+      <RadioBox name="temperature_radio" :data_store="temperature_store"
+                :store_getter_key="show_heater_cooler_data"
+                :store_setting_key="set_heater_cooler_data"/>
       <div class="card-button">
-        <SendButtonView :childname="CardLabel"/>
+        <SendAirPlane name="CardLabel" proto_type='send-button' :module_name="module_name" :data_store="temperature_store" :data_package="packaged_send_data"/>
       </div>
     </div>
   </div>
@@ -19,15 +22,21 @@
   // @ts-nocheck
   import { ref,reactive,onMounted ,watch} from 'vue' ;
   import InputBox from "@/components/TextBox/InputBox.vue";
-  import SendButtonView from  '@/views/temperature/Setting/sendbutton/sendbutton.vue'
+  import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
   import ValueShow from "@/components/showContent/ValueShow.vue";
   import ShowInput from "@/components/Items/ShowInput.vue";
+  import RadioBox from "@/components/TextBox/RadioBox.vue";
   import { TemperatureSettingDataModel, TemperatureGettingDataModel } from '@/types/temperature';
   import { useTemperatureGroupStore } from "@/store/temperatureGroup";
   const temperature_store = useTemperatureGroupStore();       // store
 
 
-  const CardLabel = ref('Temperature');
+
+
+  const props = defineProps({
+    module_name: { type: null, required: true },
+    name: { type: String, default: 'none-Name' },
+  });
 
   /////////// 显示数值区间 begin //////////////////////////
 
@@ -45,6 +54,10 @@
     data_type: 'WorkingDerivative',
   };
 
+  const show_heater_cooler_data:TemperatureGettingDataModel = {
+    data_type: 'HeaterCoolerStatus',
+  };
+
   // 设置的数值  希望发送的设定温度  希望发送的设定的P I D
   const set_temperature_data:TemperatureSettingDataModel = {
     data_type: 'SetTemperature',
@@ -60,6 +73,10 @@
   };
   const set_derivative_data:TemperatureSettingDataModel = {
     data_type: 'SetDerivative',
+    value: 0,
+  };
+  const set_heater_cooler_data:TemperatureSettingDataModel = {
+    data_type: 'HeaterCoolerStatus',
     value: 0,
   };
   /////////// 设定的数值区间 end //////////////////////////
@@ -87,7 +104,13 @@
     }
   ]
 
-
+const packaged_send_data = ref([
+      [show_working_temperature_data,set_temperature_data,2],
+      [show_working_proportional_data,set_proportional_data,0],
+      [show_working_integral_data,  set_integral_data,0],
+      [show_working_derivative_data,set_derivative_data,0],
+      [show_heater_cooler_data, set_heater_cooler_data,0]
+]); // send button 发送的数据包
 
 
   /////////// 设定的数值 end //////////////////////////
