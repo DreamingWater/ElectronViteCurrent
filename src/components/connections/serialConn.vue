@@ -17,10 +17,12 @@
       import { ref, onMounted, watch,computed,unref } from 'vue';
       import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
       import { append_serial_data_parser } from "@/api/SerialParser/index"
+      import { TimerTask} from "@/api/schedulerTask";
 
       // 获取当前在哪个页面
-      import { usePageLocationState } from "@/api/pageLocation";
+      import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
       import {SerialGettingDataModel, SerialSettingDataModel} from "@/types/serial";
+      import {serial_data_package_factory} from "@/api/SerialSendPackage";
       const { setCurrentPageLocationState, getCurrentPageLocationState } = usePageLocationState();
 
       const portList= ref([]);  // replace with your actual port list
@@ -28,6 +30,7 @@
       const rotationAngle = ref(0); // 初始角度为0度
       let use_port:any = null;
       let use_parser:any = null;
+
       // 旋转 logo 角度
       const rotateStyle = computed(() => {
         return `rotate(${rotationAngle.value}deg)`;
@@ -87,10 +90,27 @@
         ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate));
         if(use_port){
           // 跟新配置到pinia,连接成功
-          store.changeSerialConnectState(use_port,use_parser,true);
           append_serial_data_parser(use_parser,current_control_page.value);
+          // 启动定时任务
+          let task_data = serial_data_package_factory([], current_control_page.value, 'internal');
+          let task = null;
+          if(task_data.length>0){
+            task = new TimerTask(store, task_data)
+            // 温度页面单次任务，其它页面循环定时任务
+            task.createTask(1000,false);
+          }
+          // 保存对象
+          store.changeSerialConnectState(use_port,use_parser,true,task);
+
+          // 初始化任务
+          let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');
+          // 逐个发送数据
+          for (let i = 0; i < initial_data.length; i++) {
+            store.sendSerialData(initial_data[i]);
+          }
         }
       }
+
 
 
 </script>

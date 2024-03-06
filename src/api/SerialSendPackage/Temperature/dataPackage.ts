@@ -1,7 +1,7 @@
 import { useTemperatureGroupStore} from "@/store/temperatureGroup";
 import {SerialSettingDataModel} from "@/types/serial";
-const store = useTemperatureGroupStore();
-const setStoreData = (store_setter_key:SerialSettingDataModel) => {
+
+const setStoreData = (store:any,store_setter_key:SerialSettingDataModel) => {
     return store.setTargetParameter(store_setter_key);
 }
 
@@ -38,7 +38,7 @@ const other_actions = {
 
 const actions = {
     'WorkingTemperature': (package_data:SerialSettingDataModel) => {
-        console.log('SetWoringTemperature');
+        console.log('SetWorkingTemperature');
         return 'S1' + package_data['value'] + '\r\n';
     },
     'WorkingProportional': (package_data:object) => {
@@ -65,11 +65,12 @@ const actions = {
 
 export function temperature_list_package_parser(packages_data:[]){
     let packaged_data_list = []
+    const store = useTemperatureGroupStore();
     for (const package_data of packages_data) {
         let result = null;
-    // 使用 `data_type` 来调用对应的函数
+            // 使用 `data_type` 来调用对应的函数
             if (actions[package_data['data_type']]) {
-                setStoreData(package_data);
+                setStoreData(store,package_data);
                 result = actions[package_data['data_type']](package_data);
             } else if (other_actions[package_data['data_type']]) {
                 result = other_actions[package_data['data_type']]();

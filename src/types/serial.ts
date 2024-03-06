@@ -9,6 +9,7 @@ export interface SerialGroupState{
     IsOpen: boolean;      // 是否为打开状态
     SerialObject?: any;    // 串口对象
     SerialParser?: any;    // 串口解析对象
+    SerialTask?: any;      // 串口任务
 }
 
 

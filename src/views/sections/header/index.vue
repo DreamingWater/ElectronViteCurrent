@@ -68,7 +68,7 @@ const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocat
           );
       function click_close_icon(){
         const store =  getStoreByPageLocation(current_control_page.value)();
-        return store.changeSerialConnectState(null,null,false);
+        store.changeSerialConnectState(null,null,false,null);
     }
 
 

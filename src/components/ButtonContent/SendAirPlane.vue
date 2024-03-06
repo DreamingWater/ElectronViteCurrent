@@ -59,7 +59,8 @@
       console.log('data_package_list',data_package_list);
       for(const [index, data_package] of data_package_list.entries()){
           setTimeout(()=>{
-            const packaged_data = serial_data_package_factory(data_package, PageLocationStateEnum[props.module_name]);
+            const packaged_data = serial_data_package_factory(data_package, PageLocationStateEnum[props.module_name],null);
+            console.log('packaged_data',packaged_data);
             const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
             for (let i = 0; i < packaged_data.length; i++) {
               store.sendSerialData(packaged_data[i]);

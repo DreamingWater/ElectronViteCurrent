@@ -1,7 +1,7 @@
 <template>
     <div class="projects-section">
       <div class="section-head">
-            <CardHead :module_name="ModuleName" />
+          <CardHead :module_name="ModuleName" />
         </div>
 
       <div class="section-body">
@@ -22,9 +22,6 @@
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
 
     const ModuleName = ref(PageModulesNames.TemperaturePPLN);
-    // const current_control_page = computed(() => unref(ModuleName));
-    // console.log('current_control_page')
-
     onMounted (()=>{
       setCurrentPageLocationState(PageLocationStateEnum.TemperaturePPLN); // set current page location as amplifier
     })

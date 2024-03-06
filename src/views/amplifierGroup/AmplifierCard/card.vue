@@ -3,7 +3,7 @@
 
         <div class="section_card">
             <div class="card-head">
-                {{ CardLabel }}_{{name}}
+                {{ name }}_{{proto_type}}
             </div>
             <div class="card_current">
               <div class="title">
@@ -22,28 +22,24 @@
             </div>
             
             <div class="card-button">
-                <SendAirPlane :name="CardLabel"/>
+              <SendAirPlane :name="name" :proto_type='proto_type' :module_name="module_name" :data_store="amplifier_store" :data_package="packaged_send_data"/>
             </div>
         </div>
     </div>
 </template>
 <script lang='ts' setup>
    // @ts-nocheck
-   import { ref,onMounted ,watch} from 'vue' ;
-   import InputView from '@/views/amplifier1/InputData/InputData.vue'
+
     import InputBox from "@/components/TextBox/InputBox.vue";
     import ValueShow from "@/components/showContent/ValueShow.vue";
-    import SendButtonView from  '../SendButton/sendbutton.vue'
     import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
-    import { useAmplifierStore } from "@/store/Amplifier";
-    const store = useAmplifierStore();       // store
 
    // 父子接口
    const props = defineProps({
-     CardLabel: { type: String, default: 'None-label'},
+     module_name: { type: null, required: true },
      name: { type: String, default: 'None-name' },
+     proto_type:{type: String, default: 'None-type'},  // proto_type 可以是 ONE TWO THREE
    });
-
 
    import { useAmplifierGroupStore } from "@/store/amplifierGroup";
    import {
@@ -52,28 +48,31 @@
      DataTypeModel,
      AmplifierChannelModel, CurrentPowerValueModel
    } from '@/types/amplifier';
+   import {ref} from "vue";
    const amplifier_store = useAmplifierGroupStore();       // store
 
    // @ts-nocheck
    const set_power_data:AmplifierSettingDataModel = {
      data_type: 'PowerCurrent',
      value: 0,
-     channel_name: props.name as string,
+     channel_name: props.proto_type as string,
      value_model:'SetPower',
    };
    const show_power_data:AmplifierGettingDataModel = {
      data_type: 'PowerCurrent',
-     channel_name:  props.name as string,
+     channel_name:  props.proto_type as string,
      value_model: 'WorkingPower'
    };
 
    // @ts-nocheck
    const show_current_data:AmplifierGettingDataModel = {
      data_type: 'PowerCurrent',
-     channel_name:  props.name as string,
+     channel_name:  props.proto_type as string,
      value_model: 'Current'
    };
-
+   const packaged_send_data = ref([
+       [show_power_data,set_power_data,0]
+   ])
 
 </script>
 

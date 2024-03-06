@@ -1,20 +1,20 @@
 <template>
     <div class="projects-section">
         <div class="section-head">
-          <TemperatureHead ></TemperatureHead>
+          <Cardhead :module_name="ModuleName" name="Amplifier" ></Cardhead>
        </div>
         <div class="section-body">
-            <ShowCard :CardLabel="ModuleName" name="ONE"/>
-            <ShowCard :CardLabel="ModuleName" name="TWO"/>
-            <ShowCard :CardLabel="ModuleName" name="THREE"/>
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE"/>
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO"/>
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE"/>
             <!-- <ShowCard CardLabel="LASER_TWO"/> -->
         </div>
     </div>
 </template>
 
 <script setup>
-    import ShowCard from './Card/card.vue';
-    import TemperatureHead from './CardHead/TemperatureCard.vue'
+    import Cardhead from "./CardHead/cardhead.vue";
+    import AmplifierCard from './AmplifierCard/card.vue';
     import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
     import { onMounted,ref } from 'vue';

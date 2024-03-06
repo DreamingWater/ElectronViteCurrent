@@ -13,7 +13,7 @@
                 :store_getter_key="show_heater_cooler_data"
                 :store_setting_key="set_heater_cooler_data"/>
       <div class="card-button">
-        <SendAirPlane name="CardLabel" proto_type='send-button' :module_name="module_name" :data_store="temperature_store" :data_package="packaged_send_data"/>
+        <SendAirPlane :name="name" proto_type='send-button' :module_name="module_name" :data_store="temperature_store" :data_package="packaged_send_data"/>
       </div>
     </div>
   </div>
@@ -105,7 +105,7 @@
   ]
 
 const packaged_send_data = ref([
-      [show_working_temperature_data,set_temperature_data,2],
+      [show_working_temperature_data,set_temperature_data,0],
       [show_working_proportional_data,set_proportional_data,0],
       [show_working_integral_data,  set_integral_data,0],
       [show_working_derivative_data,set_derivative_data,0],

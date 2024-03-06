@@ -37,7 +37,8 @@
       store_key:  { type: null,  required:true},
     });
 
-    const enable_status = ref(props.data_store.getTargetParameter(props.store_key));
+    const enable_status = ref(props.data_store.getTargetParameter(props.store_key));  // 启动开关
+    let task = null;                // 定时任务
 
     const change_circle_animation = () => {
       /*  play button */
@@ -62,13 +63,14 @@
         }
     );
     const click_sender_circle_ = ()=>{
-      // enable_status.value = enable_status.value === 1 ? 0 : 1;
-      const send_value_package = props.data_package;  // 除开关之外的包数据
+      enable_status.value = enable_status.value === 1 ? 0 : 1;
+      const send_value_package = JSON.parse(JSON.stringify(props.data_package));  // 除开关之外的包数据
       const enable_data_package = props.store_key;    // 开关的包数据
-      enable_data_package.value = enable_status.value === 1 ? 0 : 1  // 修改开关状态
+      enable_data_package.value = enable_status.value // 修改开关状态
       send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
-      const packaged_data = serial_data_package_factory(send_value_package,PageLocationStateEnum[props.module_name],enable_status.value===1);
+      const packaged_data = serial_data_package_factory(send_value_package,PageLocationStateEnum[props.module_name],null);
       const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
+      // 逐个发送数据
       for (let i = 0; i < packaged_data.length; i++) {
         store.sendSerialData(packaged_data[i]);
       }

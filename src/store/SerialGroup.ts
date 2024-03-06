@@ -17,6 +17,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 BaudRate: baudRate,
                 SerialObject: null,   // 串口对象
                 SerialParser: null,    // 串口解析对象
+                SerialTask: null,      // 串口任务
             } as SerialGroupState,
         }),
 
@@ -45,7 +46,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 console.log('模拟串口发送：',data);
             },
             // 成功连接、断开串口后配置store
-            changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean) {
+            changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean, task:any) {
                 this.Serial_Data.SerialParser = serial_parser;
                 this.Serial_Data.IsOpen = isOpen_value;
                 if (serial_object){
@@ -53,6 +54,14 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 }else {
                     this.Serial_Data.SerialObject.close(); // 首先关闭串口
                     this.Serial_Data.SerialObject = null;
+                }
+                if(task){
+                    this.Serial_Data.SerialTask = task;
+                }else {
+                    if(this.Serial_Data.SerialTask){
+                        this.Serial_Data.SerialTask.stopTask();
+                    }
+                    this.Serial_Data.SerialTask = null;
                 }
             },
         },
