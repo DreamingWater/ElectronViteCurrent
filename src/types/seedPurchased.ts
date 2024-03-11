@@ -12,7 +12,10 @@ export interface CurrentParameter {
 
 export interface SeedPurchasedState{
     SetPower?: number;        // 设定激光功率
+    WorkingPower?:number;
+    SamplePower?:number;
     SetWavelength?: number;   // 设定激光波长
+    WorkingWavelength?: number;
     // 读取的温度值
     TemperatureParams?: TemperatureParameter;
     CurrentParams?: CurrentParameter;

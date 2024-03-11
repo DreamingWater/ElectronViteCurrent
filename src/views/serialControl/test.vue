@@ -47,7 +47,7 @@ const getPorts = async () => {
 };
 
 const connect = () => {
-  ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate.value));
+  ({ port: use_port, parser: use_parser } = askForSerialConnection('COM5', 9600));
   console.log(use_parser);
 };
 

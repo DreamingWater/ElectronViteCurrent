@@ -1,6 +1,7 @@
 import {temperature_list_package_parser, initial_temperature_package} from "./Temperature/dataPackage"
 import { PageLocationStateEnum  } from "@/api/pageLocation";
 import {amplifier_list_package_parser, initial_amplifier_package, schedual_amplifier_package } from "./Amplifier/dataPackage";
+import {seed_purchased_list_package_parser, initial_seed_purchased_package, schedual_seed_purchased_package} from "./SeedPurchased/dataPackage";
 
 // 重新排列数组元素
 //let return_data_list = [[1,3,5],[132,323],[12],['a']];
@@ -45,14 +46,19 @@ export const cut_data_package_list = (packages_data_list:[][],store:any) => {
         }
         // 需要进行数据慢速解析
         else {
-            let once_step = data_package[2];
-            let step = target_getter_value > target_setter_value ?-1* once_step : 1*once_step;
+            let once_step:number = data_package[2];
+            let step:number = target_getter_value > target_setter_value ?-1* once_step : once_step;
             for (let i = target_getter_value + step; (i-target_setter_value)*step<0; i += step) {
                 let set_package:any= JSON.parse(JSON.stringify(data_package[0]));  // 深拷贝
                 set_package['value'] = i;
                 set_package_list.push(set_package);
             }
-            set_package_list.push(data_package[1]);
+            // 最后一个数据包 如果设定差不足step,或者之前的step最后一个数据不是设定值
+            if(set_package_list.length===0 || set_package_list[set_package_list.length-1]['value']!==data_package[1]['value']){
+                let set_package:any= JSON.parse(JSON.stringify(data_package[0]));  // 深拷贝
+                set_package['value'] = data_package[1]['value'];
+                set_package_list.push(set_package);
+            }
         }
 
         return_data_list.push(set_package_list);
@@ -65,6 +71,9 @@ function combine_package_with_or_not_initial(packages_data:[],  other_instruct: 
                                              package_parser:any,initial_package:any,internal_package:any)
 {
     let result:any[] = package_parser(packages_data);
+    for(const data of result) {
+        console.log('data:',data.toString('hex'));
+    }
     if (other_instruct) {
         let other_package = null;
         if(other_instruct === 'initial' && initial_package){
@@ -91,7 +100,12 @@ const actions = {
        return combine_package_with_or_not_initial(packages_data,other_instruct,
            temperature_list_package_parser,initial_temperature_package,
            null)
-    }
+    },
+    [PageLocationStateEnum.SeedPurchased]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => {
+         return combine_package_with_or_not_initial(packages_data,other_instruct,
+              seed_purchased_list_package_parser,initial_seed_purchased_package,
+              schedual_seed_purchased_package)
+    },
 }
 
 

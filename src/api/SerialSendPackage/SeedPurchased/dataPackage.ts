@@ -1,13 +1,16 @@
-import { useAmplifierGroupStore } from "@/store/amplifierGroup";
-import { AmplifierSettingDataModel } from "@/types/amplifier";
+
+import { useSeedPurchasedStore } from "@/store/seedPurchased";
+import { SeedPurchasedSettingDataModel } from "@/types/seedPurchased"
+
+
 import {CommunicationProtocolClass,generate_package_buffer } from "../Base/packConstruct";
 
 
-const setStoreData = (store:any,store_setter_key:AmplifierSettingDataModel) => {
+const setStoreData = (store:any,store_setter_key:SeedPurchasedSettingDataModel) => {
     return store.setTargetParameter(store_setter_key);
 }
 
-export const schedual_amplifier_package = () => {
+export const schedual_seed_purchased_package = () => {
     let instruct:any = [];
     // 开启数据上报
     const data_upload = generate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
@@ -16,17 +19,15 @@ export const schedual_amplifier_package = () => {
     return instruct as Buffer[];
 }
 
-export const initial_amplifier_package = () => {
+export const initial_seed_purchased_package = () => {
     let instruct:any = [];
-    // 读取通道1功率
-    const channel1_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x01]))
-    instruct.push(channel1_power);
-    // 读取通道2功率
-    const channel2_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x02]))
-    instruct.push(channel2_power);
-    // 读取通道3功率
-    const channel3_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x03]))
-    instruct.push(channel3_power);
+    // 读取功率
+    const read_power = generate_package_buffer(Buffer.from([0xC3]), Buffer.alloc(0))
+    instruct.push(read_power);
+    // 读取波长
+    const read_wavelength = generate_package_buffer(Buffer.from([0xC5]), Buffer.alloc(0))
+    instruct.push(read_wavelength);
+
     return instruct as Buffer[];
 }
 
@@ -48,25 +49,29 @@ const actions: ISerialCtrlCode = {
             return enable_bytes
         }
     },
-    'PowerCurrent': {
-        'ctrl_code': Buffer.from([0xC4]),
+    'WorkingPower': {
+        'ctrl_code': Buffer.from([0xC3]),
         'function': (pkg:any)=>{
-            const channel =  pkg['channel_name'] === 'ONE' ? 1 : pkg['channel_name'] === 'TWO' ? 2:3;
-            const power = pkg['value'];
-            let channel_bytes = Buffer.alloc(1);
-            channel_bytes.writeUInt8(channel);
-            let powerEnergy = Buffer.alloc(2);
-            powerEnergy.writeUInt16LE(power);
-            let result = Buffer.concat([channel_bytes, powerEnergy]);
-            return result;
+            let power_bytes = Buffer.alloc(2);
+            power_bytes.writeUInt16LE(pkg['value']);
+            return power_bytes
+        }
+    },
+    'WorkingWavelength': {
+        'ctrl_code': Buffer.from([0xC8]),
+        'function': (pkg:any)=>{
+            const wavelength = pkg['value'] * 10000;
+            let power_bytes = Buffer.alloc(4); // 创建一个新的缓冲区，大小为4字节
+            power_bytes.writeInt32LE(wavelength); // 将整数写入缓冲区
+            return power_bytes
         }
     },
 };
 
 
-export const amplifier_list_package_parser = (packages_data:any[])=>{
+export const seed_purchased_list_package_parser = (packages_data:any[])=>{
     let packaged_data_list:any[] = []
-    const store = useAmplifierGroupStore();
+    const store = useSeedPurchasedStore();
     for (const package_data of packages_data) {
         let result = null;
         // 使用 `data_type` 来调用对应的函数

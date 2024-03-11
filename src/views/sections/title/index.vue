@@ -2,10 +2,7 @@
   <div class="window-title">
     <!-- 软件logo预留位置 -->
     <div style="-webkit-app-region: drag" class="logo">
-      <img
-        src="@/assets/svg/electron-logo.svg"
-        class="icon-logo"
-      />
+      <img :src="SchoolLogo" alt="School Logo" style="height: 100%;width: 350px" />
     </div>
     <!-- 菜单栏位置 -->
     <div></div>
@@ -36,8 +33,13 @@
 
 <script setup lang="ts">
 // @ts-nocheck
-import { ref } from "vue";
+import {computed, ref} from "vue";
+import SchoolLogo from "@/assets/imgs/large-scalescientificfacility.png";
 
+
+const imageSrc = computed(() => {
+  return SchoolLogo; // 大装置的logo
+});
 
 const IsUseSysTitle = ref(false);
 const mix = ref(false);

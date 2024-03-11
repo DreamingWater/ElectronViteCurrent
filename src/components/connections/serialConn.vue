@@ -74,7 +74,8 @@
 
         const current_control_page = computed(() => unref(getCurrentPageLocationState));
       // 解构对应的 store
-        const store = getStoreByPageLocation(current_control_page.value)();
+        const store_result = getStoreByPageLocation(current_control_page.value);
+        const store = store_result.store();
         // 获取波特率信息
         const search_key:SerialGettingDataModel = {
           'data_type':'BaudRate',
@@ -87,7 +88,7 @@
           alert('Please select the ports');
           return;
         }
-        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate));
+        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,store_result.flag));
         if(use_port){
           // 跟新配置到pinia,连接成功
           append_serial_data_parser(use_parser,current_control_page.value);
@@ -105,9 +106,7 @@
           // 初始化任务
           let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');
           // 逐个发送数据
-          for (let i = 0; i < initial_data.length; i++) {
-            store.sendSerialData(initial_data[i]);
-          }
+          store.sendSerialData(initial_data)
         }
       }
 

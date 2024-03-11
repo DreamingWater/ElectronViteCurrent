@@ -1,7 +1,7 @@
 import { app, BrowserWindow, shell, Menu, ipcMain } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
-
+import windowStateKeeper from 'electron-window-state'
 // 调试
 import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
 // import electronDevtoolsInstaller, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
@@ -74,11 +74,16 @@ async function createWindow() {
   //   console.log('Child process exited with code: ', code);
   //   console.log('Child process exited with signal: ', signal);
   // });
-
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 1200,
+    defaultHeight: 800,
+  });
 
   win = new BrowserWindow({
-    width:1150,
-    height:750,
+    width:mainWindowState.width,
+    height:mainWindowState.height,
+    x:mainWindowState.x,
+    y:mainWindowState.y,
     // frame: false, // 隐藏标题栏和窗口控制按钮
     // title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
@@ -92,7 +97,7 @@ async function createWindow() {
     },
     show:false,
   })
-
+  mainWindowState.manage(win);
   if (process.env.VITE_DEV_SERVER_URL) { // electron-vite-vue#298
     win.loadURL(url)
 

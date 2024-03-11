@@ -10,11 +10,9 @@ export class TimerTask {
         }
 
         this.timerId = setInterval(() => {
-            for (let i = 0; i < this.packaged_data.length; i++) {
-                this.store.sendSerialData(this.packaged_data[i]);
-                if (i === this.packaged_data.length - 1 && this.runOnce) {
-                    this.stopTask();
-                }
+            this.store.sendSerialData(this.packaged_data);
+            if (this.runOnce) {
+                this.stopTask();
             }
         }, interval);
     }

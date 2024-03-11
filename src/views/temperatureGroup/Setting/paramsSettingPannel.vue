@@ -8,6 +8,8 @@
           :data_store="temperature_store"
           :show_data="item.show_data"
           :set_data="item.set_data"
+          :min_value="item.min_value"
+          :max_value="item.max_value"
       />
       <RadioBox name="temperature_radio" :data_store="temperature_store"
                 :store_getter_key="show_heater_cooler_data"
@@ -21,9 +23,7 @@
 <script lang='ts' setup>
   // @ts-nocheck
   import { ref,reactive,onMounted ,watch} from 'vue' ;
-  import InputBox from "@/components/TextBox/InputBox.vue";
   import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
-  import ValueShow from "@/components/showContent/ValueShow.vue";
   import ShowInput from "@/components/Items/ShowInput.vue";
   import RadioBox from "@/components/TextBox/RadioBox.vue";
   import { TemperatureSettingDataModel, TemperatureGettingDataModel } from '@/types/temperature';
@@ -35,7 +35,7 @@
 
   const props = defineProps({
     module_name: { type: null, required: true },
-    name: { type: String, default: 'none-Name' },
+    name: { type: String, default: 'None-name' },
   });
 
   /////////// 显示数值区间 begin //////////////////////////
@@ -85,22 +85,30 @@
     {
     'name': 'TSV(℃)',
     'show_data': show_working_temperature_data,
-    'set_data': set_temperature_data
+    'set_data': set_temperature_data,
+      'min_value': 0,
+      'max_value': 120,
   },
     {
       'name': 'PID_P',
       'show_data': show_working_proportional_data,
       'set_data':set_proportional_data ,
+      'min_value': 0,
+      'max_value': 200,
     },
     {
       'name': 'PID_I',
       'show_data': show_working_integral_data,
       'set_data': set_integral_data,
+      'min_value': 0,
+      'max_value': 100,
     },
     {
       'name': 'PID_D',
       'show_data': show_working_derivative_data,
       'set_data': set_derivative_data,
+      'min_value': 0,
+      'max_value': 200,
     }
   ]
 
@@ -167,7 +175,7 @@ button, a {
     }
 
     .card-button{
-      margin-top: 45px;
+      margin-top: 25px;
     }
   }
 }

@@ -10,9 +10,6 @@
               <!-- <MainContent /> -->
               <router-view/>
             </div>
-            
-
-
       </div>
       <FooterSection />
     </div>
@@ -23,27 +20,18 @@
   <Back />
 </template>  -->
 <script setup lang="ts">
-// @ts-nocheck
-    // import Back from "@/components/section/back.vue"
-    // import Back from "@/components/section/testbutton.vue"
-    // import Back from "@/components/animation/ShowFoldLine.vue"
+    // @ts-nocheck
     import HeaderSection from "@/views/sections/header/index.vue";
     import SiderSection from "@/views/sections/sidersection/index.vue";
     import LeftSection from "@/views/sections/leftsection/index.vue";
-    // import MainContent from "@/components/section/MainContent.vue";
     import TitleBar from "@/views/sections/title/index.vue";
     import FooterSection from "@/views/sections/footer/index.vue";
-    // import TitleBar from "@/components/HelloWorld.vue";
-    // websocket
-    import { websockt_start } from '@/utils/WebsocketFunc'
-    websockt_start();
     
 </script>
 
 <style lang="css" scoped>
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
-
 
 
 button, a {

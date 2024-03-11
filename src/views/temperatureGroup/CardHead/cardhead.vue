@@ -7,12 +7,12 @@
 </template>
 
 <script lang='ts' setup>
-  import { ref,onMounted, watch } from 'vue'
+  import { ref, onMounted, watch } from 'vue'
   import RingVariationCard from "@/components/showContent/RingVariationCard.vue";
   import EnableOff from "@/components/ButtonContent/EnableOff.vue";
   import { TemperatureSettingDataModel, TemperatureGettingDataModel } from '@/types/temperature';
   import { useTemperatureGroupStore } from "@/store/temperatureGroup";
-import {number} from "echarts";
+
   const temperature_store = useTemperatureGroupStore();       // store
     // 父子接口
     const props = defineProps({

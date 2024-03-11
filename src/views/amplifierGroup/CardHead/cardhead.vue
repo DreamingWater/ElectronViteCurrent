@@ -24,8 +24,9 @@
 
 <template>
   <div class="card-box-warpper">
+    <LigerCard  :data_store="amplifier_store" :store_getter_key="show_amplifier_working_status" :name="name"  />
     <TemperatureCard :data_store="amplifier_store" :store_getter_key="show_amplifier_temperature" />
-    <statusShow  :data_store="amplifier_store" :store_getter_key="show_amplifier_working_status" :name="name"   />
+<!--    <statusShow  :data_store="amplifier_store" :store_getter_key="show_amplifier_working_status" :name="name"   />-->
     <EnableOff :module_name="module_name" :name="name"  :data_store="amplifier_store"  :data_package="send_data_package" :store_key="enable_status"/>
   </div>
 </template>
@@ -33,6 +34,7 @@
 // @ts-nocheck
     import TemperatureCard from "@/components/showContent/TemperatureCard.vue";
     import EnableOff from "@/components/ButtonContent/EnableOff.vue";
+    import LigerCard from "@/components/showContent/ligerCard.vue";
     import statusShow from './StatusShow/statusshow.vue'
     import { ref,onMounted, watch } from 'vue'
 

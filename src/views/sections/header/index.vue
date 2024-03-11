@@ -53,7 +53,8 @@ const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocat
     const search_serial_status:SerialGettingDataModel = { 'data_type' : 'IsOpen'};
     const cur_store_status = computed(
         () => {
-          const store =  getStoreByPageLocation(current_control_page.value)();
+          const store_result =  getStoreByPageLocation(current_control_page.value);
+          const store = store_result.store()
           return store.getTargetParameter(search_serial_status)
     })
 
@@ -67,7 +68,8 @@ const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocat
               }
           );
       function click_close_icon(){
-        const store =  getStoreByPageLocation(current_control_page.value)();
+        const store_result =  getStoreByPageLocation(current_control_page.value);
+        const store = store_result.store()
         store.changeSerialConnectState(null,null,false,null);
     }
 

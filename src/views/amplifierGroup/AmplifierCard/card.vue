@@ -15,9 +15,14 @@
               </div>
             </div>
             <div class="card-input">
-                <div class="title">Power(mW)</div>
-                <div class="value" >
-                    <InputBox  :data_store="amplifier_store" :store_setting_key="set_power_data" :store_getter_key="show_power_data"/>
+                <div class="title_working_value">
+                    <div class="title">Power(mW)</div>
+                    <div class="working_value">
+                      <ValueShow :store_getter_key="show_power_data" :data_store="amplifier_store"></ValueShow>
+                    </div>
+                </div>
+                <div class="set_value" >
+                    <InputBox  :data_store="amplifier_store" :store_setting_key="set_power_data" :store_getter_key="show_power_data" :min_value="min_value" :max_value="max_value"/>
                 </div>
             </div>
             
@@ -29,7 +34,7 @@
 </template>
 <script lang='ts' setup>
    // @ts-nocheck
-
+   import {computed, ref} from "vue";
     import InputBox from "@/components/TextBox/InputBox.vue";
     import ValueShow from "@/components/showContent/ValueShow.vue";
     import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
@@ -40,6 +45,16 @@
      name: { type: String, default: 'None-name' },
      proto_type:{type: String, default: 'None-type'},  // proto_type 可以是 ONE TWO THREE
    });
+   const min_value = ref(0);
+   const valueMap = {
+     'ONE': 10000,
+     'TWO': 20000,
+     'THREE': 50000
+     
+   };
+   const max_value:number = computed(()=>{
+     return valueMap[props.proto_type]
+   });
 
    import { useAmplifierGroupStore } from "@/store/amplifierGroup";
    import {
@@ -48,7 +63,7 @@
      DataTypeModel,
      AmplifierChannelModel, CurrentPowerValueModel
    } from '@/types/amplifier';
-   import {ref} from "vue";
+
    const amplifier_store = useAmplifierGroupStore();       // store
 
    // @ts-nocheck
@@ -71,7 +86,7 @@
      value_model: 'Current'
    };
    const packaged_send_data = ref([
-       [show_power_data,set_power_data,0]
+       [show_power_data,set_power_data,3]
    ])
 
 </script>
@@ -103,7 +118,7 @@ button, a {
    
     }
     .card-input {
-        margin-top: 20px;
+        margin-top: 10px;
         background-color: #f0f8f8;
         padding: 10px 10px;
         border-radius: 3px;
@@ -112,12 +127,22 @@ button, a {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
+      .title_working_value{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
         .title{
-            font-size: 22px;
-            color: rgb(250, 138, 138);
-            justify-content: center;
-            text-align: center;
+          font-size: 22px;
+          color: rgb(250, 138, 138);
+          justify-content: center;
+          text-align: center;
+          //float: left;
         }
+        .working_value{
+          font-size: 16px;
+          font-style: italic;
+        }
+      }
 
     }
     .card-button{

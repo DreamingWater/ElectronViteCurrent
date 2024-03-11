@@ -5,7 +5,7 @@
       <div class="current_value">
         <ValueShow :data_store="data_store" :store_getter_key="show_data" />
       </div>
-      <InputBox :data_store="data_store" :store_setting_key="set_data" :store_getter_key="show_data"/>
+      <InputBox :data_store="data_store" :store_setting_key="set_data" :store_getter_key="show_data" :min_value="min_value" :max_value="max_value" :precision="precision"/>
     </div>
   </div>
 </template>
@@ -14,12 +14,16 @@
 import { defineProps } from 'vue';
 import InputBox from "@/components/TextBox/InputBox.vue";
 import ValueShow from "@/components/showContent/ValueShow.vue";
+import {number} from "echarts";
 
 const props = defineProps({
-  name: { type: String , required: true},
+  name: { type: String , required: 'None-name'},
   data_store: { type: null , required: true},
   show_data:  {type:null,required:true},
   set_data:   {type:null,required:true},
+  min_value:{type:Number,require:true},
+  max_value:{type:Number,require:true},
+  precision:{type:Number,default:2},
 });
 </script>
 

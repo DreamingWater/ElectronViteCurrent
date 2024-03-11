@@ -11,11 +11,20 @@ async function listAvailablePorts() {
 }
 
 // @ts-ignore
-function askForSerialConnection(portPath, baudRate) {
+function askForSerialConnection(portPath, baudRate,hexData=false) {
     console.log('Connecting to port', portPath, 'at baud rate', baudRate);
     try {
         let port = new SerialPort({ path: portPath, baudRate: baudRate }); // 使用全局变量port
-        let parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+        // Switches the port into "flowing mode"
+        // port.on('data', function (data) {
+        //     console.log('Data:', data)
+        // })
+        let parser = null;
+        if(hexData === false){
+            parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
+        }else{
+            parser = port.pipe(new ReadlineParser({includeDelimiter:true,encoding: "hex"}));
+        }
         return {port ,parser};
     }catch (e)  {
         console.log('Failed to connect to port', portPath);

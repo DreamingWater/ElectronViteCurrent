@@ -61,10 +61,10 @@
           setTimeout(()=>{
             const packaged_data = serial_data_package_factory(data_package, PageLocationStateEnum[props.module_name],null);
             console.log('packaged_data',packaged_data);
-            const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
-            for (let i = 0; i < packaged_data.length; i++) {
-              store.sendSerialData(packaged_data[i]);
-            }
+            const store_result = getStoreByPageLocation(PageLocationStateEnum[props.module_name])
+            // result现在包含了你需要的store
+            const store = store_result.store();
+            store.sendSerialData(packaged_data);
           },3000 * index)
       }
     }

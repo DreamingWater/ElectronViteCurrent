@@ -2,17 +2,20 @@
   <!-- <div class="mycomponents"> -->
   <div class="circle" @click="click_sender_circle_">
     <span class="circle__btn">
-      <ion-icon class="pause" name="pause">
+      <div class="pause">
           <div class="circle-content">
-            <svg class="icon" style="width: 3em;height: 3em;vertical-align: middle;fill: rgb(170, 170, 248);overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4838"><path d="M352 768c-17.664 0-32-14.304-32-32L320 288c0-17.664 14.336-32 32-32s32 14.336 32 32l0 448C384 753.696 369.664 768 352 768z" fill="rgb(170, 170, 248)" p-id="4839"></path><path d="M672 768c-17.696 0-32-14.304-32-32L640 288c0-17.664 14.304-32 32-32s32 14.336 32 32l0 448C704 753.696 689.696 768 672 768z" fill="rgb(170, 170, 248)" p-id="4840"></path></svg>
-          </div>
-      </ion-icon>
-      <ion-icon class="play" name="play">
-        <div class="circle-content">
-          <svg class="icon" style="width: 3em;height: 3em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11075"><path d="M512 0c282.794667 0 512 229.205333 512 512s-229.205333 512-512 512S0 794.794667 0 512 229.205333 0 512 0z m311.082667 823.082667A438.016 438.016 0 0 0 951.978667 512c0-59.392-11.562667-116.992-34.56-171.306667a437.717333 437.717333 0 0 0-94.293334-139.904c-40.533333-40.405333-87.509333-72.106667-139.946666-94.293333A437.461333 437.461333 0 0 0 512 72.021333c-59.392 0-116.992 11.562667-171.306667 34.56a437.717333 437.717333 0 0 0-139.904 94.293334c-40.405333 40.533333-72.106667 87.509333-94.293333 139.946666A437.461333 437.461333 0 0 0 72.021333 512c0 59.392 11.562667 116.992 34.56 171.306667a437.717333 437.717333 0 0 0 94.293334 139.904c40.533333 40.405333 87.509333 72.106667 139.946666 94.293333 54.186667 22.912 111.786667 34.474667 171.178667 34.474667 59.392 0 116.992-11.562667 171.178667-34.56a437.717333 437.717333 0 0 0 139.946666-94.293334z m-120.405334-341.077334a36.053333 36.053333 0 0 1 0 59.989334l-256 170.666666A36.053333 36.053333 0 0 1 390.613333 682.666667V341.333333a36.053333 36.053333 0 0 1 56.064-29.994666l256 170.666666z m-239.957333-73.301333v206.592L617.685333 512l-154.965333-103.296z" fill="rgb(170, 170, 248)" p-id="11076"></path></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" style="width: 3em;height: 3em;vertical-align: middle;fill:  rgb(0, 0, 0);overflow: hidden;"  viewBox="0 0 24 24"><path fill="currentColor" d="M14 19h4V5h-4M6 19h4V5H6z"/></svg>
 
-                </div>
-      </ion-icon>
+                   </div>
+      </div>
+      <div class="play" >
+        <div class="circle-content">
+<!--             <svg class="icon" style="width: 3em;height: 3em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11075"><path d="M512 0c282.794667 0 512 229.205333 512 512s-229.205333 512-512 512S0 794.794667 0 512 229.205333 0 512 0z m311.082667 823.082667A438.016 438.016 0 0 0 951.978667 512c0-59.392-11.562667-116.992-34.56-171.306667a437.717333 437.717333 0 0 0-94.293334-139.904c-40.533333-40.405333-87.509333-72.106667-139.946666-94.293333A437.461333 437.461333 0 0 0 512 72.021333c-59.392 0-116.992 11.562667-171.306667 34.56a437.717333 437.717333 0 0 0-139.904 94.293334c-40.405333 40.533333-72.106667 87.509333-94.293333 139.946666A437.461333 437.461333 0 0 0 72.021333 512c0 59.392 11.562667 116.992 34.56 171.306667a437.717333 437.717333 0 0 0 94.293334 139.904c40.533333 40.405333 87.509333 72.106667 139.946666 94.293333 54.186667 22.912 111.786667 34.474667 171.178667 34.474667 59.392 0 116.992-11.562667 171.178667-34.56a437.717333 437.717333 0 0 0 139.946666-94.293334z m-120.405334-341.077334a36.053333 36.053333 0 0 1 0 59.989334l-256 170.666666A36.053333 36.053333 0 0 1 390.613333 682.666667V341.333333a36.053333 36.053333 0 0 1 56.064-29.994666l256 170.666666z m-239.957333-73.301333v206.592L617.685333 512l-154.965333-103.296z" fill="rgb(170, 170, 248)" p-id="11076"></path></svg>-->
+                <svg xmlns="http://www.w3.org/2000/svg" style="width: 3em;height: 3em;vertical-align: middle;fill:  rgb(0, 0, 0);overflow: hidden;"  viewBox="0 0 24 24"><path fill="currentColor" d="m10 16.5l6-4.5l-6-4.5M22 12c0-5.54-4.46-10-10-10c-1.17 0-2.3.19-3.38.56l.7 1.94c.85-.34 1.74-.53 2.68-.53c4.41 0 8.03 3.62 8.03 8.03c0 4.41-3.62 8.03-8.03 8.03c-4.41 0-8.03-3.62-8.03-8.03c0-.94.19-1.88.53-2.72l-1.94-.66C2.19 9.7 2 10.83 2 12c0 5.54 4.46 10 10 10s10-4.46 10-10M5.47 3.97c.85 0 1.53.71 1.53 1.5C7 6.32 6.32 7 5.47 7c-.79 0-1.5-.68-1.5-1.53c0-.79.71-1.5 1.5-1.5"/></svg>
+
+<!--             <svg class="icon" style="width: 3em;height: 3em;vertical-align: middle;fill:  rgb(170, 170, 248);overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="11075"> <path fill="currentColor" d="M8.5 8.64L13.77 12L8.5 15.36zM6.5 5v14l11-7"/></svg>-->
+        </div>
+      </div>
     </span>
     <span class="circle__back-1"></span>
     <span class="circle__back-2"></span>
@@ -69,11 +72,11 @@
       enable_data_package.value = enable_status.value // 修改开关状态
       send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
       const packaged_data = serial_data_package_factory(send_value_package,PageLocationStateEnum[props.module_name],null);
-      const store = getStoreByPageLocation(PageLocationStateEnum[props.module_name])();
-      // 逐个发送数据
-      for (let i = 0; i < packaged_data.length; i++) {
-        store.sendSerialData(packaged_data[i]);
-      }
+      const store_result = getStoreByPageLocation(pageLocation);
+      // result现在包含了你需要的store
+      const store = store_result.store();
+            // 逐个发送数据
+      store.sendSerialData(packaged_data);
       // 设置 enable_off 按钮
       // props.data_store.setTargetParameter(enable_data_package)
     }
@@ -99,9 +102,11 @@
 
   $circle-width: 6rem;
   $circle-height: 6rem;
+
   $circle-btn-width: 4rem;
   $circle-btn-height: 4rem;
   $circle-btn-font-size: 3rem;
+
 
   /* PLAY BUTTON */
   .circle {

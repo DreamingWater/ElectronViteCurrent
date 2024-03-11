@@ -33,6 +33,8 @@ import {reactive, ref, onMounted} from 'vue'
       step: {type:Number, default:1          },
       disabled: {type:Boolean, default:false },
       precision: {type:Number, default:2     },
+      min_value: {type:Number, default:0     },
+      max_value: {type:Number, default:100   },
     });
 
     let item_quantity = ref(0);   // 显示的数值
@@ -56,15 +58,16 @@ import {reactive, ref, onMounted} from 'vue'
       if(isDisabled.value == true){
         return;
       }
-      if (isNaN(value) || value < 0) {
-        item_quantity.value = 0;
-      } else {
+      if(value < props.min_value){
+        value = props.min_value;
+      }
+      else if(value > props.max_value){
+        value = props.max_value;
+      }
         //正常情况
         item_quantity.value = value;
         // 更新数据到pinia中
         save_data_2_store();
-      }
-
     }
 
     function save_data_2_store(){

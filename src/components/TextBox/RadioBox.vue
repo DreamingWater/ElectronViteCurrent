@@ -46,6 +46,11 @@
 
 <style scoped lang="scss">
 $radioCount : 3;
+.container{
+  margin-top: 10px;
+  display: flex;
+  justify-content: center
+}
   .tabs {
     display: flex;
     position: relative;
@@ -66,7 +71,7 @@ $radioCount : 3;
   .tab {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-evenly;
     height: 30px;
     width: 50px;
     font-size: .8rem;

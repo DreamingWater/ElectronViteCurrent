@@ -51,6 +51,7 @@
     "vue-tsc": "^1.2.0"
   },
   "dependencies": {
-    "@tomjs/electron-devtools-installer": "^2.1.1"
+    "@tomjs/electron-devtools-installer": "^2.1.1",
+    "electron-window-state": "^5.0.3"
   }
 }

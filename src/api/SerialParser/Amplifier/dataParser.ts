@@ -1,19 +1,20 @@
 import {SerialSettingDataModel} from "@/types/serial";
 import { useAmplifierGroupStore } from "@/store/amplifierGroup";
 import { AmplifierSettingDataModel } from "@/types/amplifer"
-
+import { amplifier_parser } from "@/api/SerialParser/Base/packParser";
 const create_store_object = ()=>{
     const store = useAmplifierGroupStore();
     return store
 }
 
-const dealData = (data:any, amplifier_store:any)=>{
 
-
-}
 
 const actions = {
-    'D3': (data:Buffer,store:any)=> {
+    'd3': (dataString:string,store:any)=> {
+        let data = Buffer.from(dataString, 'hex');
+        if( data.length === 1){
+            return
+        }
         let receiveLaserStatus = {
             'openStatus': data[0],
             'status': data[1],
@@ -53,7 +54,11 @@ const actions = {
         // 打印方便观测数据
         console.log(receiveLaserStatus);
     },
-    'C4': (data:Buffer,store:any)=> {
+    'c4': (dataString:string,store:any)=> {
+        let data = Buffer.from(dataString, 'hex');
+        if( data.length === 1){
+            return
+        }
         // 读取设置的功率
         const this_channel = data[0]===1 ? 'ONE' : data[0]===2 ? 'TWO' : 'THREE';
         const set_amplifier_working_power :AmplifierSettingDataModel = {
@@ -62,18 +67,26 @@ const actions = {
             value_model: 'WorkingPower',
             value:data.readUInt16LE(1),
         }
+        console.log(set_amplifier_working_power)
         store.setTargetParameter(set_amplifier_working_power);
     }
 }
 
 export function add_amplifier_serial_data_parser(amplifier_serial_parser:any) {
     console.log('add_amplifier_serial_data_parser');
-    amplifier_serial_parser.on('data', data => {
-        console.log('Received data from port:', data);
-        if(actions[data[2]]){
-            const amplifier_store = create_store_object();
-            actions[data[2]](data.slice(3),amplifier_store); // 传入数据位数
+
+    amplifier_serial_parser.on('data', (data) => {
+        console.log('Received data from port:',data);
+        const result = amplifier_parser.append_data_parser(data);
+        if(result && actions[result.ctrlCode]){
+            const store = create_store_object();
+            actions[result.ctrlCode](result.data, store);
         }
+        // console.log('Received data from port:', data.toString('hex'))
+        // if(actions[data[2]]){
+        //     const amplifier_store = create_store_object();
+        //     actions[data[2]](data.slice(3),amplifier_store); // 传入数据位数
+        // }
 
     });
 }
