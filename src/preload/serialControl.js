@@ -23,7 +23,7 @@ function askForSerialConnection(portPath, baudRate,hexData=false) {
         if(hexData === false){
             parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
         }else{
-            parser = port.pipe(new ReadlineParser({includeDelimiter:true,encoding: "hex"}));
+            parser = port.pipe(new ReadlineParser({delimiter:Buffer.from([0x55,0xAA]) ,includeDelimiter:true,encoding: "hex"}));
         }
         return {port ,parser};
     }catch (e)  {

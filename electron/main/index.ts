@@ -156,8 +156,10 @@ async function  loadingWindow() {
   
   // 延迟2秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
   setTimeout(() => {
+
     createWindow();
-  }, 1000);
+    startWin.hide();
+  }, 1500);
 }
 // 程序开始时候启动loading 效果
 app.whenReady().then(() => {

@@ -39,7 +39,7 @@
       data_store: { type: null , required: true},
       store_key:  { type: null,  required:true},
     });
-
+    const current_page_location = PageLocationStateEnum[props.module_name];
     const enable_status = ref(props.data_store.getTargetParameter(props.store_key));  // 启动开关
     let task = null;                // 定时任务
 
@@ -71,8 +71,8 @@
       const enable_data_package = props.store_key;    // 开关的包数据
       enable_data_package.value = enable_status.value // 修改开关状态
       send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
-      const packaged_data = serial_data_package_factory(send_value_package,PageLocationStateEnum[props.module_name],null);
-      const store_result = getStoreByPageLocation(pageLocation);
+      const packaged_data = serial_data_package_factory(send_value_package,current_page_location,null);
+      const store_result = getStoreByPageLocation(current_page_location);
       // result现在包含了你需要的store
       const store = store_result.store();
             // 逐个发送数据
