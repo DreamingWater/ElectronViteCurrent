@@ -59,7 +59,7 @@
 
   const show_data_list = [
     {
-    'name': '设定功率(mw)',
+    'name': '设定功率(μw)',
     'show_data': show_working_power,
     'set_data': set_power_data,
     'min_value':0,
@@ -72,7 +72,7 @@
       'set_data':set_wavelength_data ,
       'min_value':1539.80,
       'max_value':1540.65,
-      'precision': 3,
+      'precision': 4,
     }
   ]
 

@@ -11,7 +11,7 @@ function createTemperatureStore(id: string) {
                 SetTemperature: 20,
                 WorkingTemperature: 20,
                 SamplingTemperature: 30,
-                SamplingTemperatureList:[0,0,0],
+                SamplingTemperatureList:[1,2,3],
                 PIDParameter: {
                     SetProportional: 50,
                     SetIntegral: 10,

@@ -1,6 +1,9 @@
 <template>
-  <div class="container_container">
-    <div :id="`${name}-${proto_type}-g2container`"></div>
+  <div class="table-container">
+    <div class="g2line_title">Error changes chart</div>
+    <div class="container_container">
+      <div :id="`${name}-${proto_type}-g2container`"></div>
+    </div>
   </div>
 
 </template>
@@ -40,7 +43,7 @@
       xField: 'index',
       yField: 'value',
       height: 320,
-      width: 500,
+      width: 550,
       forceFit: true,
       // seriesField: 'name',
       xAxis: {
@@ -74,6 +77,21 @@
 </script>
 
 <style lang="scss">
+.table-container{
+  display: flex;
+  flex-direction: column;
+}
+.g2line_title{
+
+  font-size: 18px;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  color: #d39994;
+  font-style: italic;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
 .container_container{
   // height: 200px;
   // width: 600px;

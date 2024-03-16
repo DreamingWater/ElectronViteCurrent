@@ -86,7 +86,7 @@
      value_model: 'Current'
    };
    const packaged_send_data = ref([
-       [show_power_data,set_power_data,3]
+       [show_power_data,set_power_data,3000]
    ])
 
 </script>

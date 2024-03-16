@@ -72,7 +72,7 @@ $displacement: 0%;
   position: relative;
   left: -15px;
   top: -28px;
-  color: #DB4437;
+  color: #d39994;
   font-style: italic;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
@@ -81,7 +81,9 @@ $displacement: 0%;
   display: flex;
 
   .value{
-    font-size: 20px;
+    font-size: 30px;
+    font-family: lemon;
+    color: white;
   }
 }
 .best-item {
@@ -98,7 +100,7 @@ $displacement: 0%;
   align-items: center;
   justify-content: center;
   grid-area: 1 / 1 / 2 / 3;
-  background-color: rgba(185, 159, 237, 0.6);
+  background-image: linear-gradient(90deg, #4158D0 0%, #C850C0 46%, #d0cecc 100%);;
   padding: 15px;
   font-size: 1rem;
   font-weight: 700;
@@ -107,8 +109,8 @@ $displacement: 0%;
 
 .name {
   position: relative;
-  left: 20%;
-  top:18px;
+  left: 15%;
+  top:20px;
 
   .circles {
     height: $circle-size;

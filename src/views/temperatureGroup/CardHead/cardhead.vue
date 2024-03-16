@@ -1,7 +1,7 @@
 <template>
     <div class="card-box-warpper">
-      <RingVariationCard name="TSV" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
-      <RingVariationCard name="TPV" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
+      <RingVariationCard name="设定温度" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
+      <RingVariationCard name="采样温度" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
       <EnableOff :module_name="module_name" :name="name"  :data_store="temperature_store"  :data_package="send_data_package" :store_key="enable_status"/>
     </div>
 </template>

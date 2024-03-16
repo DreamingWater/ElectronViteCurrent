@@ -82,12 +82,22 @@
         } ;
 
         const baudRate = store.getTargetParameter(search_key);
+
+        // 初始化任务
+        // let initial_data1 = serial_data_package_factory([], current_control_page.value, 'initial');
+        // console.log(initial_data1);
+        //
+        // for(const [index, data] of initial_data1.entries()){
+        //   console.log('模拟串口发送：',data.toString('hex'));
+        // }
+
         console.log('baudRate',baudRate)
         // 获取当前页面的串口配置
         if (!selectedPort.value ) {
           alert('Please select the ports');
           return;
         }
+
         ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,store_result.flag));
         if(use_port){
           // 跟新配置到pinia,连接成功

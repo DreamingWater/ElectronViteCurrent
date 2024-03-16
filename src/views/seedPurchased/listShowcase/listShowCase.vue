@@ -26,7 +26,7 @@
       { name: '泵浦 2 温度(℃)', getterKey: { data_type: 'TemperatureTwo' } },
       { name: '泵浦 1 电流(mA)', getterKey: { data_type: 'CurrentOne' } },
       { name: '泵浦 2 电流(mA)', getterKey: { data_type: 'CurrentTwo' } },
-      { name: '输出光功率(mW)' ,  getterKey: { data_type: 'SamplePower' } },
+      { name: '输出光功率(μW)' ,  getterKey: { data_type: 'SamplePower' } },
     ];
 
 
@@ -39,11 +39,12 @@
   display: flex;
   flex-direction: column;
   //align-items: stretch; // Make items stretch to full width
-  margin: 5px;
+  margin-top: 25px;
   padding: 10px 5px;
   border-radius: 3px;
-  background-color: #f9f9fa;
-
+  //background-color: #f1eaf1;
+  background-image: linear-gradient(89deg, #f1eaf1 0%, #d0e2e4 100%);
+  height: fit-content;
   .showcase-item {
     display: flex;
     flex-direction: row;
@@ -54,12 +55,14 @@
     font-size: 20px;
     .showcase_name {
       margin-top: 5px;
-
       color: rgb(250, 138, 138);
       text-align: left; // Align text to the left
     }
 
     .showcase_value {
+      color: orchid;
+      font-size: larger;
+      min-width: 50px;
       margin-left: 20px;
       text-align: right; // Align text to the right
     }

@@ -25,7 +25,7 @@ export const initial_seed_purchased_package = () => {
     const read_power = generate_package_buffer(Buffer.from([0xC3]), Buffer.alloc(0))
     instruct.push(read_power);
     // 读取波长
-    const read_wavelength = generate_package_buffer(Buffer.from([0xC5]), Buffer.alloc(0))
+    const read_wavelength = generate_package_buffer(Buffer.from([0xC8]), Buffer.alloc(0))
     instruct.push(read_wavelength);
 
     return instruct as Buffer[];
@@ -60,9 +60,12 @@ const actions: ISerialCtrlCode = {
     'WorkingWavelength': {
         'ctrl_code': Buffer.from([0xC8]),
         'function': (pkg:any)=>{
-            const wavelength = pkg['value'] * 10000;
+            let wave_length_number = Math.round(pkg['value'] * 10000);
+            // const wavelength = wave_length_number.toFixed(0);
+            console.log(wave_length_number)
             let power_bytes = Buffer.alloc(4); // 创建一个新的缓冲区，大小为4字节
-            power_bytes.writeInt32LE(wavelength); // 将整数写入缓冲区
+            power_bytes.writeInt32LE(wave_length_number); // 将整数写入缓冲区
+            console.log(`wave_bytes is ${power_bytes.toString('hex')}`)
             return power_bytes
         }
     },

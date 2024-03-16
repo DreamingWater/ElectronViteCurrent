@@ -84,8 +84,9 @@ const actions = {
     },
     'c8': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
+        console.log('find the wavelength data come from the seeder')
         // 读取设置的波长
-        if(data.length === 6){
+        if(data.length === 4){
             const set_seed_purchased_working_wavelength :SeedPurchasedSettingDataModel = {
                 data_type: 'WorkingWavelength',
                 value: data.readUInt32LE(0) / 10000,
@@ -96,7 +97,7 @@ const actions = {
     'c3': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
         // 读取设置的功率
-        if(data.length===4){
+        if(data.length===2){
             const set_seed_purchased_working_power :SeedPurchasedSettingDataModel = {
                 data_type: 'WorkingPower',
                 value: data.readUInt16LE(0),
