@@ -10,7 +10,9 @@
   },
   "files": [
     "dist-electron",
-    "dist"
+    "dist",
+    "dist_render"
+//    "dist_render" // 添加这一行
   ],
   "mac": {
     "artifactName": "${productName}_${version}.${ext}",

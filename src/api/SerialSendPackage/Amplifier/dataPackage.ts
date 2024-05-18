@@ -11,22 +11,22 @@ export const schedual_amplifier_package = () => {
     let instruct:any = [];
     // 开启数据上报
     const data_upload = generate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
-    instruct.push(data_upload);
-
-    return instruct as Buffer[];
+    instruct.push([{ data_type: 'Amplifier-DataUpload', data: data_upload }]);
+    return instruct as [];
 }
 
 export const initial_amplifier_package = () => {
     let instruct:any = [];
     // 读取通道1功率
     const channel1_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x01]))
-    instruct.push(channel1_power);
+    instruct.push([{ data_type: 'Amplifier-ReadChannel1Power', data: channel1_power }])
     // 读取通道2功率
     const channel2_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x02]))
-    instruct.push(channel2_power);
+    instruct.push([{ data_type: 'Amplifier-ReadChannel2Power', data: channel2_power }])
     // 读取通道3功率
     const channel3_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x03]))
-    instruct.push(channel3_power);
+    instruct.push([{ data_type: 'Amplifier-ReadChannel3Power', data: channel3_power }])
+
     return instruct as Buffer[];
 }
 
@@ -76,7 +76,16 @@ export const amplifier_list_package_parser = (packages_data:any[])=>{
 
         }
         if (result) {
-            packaged_data_list.push(result);
+            if (package_data['data_type'] !== 'PowerCurrent') {
+                packaged_data_list.push(
+                    { data_type: `Amplifier-${package_data['data_type']}`, data: result }
+                );
+            }else {
+                packaged_data_list.push(
+                    { data_type: `Amplifier-${package_data['data_type']}-${package_data['channel_name']}`, data: result }
+                );
+            }
+
         }
     }
     return packaged_data_list;

@@ -1,7 +1,7 @@
 <template>
     <div class="card-box-warpper">
-      <RingVariationCard name="设定温度" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
-      <RingVariationCard name="采样温度" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
+      <RingVariationCard name="Setting Temp" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
+      <RingVariationCard name="Sample Temp" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
       <EnableOff :module_name="module_name" :name="name"  :data_store="temperature_store"  :data_package="send_data_package" :store_key="enable_status"/>
     </div>
 </template>
@@ -37,7 +37,6 @@ const send_data_package = ref([]); // 发送的数据包
 <style lang="scss" scoped>
 
     @charset "UTF-8";
-    @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
     .card-box-warpper {
         width: 100%;
         min-height: 100px;

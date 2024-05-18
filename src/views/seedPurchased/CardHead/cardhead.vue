@@ -42,7 +42,6 @@
 <style lang="scss" scoped>
 
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
 .card-box-warpper {
   width: 100%;
   min-height: 100px;

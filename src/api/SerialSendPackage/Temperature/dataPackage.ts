@@ -7,16 +7,18 @@ const setStoreData = (store:any,store_setter_key:SerialSettingDataModel) => {
 
 export const initial_temperature_package = () => {
     let instruct:any = [];
-    // 发送 读取PID 数据回来
-    instruct.push('RF' + '\r\n');
-    // 读取 加热制冷双向 的数据
-    instruct.push('RM' + '\r\n');
-    // 自动上报数据
-    instruct.push('SS' + '\r\n');
-    // TEC输出是否使能
-    // instruct.push('REN' + '\r\n');
-
-    return instruct as string[];
+    // // 发送 读取PID 数据回来
+    // instruct.push('RF' + '\r\n');
+    // // 读取 加热制冷双向 的数据
+    // instruct.push('RM' + '\r\n');
+    // // 自动上报数据
+    // instruct.push('SS' + '\r\n');
+    //// TEC输出是否使能
+    //// instruct.push('REN' + '\r\n');
+    instruct.push([{ data_type: 'TemperaturePPLN-ReadPID', data: 'RF' + '\r\n' }])
+    instruct.push([{ data_type: 'TemperaturePPLN-ReadCOOLER', data: 'RM' + '\r\n' }])
+    instruct.push([{ data_type: 'TemperaturePPLN-DataUpload', data: 'SS' + '\r\n' }])
+    return instruct;
 }
 
 const other_actions = {
@@ -78,7 +80,9 @@ export function temperature_list_package_parser(packages_data:[]){
                 console.log('Unknown data_type: ' + package_data['data_type']);
             }
         if (result) {
-            packaged_data_list.push(result);
+            packaged_data_list.push(
+                { data_type: `TemperaturePPLN-${package_data['data_type']}`, data: result }
+            );
         }
     }
     return packaged_data_list;

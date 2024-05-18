@@ -10,17 +10,17 @@ function createAmplifierGroupStore(id: string) {
             Data: {
                 Channel_ONE :   {
                     SetPower : 0,
-                    Current : 10,
+                    Current : 0,
                     WorkingPower:0,
                 },
                 Channel_TWO :   {
                     SetPower : 0,
-                    Current : 20,
+                    Current : 0,
                     WorkingPower:0,
                 },
                 Channel_THREE : {
                     SetPower : 0,
-                    Current : 30,
+                    Current : 0,
                     WorkingPower:0,
                 },
                 Temperature:      0,
@@ -49,6 +49,12 @@ function createAmplifierGroupStore(id: string) {
                 this.Data.Channel_TWO[`${value_model}`]   = value_TWO;
                 this.Data.Channel_THREE[`${value_model}`] = value_THREE;
             },
+            //        const amplifier_channel2set_power_data:AmplifierSettingDataModel = {
+            //             data_type: 'PowerCurrent',
+            //             value: 0,
+            //             channel_name: 'TWO',
+            //             value_model:'SetPower',
+            //         };
             setTargetParameter( data: AmplifierSettingDataModel ){
                 if (data.data_type === 'PowerCurrent'){
                     this.setAmplifierPowerCurrentValue(data.value_model, data.value, data.value_TWO, data.value_THREE, data.channel_name);

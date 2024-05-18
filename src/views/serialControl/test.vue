@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-// import { listAvailablePorts, connectToPort, sendDataToPort } from '@/preload/serialControl.js';
+// import { listAvailablePorts, connectToPort, sendDataToPort } from '@/preload/serialControl.ts';
 
 const ports = ref([]);
 const selectedPort = ref('');

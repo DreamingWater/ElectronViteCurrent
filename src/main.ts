@@ -8,13 +8,26 @@ import App from './App.vue'
 //import './preload/node-api'
 import router from '@/router/index'
 import 'normalize.css' //reset.css
+import './assets/css/dm_sans.css'
 import './assets/css/common.css'
+
+import { scheduler } from './api/schedulerPipeline';
+
 // import ElementPlus from 'element-plus'
 // import 'element-plus/dist/index.css'
 // .use(ElementPlus)
 
+
 const store = createPinia()
 
-createApp(App).use(router).use(store)
-  .mount('#app')
+const app = createApp(App).use(router).use(store);
+
+// 添加到 Vue 全局属性
+// Provide the scheduler instance
+app.provide('$scheduler', scheduler);
+
+app.mount('#app');
+
+// createApp(App).use(router).use(store)
+//   .mount('#app')
 

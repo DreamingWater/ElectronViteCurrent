@@ -1,7 +1,7 @@
 <template>
 
   <div class="button-container">
-    <button class="button  btn-6" :id="`${name}-${proto_type}-button-send`" :disabled="disableButton" @click="handleSendClick">
+    <button class="button  btn-6" :id="`${name}-${proto_type}-button-send`" :disabled="cur_module_working_status" @click="handleSendClick">
       <i class="icon-send material-icons" :id="`${name}-${proto_type}-button-send-icon`" >send</i>
       <!-- <i class="icon-check material-icons">check</i> -->
       <span class="button-text" :id="`${name}-${proto_type}-button-send-text`">SEND</span>
@@ -12,10 +12,11 @@
 
 <script lang='ts' setup>
     // @ts-nocheck
-    import { onMounted, watch, ref } from 'vue';
+    import {onMounted, watch, ref, computed, unref,inject} from 'vue';
     import {getStoreByPageLocation} from "@/store/SerialGroup";
-    import {PageLocationStateEnum} from "@/api/pageLocation";
+    import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
     import { serial_data_package_factory, cut_data_package_list } from "@/api/SerialSendPackage/index";
+    import {SerialGettingDataModel} from "@/types/serial";
 
     const props = defineProps({
       module_name: { type: null, required: true },
@@ -24,8 +25,13 @@
       data_store: { type: null , required: true},
       proto_type: { type: null, default: 'None-type' },
     });
-
-    let disableButton = ref(false); // 是否失能按钮部分
+    const scheduler = inject('$scheduler');
+    const module_enable_working:SerialGettingDataModel = { 'data_type' : 'EnableStatus'};
+    const cur_module_working_status = computed(() => {
+      const store = props.data_store;
+      const value = store.getTargetParameter(module_enable_working);
+      return !Boolean(value);
+    });
 
 
     const button_effect_function = ()=>{
@@ -48,26 +54,21 @@
       }, 500);
     }
     function handleSendClick() {
-      // 按钮其它事件处理
-      deal_packaged_data();
       // 按钮效果实现
       button_effect_function();
+      // 按钮其它事件处理
+      deal_packaged_data();
+
     }
     const deal_packaged_data= () => {
       // 处理数据
-      const data_package_list = cut_data_package_list(props.data_package,props.data_store);
+      const data_package_list:[][] = cut_data_package_list(props.data_package,props.data_store);
       console.log('data_package_list',data_package_list);
       for(const [index, data_package] of data_package_list.entries()){
-          setTimeout(()=>{
-            const packaged_data = serial_data_package_factory(data_package, PageLocationStateEnum[props.module_name],null);
-            console.log('packaged_data',packaged_data);
-            const store_result = getStoreByPageLocation(PageLocationStateEnum[props.module_name])
-            // result现在包含了你需要的store
-            const store = store_result.store();
-            store.sendSerialData(packaged_data);
-          },3000 * index)
+        scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'interval');
       }
     }
+
 </script>
 
 

@@ -72,7 +72,7 @@ $displacement: 0%;
   position: relative;
   left: -15px;
   top: -28px;
-  color: #d39994;
+  color: #eac7c4;
   font-style: italic;
   font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

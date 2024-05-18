@@ -18,6 +18,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 SerialParser: null,    // 串口解析对象
                 SerialTask: null,      // 串口任务
             } as SerialGroupState,
+            Error_send_times: 0,
         }),
 
         getters: {
@@ -36,17 +37,32 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 }
             },
             // 发送串口数据
-            sendSerialData(data_list: string[]) { // 每100ms发送一次数据
-                for(const [index, data] of data_list.entries()){
-                setTimeout(() => {
-                        if (this.Serial_Data.SerialObject) {
-                            try {
-                                this.Serial_Data.SerialObject.write(data);
-                            }catch (e) {console.log(e);}
-                        }
-                        console.log('模拟串口发送：',data.toString('hex'));
-                    },100*index);
+            // sendSerialData({ data, ...rest }: { data?: any [];  [key: string]: any }) { // 每100ms发送一次数据
+            //     if (this.Serial_Data.SerialObject) {
+            //         try {
+            //             this.Serial_Data.SerialObject.write(data);
+            //         }catch (e) {console.log(e);}
+            //     }
+            //     // console.log('模拟串口发送：',data.toString('hex'));
+            //     console.log('模拟串口发送：',data);
+            //     // for(const [index, _data] of data.entries()){
+            //     // setTimeout(() => {
+            //     //         if (this.Serial_Data.SerialObject) {
+            //     //             try {
+            //     //                 this.Serial_Data.SerialObject.write(_data);
+            //     //             }catch (e) {console.log(e);}
+            //     //         }
+            //     //         console.log('模拟串口发送：',_data.toString('hex'));
+            //     //     },500*index);
+            //     // }
+            // },
+            sendSerialData({ data, ...rest }: { data?: Buffer;  [key: string]: any }) { // 每100ms发送一次数据
+                if (this.Serial_Data.SerialObject) {
+                    try {
+                        this.Serial_Data.SerialObject.write(data);
+                    }catch (e) {console.log(e);}
                 }
+                console.log('模拟串口发送：',data.toString('hex'));
             },
             // 成功连接、断开串口后配置store
             changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean, task:any) {

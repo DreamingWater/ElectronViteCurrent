@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/logo.svg" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-    <link rel='stylesheet' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+    <link rel="stylesheet" href="/normalize.min.css">
+    <link rel='stylesheet' href='/googleicon.css'>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <meta http-equiv="Content-Security-Policy" content="default-src * self blob: data: gap:; style-src * self 'unsafe-inline' blob: data: gap:; script-src * 'self' 'unsafe-eval' 'unsafe-inline' blob: data: gap:; object-src * 'self' blob: data: gap:; img-src * self 'unsafe-inline' blob: data: gap:; connect-src self * 'unsafe-inline' blob: data: gap:; frame-src * self blob: data: gap:;">
@@ -12,8 +12,13 @@
   </head>
   <body>
     <div id="app" style="height: 100%;"></div>
+    <script  src="/render/render.js"></script>
+    <script  src="/render/serialControl.js"></script>
+<!--    <script  src="@render@/preload/serialControl.ts"></script>-->
+<!--    <script  src="/src/preload/render.js"  ></script>-->
+<!--    <script  src="/src/preload/serialControl.ts" ></script>-->
     <script type="module" src="/src/main.ts"></script>
-    <script  src="/src/preload/render.js"></script>
-    <script  src="/src/preload/serialControl.js"></script>
+
+
   </body>
 </html>

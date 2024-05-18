@@ -55,15 +55,49 @@ export default defineConfig(({ command }) => {
               },
             },
           },
+        },
+        {
+          entry: 'src/preload/render.js',
+          onstart(options) {
+            options.reload()
+          },
+          vite: {
+            build: {
+              sourcemap: sourcemap ? 'inline' : undefined,
+              minify: isBuild,
+              outDir: 'dist-electron/preload',
+              rollupOptions: {
+                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+              },
+            },
+          },
+        },
+        {
+          entry: 'src/preload/serialControl.ts',
+          onstart(options) {
+            options.reload()
+          },
+          vite: {
+            build: {
+              sourcemap: sourcemap ? 'inline' : undefined,
+              minify: isBuild,
+              outDir: 'dist-electron/preload',
+              rollupOptions: {
+                external: Object.keys('dependencies' in pkg ? pkg.dependencies : {}),
+              },
+            },
+          },
         }
+
       ]),
+
       // Use Node.js API in the Renderer-process
       renderer(),
     ],
     resolve: {
       // ↓路径别名，主要是这部分
       alias: {
-        "@": resolve(__dirname, "./src")
+        "@": resolve(__dirname, "./src"),
       }
     },
     server: process.env.VSCODE_DEBUG && (() => {

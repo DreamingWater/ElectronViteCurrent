@@ -55,7 +55,7 @@ const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocat
         () => {
           const store_result =  getStoreByPageLocation(current_control_page.value);
           const store = store_result.store()
-          return store.getTargetParameter(search_serial_status)
+          return store.getTargetParameter(search_serial_status);
     })
 
 

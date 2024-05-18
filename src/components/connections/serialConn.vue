@@ -14,7 +14,7 @@
 <script lang="ts" setup>
       // @ts-nocheck
       import UnConnectedImg from "@/assets/imgs/unconnected.png";
-      import { ref, onMounted, watch,computed,unref } from 'vue';
+      import {ref, onMounted, watch, computed, unref, inject} from 'vue';
       import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
       import { append_serial_data_parser } from "@/api/SerialParser/index"
       import { TimerTask} from "@/api/schedulerTask";
@@ -24,6 +24,7 @@
       import {SerialGettingDataModel, SerialSettingDataModel} from "@/types/serial";
       import {serial_data_package_factory} from "@/api/SerialSendPackage";
       const { setCurrentPageLocationState, getCurrentPageLocationState } = usePageLocationState();
+      const scheduler = inject('$scheduler');
 
       const portList= ref([]);  // replace with your actual port list
       const selectedPort = ref('');
@@ -99,24 +100,29 @@
         }
 
         ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,store_result.flag));
-        if(use_port){
+        if(use_port ){
           // 跟新配置到pinia,连接成功
           append_serial_data_parser(use_parser,current_control_page.value);
           // 启动定时任务
-          let task_data = serial_data_package_factory([], current_control_page.value, 'internal');
-          let task = null;
-          if(task_data.length>0){
-            task = new TimerTask(store, task_data)
-            // 温度页面单次任务，其它页面循环定时任务
-            task.createTask(1000,false);
-          }
+          scheduler.addSerialSendPackagesTask([],  current_control_page.value,1,'internal','continuous');
+
+          // let task_data = serial_data_package_factory([], current_control_page.value, 'internal');
+          // let task = null;
+          // if(task_data.length>0){
+          //   task = new TimerTask(store, task_data)
+          //   // 温度页面单次任务，其它页面循环定时任务
+          //   task.createTask(1000,false);
+          // }
           // 保存对象
-          store.changeSerialConnectState(use_port,use_parser,true,task);
+          store.changeSerialConnectState(use_port,use_parser,true,null);
 
           // 初始化任务
-          let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');
-          // 逐个发送数据
-          store.sendSerialData(initial_data)
+          // let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');
+          // // 逐个发送数据
+          // setTimeout(()=>{
+          //   store.sendSerialData(initial_data);
+          // },1000);
+          scheduler.addSerialSendPackagesTask([],  current_control_page.value,2,'initial','continuous');
         }
       }
 

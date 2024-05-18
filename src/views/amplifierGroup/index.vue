@@ -4,9 +4,9 @@
           <Cardhead :module_name="ModuleName" name="Amplifier" ></Cardhead>
        </div>
         <div class="section-body">
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE"/>
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO"/>
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE"/>
+<!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE"/>-->
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO" card_name="PreAmplifier"/>
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="PowerAmplifier"/>
             <!-- <ShowCard CardLabel="LASER_TWO"/> -->
         </div>
     </div>
@@ -41,8 +41,7 @@
         width: 100%;
         height: 100%;
         display: flex;
-        justify-content: space-evenly;
-
+        justify-content: space-around;
       }
   }
   

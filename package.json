@@ -1,6 +1,6 @@
 {
   "name": "LaserController",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "main": "dist-electron/main/index.js",
   "description": "Laser Controller",
   "author": "",
@@ -22,6 +22,8 @@
     "dev": "vite",
     "build": "vite build && electron-builder",
     "build-only": "vue-tsc --noEmit && vite build && electron-builder",
+    "build:renderer": "esbuild ./src/preload/render.js --outfile=./dist-electron/preload/render.js --platform=browser --format=esm",
+    "build:serialControl": "esbuild src/preload/serialControl.ts --outfile=./dist-electron/preload/serialControl.js --platform=browser --format=esm",
     "preview": "vite preview"
   },
   "devDependencies": {
@@ -33,14 +35,15 @@
     "core-js": "^3.8.3",
     "cross-spawn": "^7.0.3",
     "echarts": "^5.4.3",
-    "electron": "^25.0.1",
     "electron-builder": "^24.4.0",
+    "electron-rebuild": "^3.2.9",
     "element-plus": "^2.3.8",
+    "esbuild": "^0.20.2",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.34",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
-    "serialport": "^12.0.0",
+    "electron": "^25.0.1",
     "style-loader": "^3.3.1",
     "typescript": "^5.0.2",
     "vite": "^4.1.4",
@@ -52,6 +55,8 @@
   },
   "dependencies": {
     "@tomjs/electron-devtools-installer": "^2.1.1",
-    "electron-window-state": "^5.0.3"
+    "electron-window-state": "^5.0.3",
+    "serialport": "^12.0.0"
+
   }
 }

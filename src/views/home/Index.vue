@@ -36,14 +36,14 @@
         </div> -->
 
         <div class="project-boxes jsGridView">
-            <ShowCard CardLabel="LASER_ONE"/>
+<!--            <ShowCard CardLabel="LASER_ONE"/>-->
             <!-- <ShowCard CardLabel="LASER_TWO"/> -->
         </div>
     </div>
 </template>
 
 <script setup>
-    import ShowCard from '@/components/ShowCard/ShowCard.vue';
+    // import ShowCard from '@/components/ShowCard/ShowCard.vue';
 </script>
 <style lang="css" scoped>
 

@@ -2,7 +2,7 @@
 
   <div class="card">
     <div class="card-content">
-      <p class="card-title">Set Temperature
+      <p class="card-title">Sample Temp
       </p>
       <p class="card-para">
         <ValueShow :name="props.name" :proto_type="props.proto_type" :data_store="props.data_store" :store_getter_key="props.store_getter_key" />
@@ -72,9 +72,10 @@
 
 .card .card-title {
   font-size: 20px;
-  font-weight: 200;
+  font-weight: bold;
   margin-bottom: 4px;
   text-transform: capitalize;
+  font-style: italic;
 }
 
 .card .card-para {

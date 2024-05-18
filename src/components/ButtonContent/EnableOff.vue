@@ -1,12 +1,11 @@
 <template>
   <!-- <div class="mycomponents"> -->
-  <div class="circle" @click="click_sender_circle_">
+  <div class="circle" @click="click_sender_circle_" >
     <span class="circle__btn">
       <div class="pause">
           <div class="circle-content">
           <svg xmlns="http://www.w3.org/2000/svg" style="width: 3em;height: 3em;vertical-align: middle;fill:  rgb(0, 0, 0);overflow: hidden;"  viewBox="0 0 24 24"><path fill="currentColor" d="M14 19h4V5h-4M6 19h4V5H6z"/></svg>
-
-                   </div>
+      </div>
       </div>
       <div class="play" >
         <div class="circle-content">
@@ -26,11 +25,14 @@
 
 <script lang="ts" setup>
     // @ts-nocheck
-    import { onMounted,ref, watch,computed } from 'vue';
+    import {onMounted, ref, watch, computed, inject} from 'vue';
     // import { append_serial_data_parser } from '@/api/SerialSendPackage/index'
     import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
     import {PageLocationStateEnum} from "@/api/pageLocation";
     import {serial_data_package_factory} from "@/api/SerialSendPackage";
+    import {SerialGettingDataModel} from "@/types/serial";
+
+
 
     const props = defineProps({
       module_name: { type: null, required: true },
@@ -39,7 +41,19 @@
       data_store: { type: null , required: true},
       store_key:  { type: null,  required:true},
     });
+    const scheduler = inject('$scheduler');
+
     const current_page_location = PageLocationStateEnum[props.module_name];
+
+    const enable_open_status = computed(() => {
+      const store_result = getStoreByPageLocation(current_page_location);
+      const serial_store = store_result.store();
+      const get_Open_status:SerialGettingDataModel = {
+        'data_type' :'IsOpen'
+      }
+      return !serial_store.getTargetParameter(get_Open_status);
+    });
+
     const enable_status = ref(props.data_store.getTargetParameter(props.store_key));  // 启动开关
     let task = null;                // 定时任务
 
@@ -66,19 +80,26 @@
         }
     );
     const click_sender_circle_ = ()=>{
+      if (enable_open_status.value){
+        console.log('enable_open_status',enable_open_status.value);
+        // return;
+      }
       enable_status.value = enable_status.value === 1 ? 0 : 1;
       const send_value_package = JSON.parse(JSON.stringify(props.data_package));  // 除开关之外的包数据
       const enable_data_package = props.store_key;    // 开关的包数据
       enable_data_package.value = enable_status.value // 修改开关状态
       send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
-      const packaged_data = serial_data_package_factory(send_value_package,current_page_location,null);
-      const store_result = getStoreByPageLocation(current_page_location);
-      // result现在包含了你需要的store
-      const store = store_result.store();
-            // 逐个发送数据
-      store.sendSerialData(packaged_data);
+      console.log('send_value_package',send_value_package);
+      if (enable_status.value === 1){
+        scheduler.addSerialSendPackagesTask(send_value_package, current_page_location,0,null,'once');
+      }else {
+        scheduler.addShutdownTask(2,props.data_store,null,'interval');
+      }
+
       // 设置 enable_off 按钮
       // props.data_store.setTargetParameter(enable_data_package)
+
+      // 如果 是关闭的话，就停止定时任务
     }
 
     onMounted(()=>{

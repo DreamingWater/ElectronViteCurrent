@@ -9,7 +9,7 @@ import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-insta
 // import {resolve} from "path";
 
 // import { spawn } from 'child_process';  // 启动python进程
-const { execFile } = require("cross-spawn");
+// const { execFile } = require("cross-spawn");
 // The built directory structure
 //
 // ├─┬ dist-electron
@@ -85,7 +85,7 @@ async function createWindow() {
     x:mainWindowState.x,
     y:mainWindowState.y,
     // frame: false, // 隐藏标题栏和窗口控制按钮
-    // title: 'LaserController',
+    title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
       // preload,
@@ -104,6 +104,7 @@ async function createWindow() {
     // Open devTool if the app is not packaged
     win.webContents.openDevTools()
   } else {
+    // win.loadFile(url)
     win.loadFile(indexHtml)
     // win.webContents.openDevTools()
     // win.loadURL(join(process.env.PUBLIC, 'loader.html'))

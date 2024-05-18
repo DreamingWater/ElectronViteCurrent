@@ -3,7 +3,7 @@
 
         <div class="section_card">
             <div class="card-head">
-                {{ name }}_{{proto_type}}
+                {{card_name}}
             </div>
             <div class="card_current">
               <div class="title">
@@ -44,6 +44,8 @@
      module_name: { type: null, required: true },
      name: { type: String, default: 'None-name' },
      proto_type:{type: String, default: 'None-type'},  // proto_type 可以是 ONE TWO THREE
+     card_name: { type: String, default: 'None-name' },
+
    });
    const min_value = ref(0);
    const valueMap = {
@@ -94,7 +96,6 @@
 <style lang="scss" scoped>
 
 @charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
 
 button, a {
   cursor: pointer;
@@ -107,7 +108,7 @@ button, a {
   .section_card{
 
     margin: 5px;
-    padding: 20px 5px;
+    padding: 20px 25px;
     border-radius: 5px;
     background-color: #f9f9fa;
     .card-head{

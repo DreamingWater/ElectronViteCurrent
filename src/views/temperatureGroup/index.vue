@@ -44,7 +44,7 @@
         width: 100%;
         height: 100%;
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-between;
 
       }
   }

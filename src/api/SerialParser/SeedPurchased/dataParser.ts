@@ -2,6 +2,10 @@ import {SerialSettingDataModel} from "@/types/serial";
 import { useSeedPurchasedStore } from "@/store/seedPurchased";
 import { SeedPurchasedSettingDataModel } from "@/types/seedPurchased"
 import { seed_purchased_parser } from "@/api/SerialParser/Base/packParser";
+
+import { scheduler } from '@/api/schedulerPipeline';
+
+
 const create_store_object = ()=>{
     const store = useSeedPurchasedStore();
     return store
@@ -34,12 +38,12 @@ const actions = {
 
         const set_seed_purchased_temperature_one :SeedPurchasedSettingDataModel = {
             data_type: 'TemperatureOne',
-            value:(data.readUInt16LE(8) - 27315) / 100,
+            value: parseFloat(((data.readUInt16LE(8) - 27315) / 100).toFixed(2)),
         }
         store.setTargetParameter(set_seed_purchased_temperature_one);
         const set_seed_purchased_temperature_two :SeedPurchasedSettingDataModel = {
             data_type: 'TemperatureTwo',
-            value:(data.readUInt16LE(10) - 27315) / 100,
+            value: parseFloat(((data.readUInt16LE(10) - 27315) / 100).toFixed(2)),
         }
         store.setTargetParameter(set_seed_purchased_temperature_two);
         const set_seed_purchased_temperature_seed :SeedPurchasedSettingDataModel = {
@@ -66,6 +70,11 @@ const actions = {
             data_type: 'SamplePower',
         }
         store.setTargetParameter(set_seed_purchased_power);
+        const set_seed_purchased_working_power :SeedPurchasedSettingDataModel = {
+            value:data.readUInt16LE(14),
+            data_type: 'WorkingPower',
+        }
+        store.setTargetParameter(set_seed_purchased_working_power);
         // 设置工作状态数据
         const set_seed_purchased_workingStatus :SeedPurchasedSettingDataModel = {
             data_type: 'WorkingStatus',
@@ -91,8 +100,10 @@ const actions = {
                 data_type: 'WorkingWavelength',
                 value: data.readUInt32LE(0) / 10000,
             }
+            scheduler.cancelTask('Seed-ReadWavelength');
             store.setTargetParameter(set_seed_purchased_working_wavelength);
         }
+
     },
     'c3': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
@@ -102,10 +113,12 @@ const actions = {
                 data_type: 'WorkingPower',
                 value: data.readUInt16LE(0),
             }
+            scheduler.cancelTask('Seed-ReadPower');
             store.setTargetParameter(set_seed_purchased_working_power);
         }
     }
 }
+
 
 export function add_seed_purchased_serial_data_parser(seed_purchased_serial_parser:any) {
     console.log('add_seed_purchased_serial_data_parser');

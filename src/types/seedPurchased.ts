@@ -32,3 +32,6 @@ export interface SeedPurchasedSettingDataModel {
 export interface SeedPurchasedGettingDataModel {
     data_type: keyof SeedPurchasedState;
 }
+
+
+

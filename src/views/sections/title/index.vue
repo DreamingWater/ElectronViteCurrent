@@ -2,7 +2,10 @@
   <div class="window-title">
     <!-- 软件logo预留位置 -->
     <div style="-webkit-app-region: drag" class="logo">
-      <img :src="SchoolLogo" alt="School Logo" style="height: 100%;width: 350px" />
+<!--      <img :src="SchoolLogo" alt="School Logo" style="height: 100%;width: 350px" />-->
+      <div style="display: flex; align-items: center; height: 100%;">
+        <img data-v-17f21bb2="" src="/src/assets/imgs/large-scalescientificfacility.png" alt="School Logo" style="width: 300px" >
+      </div>
     </div>
     <!-- 菜单栏位置 -->
     <div></div>
@@ -75,13 +78,12 @@ const Close = () => {
   width: 100%;
   height: 40px;
   line-height: 30px;
-  background-color: #ffffff;
   display: flex;
   -webkit-app-region: drag;
   // position: fixed;
   align-items: center;
   top: 0;
-  background-color: #f5f5ec;
+  background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
   // z-index: 99999;
   .icon-logo {
     // margin-left: 0 !important;

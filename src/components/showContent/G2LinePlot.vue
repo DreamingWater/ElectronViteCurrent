@@ -69,7 +69,7 @@
       // const data_range = maxValue - minValue;
       // console.log(`${maxValue} - ${minValue} = data_range is ${data_range}`)
 
-    }, 1000);
+    }, 1500);
   });
 
 
