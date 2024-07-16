@@ -2,7 +2,7 @@
   <div class="card-item-input">
     <div class="title">{{ name }}</div>
     <div class="value">
-      <div class="current_value">
+      <div v-if="show_last_value" class="current_value">
         <ValueShow :data_store="data_store" :store_getter_key="show_data" />
       </div>
       <InputBox :data_store="data_store" :store_setting_key="set_data" :store_getter_key="show_data" :min_value="min_value" :max_value="max_value" :precision="precision"/>
@@ -11,7 +11,7 @@
 </template>
 
 <script lang='ts' setup>
-import { defineProps } from 'vue';
+// import { defineProps } from 'vue';
 import InputBox from "@/components/TextBox/InputBox.vue";
 import ValueShow from "@/components/showContent/ValueShow.vue";
 import {number} from "echarts";
@@ -24,6 +24,7 @@ const props = defineProps({
   min_value:{type:Number,require:true},
   max_value:{type:Number,require:true},
   precision:{type:Number,default:2},
+  show_last_value:{type:Boolean,default:true},
 });
 </script>
 
@@ -36,11 +37,13 @@ const props = defineProps({
   align-items: center;
   justify-content: space-between;
   display: flex;
+
   .title {
-    font-size: 16px;
+    font-size: 18px;
     color: rgb(250, 138, 138);
     justify-content: center;
     text-align: center;
+    font-family: 'lemon';
   }
   .current_value {
     font-size: 12px;

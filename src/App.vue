@@ -38,12 +38,23 @@
     import { useAmplifierGroupStore } from "@/store/amplifierGroup";
     import { useSeedPurchasedStore} from "@/store/seedPurchased";
     import { Manager } from "@/managements/manager";
+    import {PageLocationStateEnum} from "@/api/pageLocation";
+    import {update_serial_config} from "@/api/Config/configSetting";
 
-    const amplifier_store = useAmplifierGroupStore();       // store
+
+
+const amplifier_store = useAmplifierGroupStore();       // store
     const seed_store = useSeedPurchasedStore();       // store
 
     const manager = new Manager(seed_store,amplifier_store);
-    manager.checkAmplifierPower();
+    manager.checkAmplifierPower();    // 种子光开启之后才能开放大
+    manager.checkManager();           // 防止放大部分光纤断掉
+
+
+    // manager.control_amplifier_Three_power_stability(35000);
+    update_serial_config();     // 开机的时候自动读取config文件的内容
+
+
 // onMounted(()=>{
     //   add_script('/src/preload/serialControl.ts')
     //   add_script('/src/preload/render.js')

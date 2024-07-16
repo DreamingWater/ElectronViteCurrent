@@ -23,6 +23,7 @@ function rearrangeArraysElements(return_data_list: any[][]): any[][] {
 }
 
 //  return [[1,3,5],[132,323],[12],['a']]
+//packages_data_list =  [[amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,3000]]
 export const cut_data_package_list = (packages_data_list:[][],store:any, reset:boolean=false) => {
     let return_data_list = [];
     console.log('cut_data_package_list:',packages_data_list)
@@ -106,7 +107,7 @@ function combine_package_with_or_not_initial(packages_data:[],  other_instruct: 
 }
 
 const actions = {
-    [PageLocationStateEnum.Oscillator]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => 'add serial oscillator parser',
+    [PageLocationStateEnum.Oscillator]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => [],
     [PageLocationStateEnum.Amplifier]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => {
        return combine_package_with_or_not_initial(packages_data,other_instruct,
            amplifier_list_package_parser,initial_amplifier_package,
@@ -121,6 +122,10 @@ const actions = {
          return combine_package_with_or_not_initial(packages_data,other_instruct,
               seed_purchased_list_package_parser,initial_seed_purchased_package,
               schedual_seed_purchased_package)
+    },
+    [PageLocationStateEnum.Manager]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) =>
+    {
+        return [] ;  // 没有数据需要发送
     },
 }
 

@@ -28,10 +28,19 @@
 
       const portList= ref([]);  // replace with your actual port list
       const selectedPort = ref('');
+      const serial_config_port = ref(''); // serial_store里面的port
       const rotationAngle = ref(0); // 初始角度为0度
       let use_port:any = null;
       let use_parser:any = null;
-
+      // 解构对应的 serial _store
+      const current_control_page = computed(() => unref(getCurrentPageLocationState));
+      // 解构对应的 store
+      const computed_store_result = computed(() =>
+          {
+            const store_result = getStoreByPageLocation(current_control_page.value);
+            return store_result;
+          }
+      )
       // 旋转 logo 角度
       const rotateStyle = computed(() => {
         return `rotate(${rotationAngle.value}deg)`;
@@ -49,14 +58,22 @@
           rotationAngle.value -= 90; // 一秒后恢复初始角度
         }, 1000);
       }
-
+      // 设置默认的串口端口
+      const setting_serial_port = ()=>{
+        const search_key:SerialGettingDataModel = {
+          'data_type':'Port',
+        } ;
+        const store = computed_store_result.value.store();
+        const setting_port = store.getTargetParameter(search_key);
+        serial_config_port.value = setting_port;
+      };
      async function click_refresh_logo(): void{
         // 设置端口列表
         portList.value = await listAvailablePorts();//['COM1','COM2','COM3','COM4']; // replace with your actual port list
-        if (portList.value.length > 0) {
-          // 设置选中的端口为列表中的第一个元素
-          selectedPort.value = portList.value[0];
-        }
+          if (portList.value.length > 0) {
+            // 设置选中的端口为列表中的第一个元素 或者利用默认值，前提是默认值是出现时list中
+            selectedPort.value = (serial_config_port.value !== '' && portList.value.includes(serial_config_port.value)) ? serial_config_port.value : portList.value[0];
+          }
         rotate_logo();
       }
 
@@ -65,23 +82,24 @@
         setTimeout(() => {
           click_refresh_logo();
         }, 200);
+        // 获取默认的串口值
+        setting_serial_port();
       });
+
+
       function add_parser(this_parser:any) {
         this_parser.on('data', data => {
           console.log('Received data from port:', data);
         });
       }
+
       function click_connect_serial(){
 
-        const current_control_page = computed(() => unref(getCurrentPageLocationState));
-      // 解构对应的 store
-        const store_result = getStoreByPageLocation(current_control_page.value);
-        const store = store_result.store();
         // 获取波特率信息
         const search_key:SerialGettingDataModel = {
           'data_type':'BaudRate',
         } ;
-
+        const store =   computed_store_result.value.store();
         const baudRate = store.getTargetParameter(search_key);
 
         // 初始化任务
@@ -91,16 +109,12 @@
         // for(const [index, data] of initial_data1.entries()){
         //   console.log('模拟串口发送：',data.toString('hex'));
         // }
+        console.log(store);
 
-        console.log('baudRate',baudRate)
-        // 获取当前页面的串口配置
-        if (!selectedPort.value ) {
-          alert('Please select the ports');
-          return;
-        }
+        console.log('baudRate',baudRate);
 
-        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,store_result.flag));
-        if(use_port ){
+        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,computed_store_result.value.flag));
+        if(use_port || true ){
           // 跟新配置到pinia,连接成功
           append_serial_data_parser(use_parser,current_control_page.value);
           // 启动定时任务
@@ -114,7 +128,7 @@
           //   task.createTask(1000,false);
           // }
           // 保存对象
-          store.changeSerialConnectState(use_port,use_parser,true,null);
+          store.changeSerialConnectState(use_port,use_parser,true,selectedPort.value);
 
           // 初始化任务
           // let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');

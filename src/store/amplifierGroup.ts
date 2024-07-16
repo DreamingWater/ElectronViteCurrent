@@ -2,6 +2,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { AmplifierGroupState, CurrentPowerValueModel, AmplifierChannelModel, DataTypeModel,
     AmplifierSettingDataModel,AmplifierGettingDataModel } from '@/types/amplifier';
+import {PidParameter} from "../types/amplifier";
 
 function createAmplifierGroupStore(id: string) {
     return defineStore({
@@ -9,23 +10,29 @@ function createAmplifierGroupStore(id: string) {
         state: () => ({
             Data: {
                 Channel_ONE :   {
-                    SetPower : 0,
-                    Current : 0,
+                    SetPower :   0,
+                    Current :    0,
                     WorkingPower:0,
                 },
                 Channel_TWO :   {
-                    SetPower : 0,
-                    Current : 0,
+                    SetPower :   0,
+                    Current :    0,
                     WorkingPower:0,
                 },
                 Channel_THREE : {
-                    SetPower : 0,
-                    Current : 0,
+                    SetPower :   0,
+                    Current :    0,
                     WorkingPower:0,
                 },
                 Temperature:      0,
                 WorkingStatus:    0,  // 放大器的开关状态
-                EnableStatus:       0,  // 放大器的工作状态
+                EnableStatus:     0,  // 放大器的工作状态
+                PidParameters:{
+                    SetProportional: 1,
+                    SetIntegral: 1,
+                    SetDerivative: 0,
+                } as PidParameter,
+                PID_Enable : 0,
             } as AmplifierGroupState,
         }),
         getters: {
@@ -35,6 +42,9 @@ function createAmplifierGroupStore(id: string) {
             getTargetParameter: (state) => (data:AmplifierGettingDataModel) => {
                 if (data.data_type === 'PowerCurrent'){
                     return state.Data[`Channel_${data.channel_name}`][`${data.value_model}`];
+                }
+                if (data.data_type in state.Data.PidParameters) {
+                    return state.Data.PidParameters[data.data_type];
                 }
                 return state.Data[`${data.data_type}`];
             },
@@ -58,7 +68,10 @@ function createAmplifierGroupStore(id: string) {
             setTargetParameter( data: AmplifierSettingDataModel ){
                 if (data.data_type === 'PowerCurrent'){
                     this.setAmplifierPowerCurrentValue(data.value_model, data.value, data.value_TWO, data.value_THREE, data.channel_name);
-                } else {
+                } else if (data.data_type in this.Data.PidParameters){
+                    this.Data.PidParameters[data.data_type] = data.value;
+                }else
+                {
                     this.Data[`${data.data_type}`]= data.value;
                 }
             }

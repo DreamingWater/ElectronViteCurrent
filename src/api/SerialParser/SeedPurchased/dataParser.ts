@@ -89,19 +89,26 @@ const actions = {
         }
         store.setTargetParameter(set_seed_purchased_enableStatus);
         // 打印方便观测数据
-        console.log(receive_laser_status);
+        // console.log(receive_laser_status);
     },
     'c8': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
         console.log('find the wavelength data come from the seeder')
         // 读取设置的波长
         if(data.length === 4){
+            const read_wavelength = data.readUInt32LE(0) / 10000;
             const set_seed_purchased_working_wavelength :SeedPurchasedSettingDataModel = {
                 data_type: 'WorkingWavelength',
                 value: data.readUInt32LE(0) / 10000,
             }
-            scheduler.cancelTask('Seed-ReadWavelength');
-            store.setTargetParameter(set_seed_purchased_working_wavelength);
+            if (read_wavelength >= 1539.80 && read_wavelength <= 1540.65) {
+                scheduler.cancelTask('Seed-ReadWavelength');
+                store.setTargetParameter(set_seed_purchased_working_wavelength);
+            }
+        }
+        if (data.length === 1 && data[0] === 0){
+            console.log('*******************************************************************************************************')
+            scheduler.cancelTask('Seed-WorkingWavelength');
         }
 
     },

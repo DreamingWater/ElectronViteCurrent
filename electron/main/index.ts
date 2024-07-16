@@ -4,13 +4,7 @@ import { join } from 'node:path'
 import windowStateKeeper from 'electron-window-state'
 // 调试
 import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
-// import electronDevtoolsInstaller, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
-// import { session } from 'electron'
-// import {resolve} from "path";
 
-// import { spawn } from 'child_process';  // 启动python进程
-// const { execFile } = require("cross-spawn");
-// The built directory structure
 //
 // ├─┬ dist-electron
 // │ ├─┬ main
@@ -102,7 +96,7 @@ async function createWindow() {
     win.loadURL(url)
 
     // Open devTool if the app is not packaged
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   } else {
     // win.loadFile(url)
     win.loadFile(indexHtml)
@@ -167,20 +161,8 @@ app.whenReady().then(() => {
   installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
       .then(ext => console.log(`Added Extension:  ${ext.name}`))
       .catch(err => console.log('An error occurred: ', err));
-  // try{
-  //   electronDevtoolsInstaller(VUEJS_DEVTOOLS).then((name) =>
-  //     console.log(`Added Extension: ${name}`)).catch((err) => console.log('An error occurred: ', err))
-  //   }catch (err){
-  //       console.log('Unable to install `vue-devtools`: \n', err)
-  // }
   loadingWindow();
-  // session.defaultSession.loadExtension(
-  //     resolve(__dirname, "../../extentions/devtools/6.6.1_0"),
-  //     { allowFileAccess: true,}
-  // )
 })
-// app.whenReady().then(loadingWindow)
-// app.whenReady().then(createWindow)
 
 app.on('window-all-closed', () => {
   win = null

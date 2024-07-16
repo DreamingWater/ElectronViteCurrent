@@ -15,7 +15,7 @@ function createSeedPurchasedStore(id: string) {
                 WorkingPower:0,
                 SamplePower:0,
                 SetWavelength: 1540.216,   // 设定激光波长
-                WorkingWavelength :1540.216,
+                WorkingWavelength :1539.816,
                 // 读取的温度值
                 TemperatureParams: {
                     TemperatureModule:0,

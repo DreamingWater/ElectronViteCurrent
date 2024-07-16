@@ -12,7 +12,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
             Serial_Data: {
                 Target: target,
                 IsOpen: false,
-                Port: 'COM1',
+                Port: 'COM2',
                 BaudRate: baudRate,
                 SerialObject: null,   // 串口对象
                 SerialParser: null,    // 串口解析对象
@@ -65,22 +65,15 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 console.log('模拟串口发送：',data.toString('hex'));
             },
             // 成功连接、断开串口后配置store
-            changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean, task:any) {
+            changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean, port:string) {
                 this.Serial_Data.SerialParser = serial_parser;
                 this.Serial_Data.IsOpen = isOpen_value;
+                this.Serial_Data.Port = port; // 更新port，方便后续保存配置，对其进行访问
                 if (serial_object){
                     this.Serial_Data.SerialObject = serial_object;
                 }else {
                     this.Serial_Data.SerialObject.close(); // 首先关闭串口
                     this.Serial_Data.SerialObject = null;
-                }
-                if(task){
-                    this.Serial_Data.SerialTask = task;
-                }else {
-                    if(this.Serial_Data.SerialTask){
-                        this.Serial_Data.SerialTask.stopTask();
-                    }
-                    this.Serial_Data.SerialTask = null;
                 }
             },
         },
@@ -92,21 +85,25 @@ export const useSerialOscillatorStore = createSerialGroupStore('use-serial-oscil
 export const useSerialAmplifierStore = createSerialGroupStore('use-serial-amplifier',9600,PageLocationStateEnum.Amplifier);
 export const useSerialTemperaturePPLNStore = createSerialGroupStore('use-serial-temperature-ppln',9600,PageLocationStateEnum.TemperaturePPLN);
 export const useSerialSeedPurchasedStore = createSerialGroupStore('use-serial-seed-purchased',9600,PageLocationStateEnum.SeedPurchased);
+export const useSerialManagerStore = createSerialGroupStore('use-serial-manager',9600,PageLocationStateEnum.Manager);
 
 export  const getStoreByPageLocation = (pageLocation: PageLocationStateEnum) => {
     switch (pageLocation) {
         case PageLocationStateEnum.Oscillator:
-            console.log('useSerialOscillatorStore');
+            // console.log('useSerialOscillatorStore');
             return {store: useSerialOscillatorStore, flag: false}
         case PageLocationStateEnum.Amplifier:
-            console.log('useSerialAmplifierStore');
+            // console.log('useSerialAmplifierStore');
             return {store: useSerialAmplifierStore, flag: true }
         case PageLocationStateEnum.TemperaturePPLN:
-            console.log('useSerialTemperaturePPLNStore')
+            // console.log('useSerialTemperaturePPLNStore')
             return {store: useSerialTemperaturePPLNStore, flag: false}
         case PageLocationStateEnum.SeedPurchased:
-            console.log('useSerialSeedPurchasedStore');
+            // console.log('useSerialSeedPurchasedStore');
             return {store: useSerialSeedPurchasedStore, flag: true};
+        case PageLocationStateEnum.Manager:
+            // console.log('useSerialSeedPurchasedStore');
+            return {store: useSerialManagerStore, flag: true};
         default:
             throw new Error("Invalid page location");
     }

@@ -56,6 +56,7 @@ class StringParser {
 
 export const seed_purchased_parser = new StringParser();
 export const amplifier_parser = new StringParser();
+export const monitor_parser = new StringParser();
 
 
 const actions = {

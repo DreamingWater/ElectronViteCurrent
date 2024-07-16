@@ -3,6 +3,13 @@ export interface CurrentPowerType{
     WorkingPower : number; // 放大器目前状态的功率
     Current : number;
 }
+
+export interface PidParameter {
+    SetProportional  ?: number;
+    SetIntegral ?: number;
+    SetDerivative ?:  number;
+}
+
 export type CurrentPowerValueModel = 'SetPower' | 'Current' | 'WorkingPower';
 export interface AmplifierGroupState{
     Channel_ONE : CurrentPowerType;
@@ -11,10 +18,12 @@ export interface AmplifierGroupState{
     Temperature:number;
     WorkingStatus:number; // 放大器的工作状态
     EnableStatus:number;    // 放大器的开关状态
+    PIDParameter : PidParameter ; // 放大器3的PID参数
+    PID_Enable : number ; // 是否使能PID控制
 }
 export type AmplifierChannelModel = 'ONE' | 'TWO' | 'THREE';
 
-export type DataTypeModel = 'PowerCurrent' | 'Temperature' | 'WorkingStatus' | 'EnableStatus';
+export type DataTypeModel = 'PowerCurrent' | 'Temperature' | 'WorkingStatus' | 'EnableStatus'|'SetProportional'|'SetIntegral'|'SetDerivative'|'PID_Enable';
 
 export interface AmplifierSettingDataModel {
     data_type: DataTypeModel;

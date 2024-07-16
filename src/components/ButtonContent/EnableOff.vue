@@ -93,6 +93,7 @@
       if (enable_status.value === 1){
         scheduler.addSerialSendPackagesTask(send_value_package, current_page_location,0,null,'once');
       }else {
+        console.log('shut down the module task from the close button!!!!!!')
         scheduler.addShutdownTask(2,props.data_store,null,'interval');
       }
 

@@ -53,7 +53,7 @@ npm run dev
   │ └── section       section part 
   ├── index.html
   ├── package.json
-  └── vite.config.ts
+  └── vite.configManager.ts
 ```
 
 # FAQ

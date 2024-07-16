@@ -82,7 +82,10 @@ class SchedulerPipeline {
                 console.log('this_data_package_for_send', data_package);
                 this.addTask(this_data_package_name, store.sendSerialData, data_package, interval,executionMode);
             }
-        } else {
+        } else if(packaged_data.length === 0) {
+            console.log('packaged_data is empty');
+        }
+        else {
             // packaged_data 是一维数组
             let this_data_package_name = `${packaged_data[0]['data_type']}`;
             console.log('this_data_package_for_send', packaged_data);
@@ -122,35 +125,45 @@ class SchedulerPipeline {
         console.log('packaged_data',packaged_data);
         this.addTask(this_data_package_name, serial_store.sendSerialData, packaged_data, interval,executionMode);
     }
+
+    set_amplifier_one_channel_data(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'='TWO', set_power=0) {
+        const amplifier_channel2set_power_data:AmplifierSettingDataModel = {
+            data_type: 'PowerCurrent',
+            value: set_power,
+            channel_name: channel,
+            value_model:'SetPower',
+        };
+        const amplifier_channel2show_workingpower_data:AmplifierGettingDataModel = {
+            data_type: 'PowerCurrent',
+            channel_name:  channel,
+            value_model: 'WorkingPower'
+        };
+
+        const amplifier_channel2_packaged_data = [
+            [amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,3000]
+        ];
+        store.setTargetParameter(amplifier_channel2set_power_data);
+
+        const amplifier_channel2_packaged_setting_power_data = cut_data_package_list(amplifier_channel2_packaged_data,store);
+        console.log('packaged_setting_power_data',amplifier_channel2_packaged_setting_power_data)
+        const amplifier_channel2packaged_data = serial_data_package_factory(amplifier_channel2_packaged_setting_power_data[0], PageLocationStateEnum.Amplifier, other_instruct);
+        return amplifier_channel2packaged_data;
+    }
+    SetAmplifierThreeTask( set_power:any, interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval')
+    {
+        const set_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',set_power);
+        const amplifier_store_result = getStoreByPageLocation(PageLocationStateEnum.Amplifier);
+        const this_amplifier_store_result = amplifier_store_result.store();
+        let shut_channel_name = `${set_channel_three_data[set_channel_three_data.length-1]['data_type']}`;
+        this.addTask(shut_channel_name, this_amplifier_store_result.sendSerialData, set_channel_three_data, interval,executionMode);
+
+    }
+
     ShutdownAmplifierTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval', Two_Step_Shutdown:boolean=false)
     {
-        function shutdown_one_channel(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'='TWO') {
-            const amplifier_channel2set_power_data:AmplifierSettingDataModel = {
-                data_type: 'PowerCurrent',
-                value: 0,
-                channel_name: channel,
-                value_model:'SetPower',
-            };
-            const amplifier_channel2show_workingpower_data:AmplifierGettingDataModel = {
-                data_type: 'PowerCurrent',
-                channel_name:  channel,
-                value_model: 'WorkingPower'
-            };
 
-            const amplifier_channel2_packaged_data = [
-                [amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,3000]
-            ];
-            store.setTargetParameter(amplifier_channel2set_power_data);
-
-            const amplifier_channel2_packaged_setting_power_data = cut_data_package_list(amplifier_channel2_packaged_data,store);
-            console.log('packaged_setting_power_data',amplifier_channel2_packaged_setting_power_data)
-            const amplifier_channel2packaged_data = serial_data_package_factory(amplifier_channel2_packaged_setting_power_data[0], PageLocationStateEnum.Amplifier, other_instruct);
-            return amplifier_channel2packaged_data;
-        }
-
-        const shut_channel_three_data = shutdown_one_channel(store,other_instruct,'THREE');
-        const shut_channel_two_data = shutdown_one_channel(store,other_instruct,'TWO');
-
+        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0);
+        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',0);
 
         function shut_down_module(store:any=null,other_instruct: 'initial' | 'internal' | null=null) {
             const module_enable_status:AmplifierSettingDataModel = {
@@ -163,20 +176,23 @@ class SchedulerPipeline {
             return module_shut_data;
         }
         const amplifier_module_shut_data = shut_down_module(store,other_instruct);
+        console.log('shut amplifier code is ', amplifier_module_shut_data)
 
         const amplifier_store_result = getStoreByPageLocation(PageLocationStateEnum.Amplifier);
         const this_amplifier_store_result = amplifier_store_result.store();
 
         if (!Two_Step_Shutdown) {
+
             let amplifier_module_packaged_data = [...shut_channel_three_data, ...shut_channel_two_data, ...amplifier_module_shut_data];
             let amplifier_channel2this_data_package_name = `${amplifier_module_packaged_data[amplifier_module_packaged_data.length-1]['data_type']}`;   // 命名为shutdown
             this.addTask(amplifier_channel2this_data_package_name, this_amplifier_store_result.sendSerialData, amplifier_module_packaged_data, interval,executionMode);
 
+
         }else {
             let amplifier_module_channel2_packaged_data = shut_channel_three_data;
             let amplifier_module_channel3_packaged_data = [ ...shut_channel_two_data, ...amplifier_module_shut_data];
-            this.addTask('Amplifier_channel2_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
-            this.addTask('Amplifier_channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel2_packaged_data, interval,executionMode);
+            this.addTask('Amplifier_channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
+            this.addTask('Amplifier_channel2_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel2_packaged_data, interval,executionMode);
         }
     }
     ShutdownTemperatureTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval'){
@@ -198,7 +214,7 @@ class SchedulerPipeline {
         if (store.$id === 'use-seed_purchased') {
             // 如果是 种子源 处理方法是
             // 设置的数值  希望发送的设定温度  希望发送的设定的P I D
-            // this.cancelTask('Seed-SetPower') // 取消所有的setting任务
+            this.cancelTask('Seed-SetPower') // 取消所有的setting任务
             // this.cancelTask('Seed-DataUpload') // 取消振荡器的上传任务
 
             this.ShutdownSeedTask(interval,store,other_instruct,executionMode);
@@ -208,7 +224,7 @@ class SchedulerPipeline {
             // 关闭 放大器3
             this.cancelTask('Amplifier-PowerCurrent-TWO') // 取消所有的setting任务
             this.cancelTask('Amplifier-PowerCurrent-THREE') // 取消所有的setting任务
-            this.cancelTask('Amplifier-DataUpload') // 取消放大器的上传任务
+            // this.cancelTask('Amplifier-DataUpload') // 取消放大器的上传任务
             this.ShutdownAmplifierTask(interval,store,other_instruct,executionMode);
         }
        else if (store.$id === 'use-temperature') {
@@ -218,6 +234,8 @@ class SchedulerPipeline {
 
         // 关闭  放大器2
     }
+
+
 }
 
 

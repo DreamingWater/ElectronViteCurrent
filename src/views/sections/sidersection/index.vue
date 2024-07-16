@@ -31,6 +31,12 @@
           <p class="content"> 倍频器</p>
         </div>
       </router-link>
+      <router-link to="/manager" class="app-sidebar-link"  active-class="active" >
+        <div class="svg_content">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"  width="24" height="24" data-v-ea893729=""><path d="M900.6592 318.5664L512 480.512 123.2896 318.5664c-26.2656-10.9056-26.2656-49.7664 0-60.672L512 95.9488l388.6592 161.9456c26.2656 10.9056 26.2656 49.7664 0 60.672zM219.3408 288.256L512 410.1632l292.608-121.9584L512 166.2976 219.3408 288.2048z" fill="#000000" fill-opacity=".9" p-id="566"></path><path d="M95.9488 449.6896v78.5408L512 711.168l415.9488-182.8864V449.7408L512 632.6272 95.9488 449.6896z" fill="#000000" fill-opacity=".9" p-id="567"></path><path d="M95.9488 666.8288v78.5408L512 928.3072l415.9488-182.8864v-78.5408L512 849.7664l-416.0512-182.9376z" fill="#000000" fill-opacity=".9" p-id="568"></path></svg>
+          <p class="content"> 监测器</p>
+        </div>
+      </router-link>
       <!-- </a> -->
     </div>
     <div class="bottom-sidebar">
@@ -40,11 +46,63 @@
         </div>
       </router-link>
     </div>
+
+    <div class="save_button" @click="SaveConfigs">
+      <svg class="icon" style="width: 1.5em;height: 1.5em;vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="619"><path d="M906.666667 298.666667L725.333333 117.333333c-14.933333-14.933333-32-21.333333-53.333333-21.333333H170.666667C130.133333 96 96 130.133333 96 170.666667v682.666666c0 40.533333 34.133333 74.666667 74.666667 74.666667h682.666666c40.533333 0 74.666667-34.133333 74.666667-74.666667V349.866667c0-19.2-8.533333-38.4-21.333333-51.2zM652.8 864H371.2V648.533333h281.6v215.466667z m211.2-10.666667c0 6.4-4.266667 10.666667-10.666667 10.666667h-140.8V618.666667c0-17.066667-12.8-29.866667-29.866666-29.866667H341.333333c-17.066667 0-29.866667 12.8-29.866666 29.866667v245.333333H170.666667c-6.4 0-10.666667-4.266667-10.666667-10.666667V170.666667c0-6.4 4.266667-10.666667 10.666667-10.666667h140.8V320c0 17.066667 12.8 29.866667 29.866666 29.866667h277.333334c17.066667 0 29.866667-12.8 29.866666-29.866667s-12.8-29.866667-29.866666-29.866667H371.2V160h302.933333c2.133333 0 6.4 2.133333 8.533334 2.133333l179.2 179.2c2.133333 2.133333 2.133333 4.266667 2.133333 8.533334V853.333333z" fill="#666666" p-id="620"></path></svg>
+    </div>
   </div>
+
 </template>
   
   <script lang="ts" setup>
     import circlewave from '@/components/animation/circlewave.vue';
+    import Swal from 'sweetalert2';
+    import { ConfigManager } from '@/api/Config/configManager'
+    import {
+      useSerialAmplifierStore,
+      useSerialSeedPurchasedStore,
+      useSerialTemperaturePPLNStore,
+      useSerialManagerStore, useSerialOscillatorStore
+    } from "@/store/SerialGroup";
+
+    const alertResult = (success=true) => {
+      if(success){
+        Swal.fire({
+          title: 'Success!',
+          text: 'Configs saved successfully',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }
+      else {
+        Swal.fire({
+          title: 'Error!',
+          text: 'Error occuers!!',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+
+    const return_serial_store_port = (useSerialStore:any)=>{
+      const this_store = useSerialStore();
+
+      return this_store.getTargetParameter({'data_type' :'Port'}) || ''
+    }
+
+    const SaveConfigs = () =>{
+      const manager = new ConfigManager();
+      const result = manager.updateConfigs({
+        'SeedPurchased': return_serial_store_port(useSerialSeedPurchasedStore),
+        'Amplifier': return_serial_store_port(useSerialAmplifierStore),
+        'TemperaturePPLN': return_serial_store_port(useSerialTemperaturePPLNStore),
+        'Manager': return_serial_store_port(useSerialManagerStore),
+        'Oscillator': return_serial_store_port(useSerialOscillatorStore),
+      });
+      alertResult(result); // 弹窗显示结果
+    }
+
+
   </script>
 
 
@@ -101,6 +159,9 @@
 
 .bottom-sidebar {
   margin-top: 50px;
+}
+.save_button{
+  margin-top:50px;
 }
   </style>
   

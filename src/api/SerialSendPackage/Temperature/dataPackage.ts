@@ -16,7 +16,7 @@ export const initial_temperature_package = () => {
     //// TEC输出是否使能
     //// instruct.push('REN' + '\r\n');
     instruct.push([{ data_type: 'TemperaturePPLN-ReadPID', data: 'RF' + '\r\n' }])
-    instruct.push([{ data_type: 'TemperaturePPLN-ReadCOOLER', data: 'RM' + '\r\n' }])
+    // instruct.push([{ data_type: 'TemperaturePPLN-ReadCOOLER', data: 'RM' + '\r\n' }])
     instruct.push([{ data_type: 'TemperaturePPLN-DataUpload', data: 'SS' + '\r\n' }])
     return instruct;
 }

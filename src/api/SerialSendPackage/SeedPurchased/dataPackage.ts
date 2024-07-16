@@ -65,7 +65,6 @@ const actions: ISerialCtrlCode = {
         'function': (pkg:any)=>{
             let wave_length_number = Math.round(pkg['value'] * 10000);
             // const wavelength = wave_length_number.toFixed(0);
-            console.log(wave_length_number)
             let power_bytes = Buffer.alloc(4); // 创建一个新的缓冲区，大小为4字节
             power_bytes.writeInt32LE(wave_length_number); // 将整数写入缓冲区
             console.log(`wave_bytes is ${power_bytes.toString('hex')}`)

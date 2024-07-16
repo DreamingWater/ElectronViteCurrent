@@ -2,6 +2,9 @@ import {SerialSettingDataModel} from "@/types/serial";
 import { useAmplifierGroupStore } from "@/store/amplifierGroup";
 import { AmplifierSettingDataModel } from "@/types/amplifer"
 import { amplifier_parser } from "@/api/SerialParser/Base/packParser";
+
+import { scheduler } from '@/api/schedulerPipeline';
+
 const create_store_object = ()=>{
     const store = useAmplifierGroupStore();
     return store
@@ -66,6 +69,11 @@ const actions = {
             channel_name:  this_channel,
             value_model: 'WorkingPower',
             value:data.readUInt16LE(1),
+        }
+        if (data[0] === 2){
+            scheduler.cancelTask('Amplifier-ReadChannel2Power');
+        }else if(data[0] === 3){
+            scheduler.cancelTask('Amplifier-ReadChannel3Power');
         }
         console.log(set_amplifier_working_power)
         store.setTargetParameter(set_amplifier_working_power);

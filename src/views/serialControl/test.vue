@@ -47,13 +47,16 @@ const getPorts = async () => {
 };
 
 const connect = () => {
-  ({ port: use_port, parser: use_parser } = askForSerialConnection('COM5', 9600));
+  ({ port: use_port, parser: use_parser } = askForSerialConnection('COM12', 9600,true));
   console.log(use_parser);
 };
 
 const sendDataFunc = () => {
-  sendDataBySerial(use_port,sendData.value);
-  sendData.value = '';
+  // sendDataBySerial(use_port,sendData.value);
+  // sendData.value = '';
+  const send_data = Buffer.from([0xAA,0x55,0xD1,0x00,0x00,0x00,0x0d,0x0a]);
+  // sendDataBySerial(use_port,send_data);
+  use_port.write(send_data);
 };
 
 const disconnect = () => {

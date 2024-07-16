@@ -1,7 +1,7 @@
 <template>
     <div class="card-box-warpper">
-      <RingVariationCard name="Setting Temp" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
-      <RingVariationCard name="Sample Temp" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
+      <RingVariationCard name="Setting T(℃)" :data_store="temperature_store" :store_getter_key="show_working_temperature_data" />
+      <RingVariationCard name="Sample T(℃)" :data_store="temperature_store" :store_getter_key="show_sample_temperature_data" />
       <EnableOff :module_name="module_name" :name="name"  :data_store="temperature_store"  :data_package="send_data_package" :store_key="enable_status"/>
     </div>
 </template>

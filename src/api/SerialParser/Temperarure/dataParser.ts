@@ -1,6 +1,7 @@
-import {SerialSettingDataModel} from "@/types/serial";
-import { useTemperatureGroupStore} from "@/store/temperatureGroup";
 
+import { useTemperatureGroupStore} from "@/store/temperatureGroup";
+import {scheduler} from "../../schedulerPipeline";
+import { TemperatureSettingDataModel } from "@/types/temperature"
 
 const create_store_object = ()=>{
     const store = useTemperatureGroupStore();
@@ -20,27 +21,30 @@ const regexHandlers = {
         console.log('PV SV:',result[1],result[2],result[3])
         let sample_temperature = result[1];
         let working_temperature = result[2];
-        store.setTargetParameter({ 'data_type':'SamplingTemperature', value: result[1]} as SerialSettingDataModel);
-        store.setTargetParameter({ 'data_type':'WorkingTemperature', value: result[2]} as SerialSettingDataModel);
+        store.setTargetParameter({ 'data_type':'SamplingTemperature', value: result[1]} as TemperatureSettingDataModel);
+        store.setTargetParameter({ 'data_type':'WorkingTemperature', value: result[2]} as TemperatureSettingDataModel);
         // 是否使能 TEC output
         if (result[3].indexOf('TEC Disabled!') !== -1) {
-            store.setTargetParameter({'data_type':'EnableStatus', value: 0} as SerialSettingDataModel);
+            store.setTargetParameter({'data_type':'EnableStatus', value: 0} as TemperatureSettingDataModel);
         } else {
-            store.setTargetParameter({'data_type':'EnableStatus', value: 1} as SerialSettingDataModel);
+            store.setTargetParameter({'data_type':'EnableStatus', value: 1} as TemperatureSettingDataModel);
         }
         console.log(`采样温度：${sample_temperature}-设定温度：${working_temperature}`);
+        scheduler.cancelTask('TemperaturePPLN-DataUpload');
         },
     'P:(.*?) I:(.*?) D:(.*?)$': (result:any,store:any) => {  // P:50 I:15 D:20
         let [data_p, data_i, data_d] = [result[1], result[2],  result[3]];
-        store.setTargetParameter({ 'data_type':'WorkingProportional', value: result[1]} as SerialSettingDataModel);
-        store.setTargetParameter({ 'data_type':'WorkingIntegral', value: result[2]} as SerialSettingDataModel);
-        store.setTargetParameter({ 'data_type':'WorkingDerivative', value: result[3]} as SerialSettingDataModel);
+        store.setTargetParameter({ 'data_type':'WorkingProportional', value: result[1]} as TemperatureSettingDataModel);
+        store.setTargetParameter({ 'data_type':'WorkingIntegral', value: result[2]} as TemperatureSettingDataModel);
+        store.setTargetParameter({ 'data_type':'WorkingDerivative', value: result[3]} as TemperatureSettingDataModel);
         console.log(`pid数据:${data_p}-${data_i}-${data_d}`);
+        scheduler.cancelTask('TemperaturePPLN-ReadPID');
     },
     'M(.*?)': (result:any,store:any) => {
         if(result) {
-            store.setTargetParameter({'data_type':'HeaterCoolerStatus', value: result[1]} as SerialSettingDataModel);
+            store.setTargetParameter({'data_type':'HeaterCoolerStatus', value: result[1]} as TemperatureSettingDataModel);
             console.log('返回工作模式:', result[1]);
+            // scheduler.cancelTask('TemperaturePPLN-ReadCOOLER');
         }
     }
 };

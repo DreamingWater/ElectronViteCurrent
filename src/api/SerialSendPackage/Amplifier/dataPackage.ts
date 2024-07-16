@@ -18,8 +18,8 @@ export const schedual_amplifier_package = () => {
 export const initial_amplifier_package = () => {
     let instruct:any = [];
     // 读取通道1功率
-    const channel1_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x01]))
-    instruct.push([{ data_type: 'Amplifier-ReadChannel1Power', data: channel1_power }])
+    // const channel1_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x01]))
+    // instruct.push([{ data_type: 'Amplifier-ReadChannel1Power', data: channel1_power }])
     // 读取通道2功率
     const channel2_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x02]))
     instruct.push([{ data_type: 'Amplifier-ReadChannel2Power', data: channel2_power }])

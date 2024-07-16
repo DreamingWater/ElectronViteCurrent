@@ -65,7 +65,7 @@ $displacement: 0%;
   // grid-template-rows: repeat(2, 150px);
   // gap: 10px;
   // margin-top: 10px;
-  min-width: 200px
+  min-width: 180px
 }
 .title{
   font-size: 18px;

@@ -30,7 +30,8 @@
     const cur_module_working_status = computed(() => {
       const store = props.data_store;
       const value = store.getTargetParameter(module_enable_working);
-      return !Boolean(value);
+      // return !Boolean(value);
+      return false;
     });
 
 
@@ -65,7 +66,12 @@
       const data_package_list:[][] = cut_data_package_list(props.data_package,props.data_store);
       console.log('data_package_list',data_package_list);
       for(const [index, data_package] of data_package_list.entries()){
-        scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'interval');
+        if (data_package[0]['data_type'] == "WorkingWavelength")
+        { // 连续发送,解决种子波长调节过程，奇奇怪怪的问题，就是调不了，能发送，但是接收可能不到。
+          scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'continuous');
+        }else {
+          scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'interval');
+        }
       }
     }
 

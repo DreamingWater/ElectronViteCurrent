@@ -16,7 +16,7 @@ const set_power_data:SeedPurchasedSettingDataModel = {
 };
 const set_wavelength_data:SeedPurchasedSettingDataModel = {
     data_type: 'SetWavelength',
-    value: 0,
+    value: 1540.216,
 };
 /////////// 设定的数值区间 end //////////////////////////
 
