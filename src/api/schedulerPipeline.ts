@@ -32,6 +32,7 @@ class SchedulerPipeline {
         // Remove the task from the queue
         this.queue = this.queue.filter(task => task.name !== name);
     }
+
     hasTask(name: string): boolean {
         return this.queue.some(task => task.name === name);
     }
@@ -126,7 +127,8 @@ class SchedulerPipeline {
         this.addTask(this_data_package_name, serial_store.sendSerialData, packaged_data, interval,executionMode);
     }
 
-    set_amplifier_one_channel_data(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'='TWO', set_power=0) {
+    // change_step 为设置的步长
+    set_amplifier_one_channel_data(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'='TWO', set_power=0,change_step=3000) {
         const amplifier_channel2set_power_data:AmplifierSettingDataModel = {
             data_type: 'PowerCurrent',
             value: set_power,
@@ -140,7 +142,7 @@ class SchedulerPipeline {
         };
 
         const amplifier_channel2_packaged_data = [
-            [amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,3000]
+            [amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,change_step]
         ];
         store.setTargetParameter(amplifier_channel2set_power_data);
 
@@ -162,8 +164,8 @@ class SchedulerPipeline {
     ShutdownAmplifierTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval', Two_Step_Shutdown:boolean=false)
     {
 
-        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0);
-        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',0);
+        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0,20000);   // 变化步长为20 W
+        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',5000);                     // 变化步长为 5 W
 
         function shut_down_module(store:any=null,other_instruct: 'initial' | 'internal' | null=null) {
             const module_enable_status:AmplifierSettingDataModel = {
@@ -191,8 +193,8 @@ class SchedulerPipeline {
         }else {
             let amplifier_module_channel2_packaged_data = shut_channel_three_data;
             let amplifier_module_channel3_packaged_data = [ ...shut_channel_two_data, ...amplifier_module_shut_data];
-            this.addTask('Amplifier_channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
-            this.addTask('Amplifier_channel2_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel2_packaged_data, interval,executionMode);
+            this.addTask('Amplifier-channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
+            this.addTask('Amplifier-channel2_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel2_packaged_data, interval,executionMode);
         }
     }
     ShutdownTemperatureTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval'){
@@ -231,11 +233,8 @@ class SchedulerPipeline {
 
             this.ShutdownTemperatureTask(interval,store,other_instruct,executionMode);
         }
-
         // 关闭  放大器2
     }
-
-
 }
 
 

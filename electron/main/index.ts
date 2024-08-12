@@ -3,7 +3,7 @@ import { release } from 'node:os'
 import { join } from 'node:path'
 import windowStateKeeper from 'electron-window-state'
 // 调试
-import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
+//import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
 
 //
 // ├─┬ dist-electron
@@ -48,6 +48,7 @@ if (!app.requestSingleInstanceLock()) {
 // Read more on https://www.electronjs.org/docs/latest/tutorial/security
 // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 let child:any;
+let time_reload:number = 0;
 let win: BrowserWindow | null = null
 // let win: BrowserWindow | null = null
 let startWin: BrowserWindow | null = null
@@ -126,7 +127,18 @@ async function createWindow() {
   //   BrowserWindow.fromWebContents(event.sender)?.minimize();
   // })
 
+  // 监听到渲染进程失败就重启应用
+  win.webContents.on('render-process-gone', (event, details) => {
+    console.error('Render process crashed:', details);
+    // 可以选择在这里重启渲染进程
+    win.reload();
+    time_reload += 1;
+    // 监听窗口加载完成事件
 
+  });
+  win.webContents.on('did-finish-load', () => {
+    win.webContents.send('time_reload', time_reload);
+  });
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }
 // 加载窗口函数 loadingURL: string
@@ -158,9 +170,9 @@ async function  loadingWindow() {
 }
 // 程序开始时候启动loading 效果
 app.whenReady().then(() => {
-  installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
-      .then(ext => console.log(`Added Extension:  ${ext.name}`))
-      .catch(err => console.log('An error occurred: ', err));
+  // installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
+  //     .then(ext => console.log(`Added Extension:  ${ext.name}`))
+  //     .catch(err => console.log('An error occurred: ', err));
   loadingWindow();
 })
 
@@ -187,11 +199,13 @@ app.on('activate', () => {
 })
 
 
+
 // 使用ipcMain.on方法监听 renderer-send 事件
 ipcMain.on("WindowMini", (event) => {
   BrowserWindow.fromWebContents(event.sender)?.minimize();
 
 });
+
 
 // New window example arg: new windows url
 

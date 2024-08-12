@@ -55,7 +55,6 @@
 </template>
   
   <script lang="ts" setup>
-    import circlewave from '@/components/animation/circlewave.vue';
     import Swal from 'sweetalert2';
     import { ConfigManager } from '@/api/Config/configManager'
     import {

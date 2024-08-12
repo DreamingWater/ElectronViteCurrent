@@ -30,8 +30,8 @@
     const cur_module_working_status = computed(() => {
       const store = props.data_store;
       const value = store.getTargetParameter(module_enable_working);
-      // return !Boolean(value);
-      return false;
+      return !Boolean(value);        // 不工作就不能发
+      // return false;
     });
 
 

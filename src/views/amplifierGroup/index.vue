@@ -26,7 +26,7 @@
     import GiantSquid from "@/components/showContent/giantSquid.vue";
     import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
-    const showCard= ref(false);     // 显示卡片还是显示pid的参数框框
+    const showCard= ref(true);     // 显示卡片还是显示pid的参数框框
     import { onMounted,ref } from 'vue';
 
     const ModuleName = ref(PageModulesNames.Amplifier);

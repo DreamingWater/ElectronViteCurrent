@@ -41,20 +41,23 @@
     import {PageLocationStateEnum} from "@/api/pageLocation";
     import {update_serial_config} from "@/api/Config/configSetting";
 
-
+import { useMonitorStore } from "@/store/monitorGroup";
+import {serial_controller} from "@/api/SerialChooser/chooserSend";
 
 const amplifier_store = useAmplifierGroupStore();       // store
     const seed_store = useSeedPurchasedStore();       // store
 
-    const manager = new Manager(seed_store,amplifier_store);
+    const manager_store = useMonitorStore();
+
+    const manager = new Manager(seed_store,amplifier_store,manager_store);
     manager.checkAmplifierPower();    // 种子光开启之后才能开放大
     manager.checkManager();           // 防止放大部分光纤断掉
 
 
-    // manager.control_amplifier_Three_power_stability(35000);
+
     update_serial_config();     // 开机的时候自动读取config文件的内容
-
-
+    //   localStorage.getItem('time_reload');
+    serial_controller.auto_connect_serial_when_dead()
 // onMounted(()=>{
     //   add_script('/src/preload/serialControl.ts')
     //   add_script('/src/preload/render.js')

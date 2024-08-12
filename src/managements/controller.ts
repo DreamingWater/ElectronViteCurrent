@@ -27,7 +27,7 @@ class PIDController {
         this.Ki = Ki;
         this.Kd = Kd;
     }
-    control(setPoint: number, measuredValue: number,output_Limitation:number): number {
+    control_calculate(setPoint: number, measuredValue: number,output_Limitation:number): number {
         const error = setPoint - measuredValue;
         this.integralErrors.push(error);
         if (this.integralErrors.length > this.maxErrorHistory) {

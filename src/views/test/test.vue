@@ -2,7 +2,7 @@
 <template>
   <div>hello world</div>
   <button @click="stop_value_scheducl" style="height: 80px"></button>
-  <button @click="set_value_scheducl"  style="height: 80px"></button>
+<!--  <button @click="set_value_scheducl"  style="height: 80px"></button>-->
   <el-input-number v-model="num3" size="small" />
 
 
@@ -13,7 +13,14 @@
 <script lang="ts" setup>
 import {useTemperatureGroupStore} from "@/store/TemperatureGroup";
 import { TemperatureSettingDataModel,TemperatureGettingDataModel } from '@/types/temperature';
+import {serial_controller} from "@/api/SerialChooser/chooserSend";
+
+
+
+// serial_controller.auto_connect_serial()
+
 import { ref, inject } from  'vue'
+import {ConfigManager} from "@/api/Config/configManager";
 const num3 = ref(3);
 
 const store = useTemperatureGroupStore();       // store
@@ -33,16 +40,12 @@ const set_value = ()=>{
   // store.SetTargetData('Current', 100,100,100,'ONE');
   store.setTargetParameter(data);
 }
-// 定义一个任务函数
-function taskFunction(hello:string, name1:string) {
-  console.log('taskFunction', hello, name1);
-}
-const scheduler = inject('$scheduler');
-const set_value_scheducl = ()=> {
-  scheduler.addTask('task1', taskFunction, [{ hello:'hello',name1:'xiaoming' }] , 3);
-}
-const stop_value_scheducl = ()=> {
-  scheduler.cancelTask('task1');
+
+const stop_value_scheducl = ()=>{
+  // const manager = new ConfigManager();
+  // const data = manager.get_serial_store_port('Amplifier');
+  // console.log(data);
+  serial_controller.auto_connect_serial();
 }
 </script>
 

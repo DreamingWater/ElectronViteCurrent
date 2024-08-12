@@ -1,6 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+import {
+    getStoreByPageLocation
+} from "@/store/SerialGroup";
+
+import {PageLocationStateEnum} from "@/api/pageLocation";
+
+
 
 export class ConfigManager {
     private userDir: string;
@@ -45,12 +52,21 @@ export class ConfigManager {
         return this.configFilePath;
     }
     public updateConfigs(newConfigs: { [key: string]: any }) {
-        const config = this.readConfigFile(this.configFilePath);
+        const config = this.readConfigFile();
         for (const key in newConfigs) {
             config[key] = newConfigs[key];
         }
         this.writeConfigFile(this.configFilePath, config);
         return true;
+    }
+
+    public get_serial_store_port(SerialStore:string){
+        const store_set = getStoreByPageLocation(PageLocationStateEnum[SerialStore]);
+        const this_store = store_set.store();
+        const getting_store_value = {
+            'data_type' :'Port',
+        };
+        return this_store.getTargetParameter(getting_store_value) || ''
     }
 }
 

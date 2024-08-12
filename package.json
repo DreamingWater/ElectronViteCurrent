@@ -1,6 +1,6 @@
 {
   "name": "LaserController",
-  "version": "2.1.1",
+  "version": "2.3.1",
   "main": "dist-electron/main/index.js",
   "description": "Laser Controller",
   "author": "",
@@ -35,7 +35,7 @@
     "core-js": "^3.8.3",
     "cross-spawn": "^7.0.3",
     "echarts": "^5.4.3",
-    "electron": "^25.0.1",
+    "electron": "^31.3.1",
     "electron-builder": "^24.4.0",
     "electron-rebuild": "^3.2.9",
     "element-plus": "^2.3.8",

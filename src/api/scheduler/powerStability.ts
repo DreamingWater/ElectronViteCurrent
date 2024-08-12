@@ -1,6 +1,6 @@
 import {AmplifierGettingDataModel} from "@/types/amplifier";
 import {scheduler} from "@/api/schedulerPipeline";
-import {amplifier_pid_controller} from "@/managements/controller";
+import { amplifier_pid_controller } from "@/managements/controller";
 import { schedulerTask } from "./scheduler";
 import {AmplifierSettingDataModel} from "../../types/amplifier";
 
@@ -33,7 +33,7 @@ function Control_amplifier_power_stability(set_power:number, store:any){
 
     amplifier_pid_controller.set_pid_parameters(proportional_data,integral_data,derivative_data);
 
-    const output_power = amplifier_pid_controller.control(set_power,current_to_power,output_Limitation);
+    const output_power = amplifier_pid_controller.control_calculate(set_power,current_to_power,output_Limitation);
     const result_valid_or_not = amplifier_pid_controller.check_exceeding_Limit();
     if (!result_valid_or_not){ // 如果没有超出限制
         scheduler.SetAmplifierThreeTask(output_power,1, store,null,'once') ;
