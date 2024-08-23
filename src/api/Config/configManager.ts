@@ -1,10 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
-import {
-    getStoreByPageLocation
-} from "@/store/SerialGroup";
-
+import { getStoreByPageLocation } from "@/store/SerialGroup";
 import {PageLocationStateEnum} from "@/api/pageLocation";
 
 
@@ -69,15 +66,3 @@ export class ConfigManager {
         return this_store.getTargetParameter(getting_store_value) || ''
     }
 }
-
-
-
-
-// // 使用示例
-// const config = readConfigFile('./config.json');
-// console.log(config);
-//
-// config.newKey = 'newValue';
-// writeConfigFile('./config.json', config);
-
-

@@ -37,7 +37,7 @@ const defaultValue = computed(()=>{
   return amplifier_enabled_data !== 0;
 });
 
-import { add_control_task,stop_control_task} from "@/api/scheduler/powerStability";
+import { add_control_task,stop_control_task} from "@/api/scheduler/SchePowerS/powerStability";
 
 const props = defineProps({
   module_name: { type: null, required: true },

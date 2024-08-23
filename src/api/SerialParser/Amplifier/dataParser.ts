@@ -2,8 +2,7 @@ import {SerialSettingDataModel} from "@/types/serial";
 import { useAmplifierGroupStore } from "@/store/amplifierGroup";
 import { AmplifierSettingDataModel } from "@/types/amplifer"
 import { amplifier_parser } from "@/api/SerialParser/Base/packParser";
-
-import { scheduler } from '@/api/schedulerPipeline';
+import { scheduler } from '@/api/scheduler/base/scheduler';
 
 const create_store_object = ()=>{
     const store = useAmplifierGroupStore();

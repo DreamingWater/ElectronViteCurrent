@@ -3,8 +3,8 @@ import { useSeedPurchasedStore } from "@/store/seedPurchased";
 import { SeedPurchasedSettingDataModel } from "@/types/seedPurchased"
 import { seed_purchased_parser } from "@/api/SerialParser/Base/packParser";
 
-import { scheduler } from '@/api/schedulerPipeline';
 
+import { scheduler } from '@/api/scheduler/base/scheduler';
 
 const create_store_object = ()=>{
     const store = useSeedPurchasedStore();

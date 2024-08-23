@@ -1,7 +1,4 @@
-import {
-    getStoreByPageLocation
-} from "@/store/SerialGroup";
-
+import { getStoreByPageLocation } from "@/store/SerialGroup";
 import {ConfigManager} from "@/api/Config/configManager";
 import {PageLocationStateEnum} from "@/api/pageLocation";
 

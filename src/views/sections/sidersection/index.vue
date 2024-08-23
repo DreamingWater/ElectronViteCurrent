@@ -2,7 +2,20 @@
   <div class="sidebar_content">
     <!-- <circlewave /> -->
     <div class="app-sidebar">
+      <router-link to="/manager" class="app-sidebar-link"  active-class="active" >
+        <div class="svg_content">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"  width="24" height="24" data-v-ea893729=""><path d="M900.6592 318.5664L512 480.512 123.2896 318.5664c-26.2656-10.9056-26.2656-49.7664 0-60.672L512 95.9488l388.6592 161.9456c26.2656 10.9056 26.2656 49.7664 0 60.672zM219.3408 288.256L512 410.1632l292.608-121.9584L512 166.2976 219.3408 288.2048z" fill="#000000" fill-opacity=".9" p-id="566"></path><path d="M95.9488 449.6896v78.5408L512 711.168l415.9488-182.8864V449.7408L512 632.6272 95.9488 449.6896z" fill="#000000" fill-opacity=".9" p-id="567"></path><path d="M95.9488 666.8288v78.5408L512 928.3072l415.9488-182.8864v-78.5408L512 849.7664l-416.0512-182.9376z" fill="#000000" fill-opacity=".9" p-id="568"></path></svg>
+          <p class="content"> 监测器</p>
+        </div>
 
+      </router-link>
+      <router-link to="/watercooling" class="app-sidebar-link"  active-class="active" >
+        <div class="svg_content">
+          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"  width="24" height="24" data-v-ea893729=""><path d="M512 192s192 192 192 352c0 192-192 192-192 192s-192 0-192-192c0-160 192-352 192-352M352 832c0 53.12-42.88 96-96 96s-96-42.88-96-96 42.88-96 96-96 96 42.88 96 96M384 160c0 35.2-28.8 64-64 64s-64-28.8-64-64 28.8-64 64-64 64 28.8 64 64M256 464a80 80 0 0 1-160 0 80 80 0 0 1 160 0M768 832c0 35.2-28.8 64-64 64s-64-28.8-64-64 28.8-64 64-64 64 28.8 64 64M960 592a80 80 0 0 1-160 0 80 80 0 0 1 160 0" fill="#67DDE0" p-id="1675"></path><path d="M512 192s-192 192-192 352c0 192 192 192 192 192s192 0 192-192c0-160-192-352-192-352m0 512c-6.4 0-160-1.92-160-160 0-113.6 111.04-250.24 160-304.96 48.96 54.72 160 191.36 160 304.96 0 154.24-143.68 160-160 160M256 736c-53.12 0-96 42.88-96 96s42.88 96 96 96 96-42.88 96-96-42.88-96-96-96m0 160c-35.2 0-64-28.8-64-64s28.8-64 64-64 64 28.8 64 64-28.8 64-64 64" fill="#4D5152" p-id="1676"></path><path d="M896 192c0 53.12-42.88 96-96 96s-96-42.88-96-96 42.88-96 96-96 96 42.88 96 96" fill="#67DDE0" p-id="1677"></path><path d="M800 96c-53.12 0-96 42.88-96 96s42.88 96 96 96 96-42.88 96-96-42.88-96-96-96m0 160c-35.2 0-64-28.8-64-64s28.8-64 64-64 64 28.8 64 64-28.8 64-64 64M320 96c-35.2 0-64 28.8-64 64s28.8 64 64 64 64-28.8 64-64-28.8-64-64-64m0 96c-17.6 0-32-14.4-32-32s14.4-32 32-32 32 14.4 32 32-14.4 32-32 32M880 512a80 80 0 0 0 0 160 80 80 0 0 0 0-160m0 128c-26.56 0-48-21.44-48-48s21.44-48 48-48 48 21.44 48 48-21.44 48-48 48M176 384a80 80 0 0 0 0 160 80 80 0 0 0 0-160m0 128c-26.56 0-48-21.44-48-48S149.44 416 176 416s48 21.44 48 48S202.56 512 176 512M704 768c-35.2 0-64 28.8-64 64s28.8 64 64 64 64-28.8 64-64-28.8-64-64-64m0 96c-17.6 0-32-14.4-32-32s14.4-32 32-32 32 14.4 32 32-14.4 32-32 32" fill="#4D5152" p-id="1678"></path><path d="M576 512c0-53.12 42.88-96 96-96s96 42.88 96 96-42.88 96-96 96-96-42.88-96-96" fill="#67DDE0" p-id="1679"></path><path d="M672 416c-53.12 0-96 42.88-96 96s42.88 96 96 96 96-42.88 96-96-42.88-96-96-96m0 160c-35.2 0-64-28.8-64-64s28.8-64 64-64 64 28.8 64 64-28.8 64-64 64" fill="#4D5152" p-id="1680"></path></svg>
+          <p class="content"> 水冷器</p>
+        </div>
+
+      </router-link>
       <router-link to="/creater" class="app-sidebar-link" active-class="active" >
         <div class="svg_content" >
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"  width="24" height="24" data-v-ea893728=""><path d="M512 64a448.128 448.128 0 0 0 0 896 446.976 446.976 0 0 0 381.056-212.288c18.56-30.08 0-48.768-30.016-67.392-30.08-18.624-60.16-30.08-78.784 0A318.976 318.976 0 0 1 512 832a320 320 0 0 1 0-640c35.328 0 40.448-30.72 40.448-66.048S547.328 64 512 64z m447.68 469.568c6.784-177.92-84.672-327.616-220.224-407.616-30.464-17.92-47.104 1.92-65.088 32.384-17.92 30.4-30.464 59.904 0 77.824A319.744 319.744 0 0 1 832 512c0 35.328 33.664 40.576 61.056 52.864 27.328 12.288 65.28 3.968 66.624-31.296z" fill="#515151" p-id="2507"></path></svg>
@@ -31,12 +44,7 @@
           <p class="content"> 倍频器</p>
         </div>
       </router-link>
-      <router-link to="/manager" class="app-sidebar-link"  active-class="active" >
-        <div class="svg_content">
-          <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg"  width="24" height="24" data-v-ea893729=""><path d="M900.6592 318.5664L512 480.512 123.2896 318.5664c-26.2656-10.9056-26.2656-49.7664 0-60.672L512 95.9488l388.6592 161.9456c26.2656 10.9056 26.2656 49.7664 0 60.672zM219.3408 288.256L512 410.1632l292.608-121.9584L512 166.2976 219.3408 288.2048z" fill="#000000" fill-opacity=".9" p-id="566"></path><path d="M95.9488 449.6896v78.5408L512 711.168l415.9488-182.8864V449.7408L512 632.6272 95.9488 449.6896z" fill="#000000" fill-opacity=".9" p-id="567"></path><path d="M95.9488 666.8288v78.5408L512 928.3072l415.9488-182.8864v-78.5408L512 849.7664l-416.0512-182.9376z" fill="#000000" fill-opacity=".9" p-id="568"></path></svg>
-          <p class="content"> 监测器</p>
-        </div>
-      </router-link>
+
       <!-- </a> -->
     </div>
     <div class="bottom-sidebar">
@@ -57,12 +65,6 @@
   <script lang="ts" setup>
     import Swal from 'sweetalert2';
     import { ConfigManager } from '@/api/Config/configManager'
-    import {
-      useSerialAmplifierStore,
-      useSerialSeedPurchasedStore,
-      useSerialTemperaturePPLNStore,
-      useSerialManagerStore, useSerialOscillatorStore
-    } from "@/store/SerialGroup";
 
     const alertResult = (success=true) => {
       if(success){
@@ -83,20 +85,13 @@
       }
     }
 
-    const return_serial_store_port = (useSerialStore:any)=>{
-      const this_store = useSerialStore();
-
-      return this_store.getTargetParameter({'data_type' :'Port'}) || ''
-    }
-
     const SaveConfigs = () =>{
       const manager = new ConfigManager();
       const result = manager.updateConfigs({
-        'SeedPurchased': return_serial_store_port(useSerialSeedPurchasedStore),
-        'Amplifier': return_serial_store_port(useSerialAmplifierStore),
-        'TemperaturePPLN': return_serial_store_port(useSerialTemperaturePPLNStore),
-        'Manager': return_serial_store_port(useSerialManagerStore),
-        'Oscillator': return_serial_store_port(useSerialOscillatorStore),
+        'SeedPurchased': manager.get_serial_store_port('SeedPurchased'),
+        'Amplifier': manager.get_serial_store_port('Amplifier'),
+        'Manager': manager.get_serial_store_port('Manager'),
+        'TemperaturePPLN': manager.get_serial_store_port('TemperaturePPLN'),
       });
       alertResult(result); // 弹窗显示结果
     }

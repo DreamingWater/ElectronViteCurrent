@@ -32,7 +32,7 @@ async function listAvailablePorts() {
 //     }
 // }
 
-function askForSerialConnection(portPath, baudRate, hexData = false) {
+function askForSerialConnection(portPath, baudRate, hexData = 'str') {
     console.log('Connecting to port', portPath, 'at baudRate', baudRate);
 
     let port = new SerialPort({ path: portPath, baudRate: baudRate });
@@ -50,10 +50,12 @@ function askForSerialConnection(portPath, baudRate, hexData = false) {
     });
 
     let parser = null;
-    if (hexData === false) {
+    if (hexData === 'str') {
         parser = port.pipe(new ReadlineParser({ delimiter: '\n' }));
-    } else {
+    } else if(hexData === '55AA') {
         parser = port.pipe(new ReadlineParser({ delimiter: Buffer.from([0x55, 0xAA]), includeDelimiter: true, encoding: "hex" }));
+    } else if(hexData === '01C0') {
+        parser = port.pipe(new ReadlineParser({ delimiter: Buffer.from([0x01, 0xC0]), includeDelimiter: true, encoding: "hex" }));
     }
 
     return { port, parser };

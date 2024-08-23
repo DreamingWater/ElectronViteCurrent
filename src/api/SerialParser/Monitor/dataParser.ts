@@ -3,10 +3,7 @@ import { useMonitorStore } from "@/store/monitorGroup";
 import { MonitorSettingDataModel } from "@/types/manager";
 
 import {SerialSettingDataModel} from "@/types/serial";
-
-import {scheduler} from "../../schedulerPipeline";
 import { monitor_parser } from "@/api/SerialParser/Base/packParser";
-
 
 const create_store_object = ()=>{
     const store = useMonitorStore();

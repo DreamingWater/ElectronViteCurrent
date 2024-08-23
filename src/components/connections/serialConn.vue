@@ -12,149 +12,99 @@
 </template>
 
 <script lang="ts" setup>
-      // @ts-nocheck
-      import UnConnectedImg from "@/assets/imgs/unconnected.png";
-      import {ref, onMounted, watch, computed, unref, inject} from 'vue';
-      import { getStoreByPageLocation, useSerialOscillatorStore} from "@/store/SerialGroup";
-      import { append_serial_data_parser } from "@/api/SerialParser/index"
-      import { TimerTask} from "@/api/schedulerTask";
+  // @ts-nocheck
+  import UnConnectedImg from "@/assets/imgs/unconnected.png";
+  import { ref, onMounted, watch, computed, unref } from 'vue';
+  import { getStoreByPageLocation } from "@/store/SerialGroup";
+  import { append_serial_data_parser } from "@/api/SerialParser/index"
+  import { schedulerSerial } from '@/api/scheduler/ScheSerial/schedulerPipeline';
 
-      // 获取当前在哪个页面
-      import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
-      import {SerialGettingDataModel, SerialSettingDataModel} from "@/types/serial";
-      import {serial_data_package_factory} from "@/api/SerialSendPackage";
-      const { setCurrentPageLocationState, getCurrentPageLocationState } = usePageLocationState();
-      const scheduler = inject('$scheduler');
+  // 获取当前在哪个页面
+  import { PageLocationStateEnum, usePageLocationState } from "@/api/pageLocation";
+  import { SerialGettingDataModel } from "@/types/serial";
+  import { connectAndInitializeSerial } from "@/api/SerialChooser/chooserSend"
+  const { setCurrentPageLocationState, getCurrentPageLocationState } = usePageLocationState();
 
-      const portList= ref([]);  // replace with your actual port list
-      const selectedPort = ref('');
-      const serial_config_port = ref(''); // serial_store里面的port
-      const rotationAngle = ref(0); // 初始角度为0度
-      let use_port:any = null;
-      let use_parser:any = null;
-      // 解构对应的 serial _store
-      const current_control_page = computed(() => unref(getCurrentPageLocationState));
 
-      // 旋转 logo 角度
-      const rotateStyle = computed(() => {
-        return `rotate(${rotationAngle.value}deg)`;
-      });
-      // 图标
-      const imageSrc = computed(() => {
-        return UnConnectedImg; // 未连接的图标
-      });
+  const portList = ref([]);  // replace with your actual port list
+  const selectedPort = ref('');
+  const serial_config_port = ref(''); // serial_store里面的port
+  const rotationAngle = ref(0); // 初始角度为0度
 
-      // 图标的旋转
-      function rotate_logo(): void {   // 点击刷新
-        // 旋转90°
-        rotationAngle.value += 90; // 点击时增加180度
-        setTimeout(() => {
-          rotationAngle.value -= 90; // 一秒后恢复初始角度
-        }, 1000);
+  // 解构对应的 serial _store
+  const current_control_page = computed(() => unref(getCurrentPageLocationState));
+
+  // 旋转 logo 角度
+  const rotateStyle = computed(() => `rotate(${rotationAngle.value}deg)`);
+  // 图标
+  const imageSrc = computed(() => UnConnectedImg); // 未连接的图标
+
+  // 图标的旋转
+  function rotate_logo(): void {   // 点击刷新
+                                   // 旋转90°
+    rotationAngle.value += 90; // 点击时增加180度
+    setTimeout(() => {
+      rotationAngle.value -= 90; // 一秒后恢复初始角度
+    }, 1000);
+  }
+
+  // 获取当前页面的store
+  function getCurrentStore() {
+    return getStoreByPageLocation(current_control_page.value).store();
+  }
+
+  // 获取指定数据类型的参数
+  function getTargetParameter(dataType: string) {
+    const search_key: SerialGettingDataModel = { 'data_type': dataType };
+    return getCurrentStore().getTargetParameter(search_key);
+  }
+
+  // 设置默认的串口端口
+  const setting_serial_port = () => {
+    serial_config_port.value = getTargetParameter('Port');
+    if (portList.value.length > 0) {
+      // 设置选中的端口为列表中的第一个元素 或者利用默认值，前提是默认值是出现时list中
+      selectedPort.value = (serial_config_port.value !== '' && portList.value.includes(serial_config_port.value)) ? serial_config_port.value : portList.value[0];
+    }
+    // console.log('setting_serial_port', selectedPort.value);
+  };
+
+  async function click_refresh_logo(): Promise<void> {
+    // 设置端口列表
+    portList.value = await listAvailablePorts(); //['COM1','COM2','COM3','COM4']; // replace with your actual port list
+    rotate_logo(); // 选择logo
+    // 获取默认的串口值
+    setting_serial_port();
+  }
+
+  onMounted(() => {
+    // 页面刷新的时候搜索串口等
+    setTimeout(() => {
+      click_refresh_logo();
+    }, 200);
+  });
+
+  watch(() => current_control_page.value,
+      (newVal, oldVal) => {
+        console.log(`changed circle status ${newVal}`)
+        setting_serial_port();
       }
-      // 设置默认的串口端口
-      const setting_serial_port = ()=>{
-        const search_key:SerialGettingDataModel = {
-          'data_type':'Port',
-        } ;
+  );
 
-        const this_page_store = getStoreByPageLocation(current_control_page.value)
-        const store = this_page_store.store();
-        const setting_port = store.getTargetParameter(search_key);
-        serial_config_port.value = setting_port;
-        if (portList.value.length > 0) {
-          // 设置选中的端口为列表中的第一个元素 或者利用默认值，前提是默认值是出现时list中
-          selectedPort.value = (serial_config_port.value !== '' && portList.value.includes(serial_config_port.value)) ? serial_config_port.value : portList.value[0];
-        }
-        console.log('setting_serial_port',selectedPort.value);
-      };
-     async function click_refresh_logo(): void{
-        // 设置端口列表
-       portList.value = await listAvailablePorts();//['COM1','COM2','COM3','COM4']; // replace with your actual port list
-       rotate_logo(); // 选择logo
-       // 获取默认的串口值
-       setting_serial_port();
-      }
-
-      onMounted(() => {
-        // 页面刷新的时候搜索串口等
-        setTimeout(() => {
-          click_refresh_logo();
-        }, 200);
-      });
-
-      watch(() => current_control_page.value,
-          (newVal, oldVal) => {
-            console.log(`changed circle status ${newVal}`)
-            setting_serial_port();
-          }
-      );
-
-      function add_parser(this_parser:any) {
-        this_parser.on('data', data => {
-          console.log('Received data from port:', data);
-        });
-      }
-
-      function click_connect_serial(){
-
-        // 获取波特率信息
-        const search_key:SerialGettingDataModel = {
-          'data_type':'BaudRate',
-        } ;
-        const this_page_store = getStoreByPageLocation(current_control_page.value)
-        const store = this_page_store.store();
-        const baudRate = store.getTargetParameter(search_key);
-
-        // 初始化任务
-        // let initial_data1 = serial_data_package_factory([], current_control_page.value, 'initial');
-        // console.log(initial_data1);
-        //
-        // for(const [index, data] of initial_data1.entries()){
-        //   console.log('模拟串口发送：',data.toString('hex'));
-        // }
-        // console.log(store);
-
-        // console.log('baudRate',baudRate);
-
-        ({ port: use_port, parser: use_parser } = askForSerialConnection(selectedPort.value, baudRate,this_page_store.flag));
-        if(use_port  ){ //  || true
-          // 跟新配置到pinia,连接成功
-          append_serial_data_parser(use_parser,current_control_page.value);
-          // 启动定时任务
-          scheduler.addSerialSendPackagesTask([],  current_control_page.value,1,'internal','continuous');
-
-          // let task_data = serial_data_package_factory([], current_control_page.value, 'internal');
-          // let task = null;
-          // if(task_data.length>0){
-          //   task = new TimerTask(store, task_data)
-          //   // 温度页面单次任务，其它页面循环定时任务
-          //   task.createTask(1000,false);
-          // }
-          // 保存对象
-          store.changeSerialConnectState(use_port,use_parser,true,selectedPort.value);
-
-          // 初始化任务
-          // let initial_data = serial_data_package_factory([], current_control_page.value, 'initial');
-          // // 逐个发送数据
-          // setTimeout(()=>{
-          //   store.sendSerialData(initial_data);
-          // },1000);
-          scheduler.addSerialSendPackagesTask([],  current_control_page.value,2,'initial','continuous');
-        }
-      }
-
+  async function click_connect_serial() {
+    const serial_flag = getStoreByPageLocation(current_control_page.value).flag;
+    connectAndInitializeSerial(selectedPort.value,getCurrentStore(), serial_flag,current_control_page.value)
+  }
 
 
 </script>
-
 
 <style lang="scss" scoped>
 
   .serial-con{
     display: flex;
     flex-direction: row;
-    align-items: center
+    align-itegetCurrentStorems: center
   }
   .port_select {
     height: 25px;

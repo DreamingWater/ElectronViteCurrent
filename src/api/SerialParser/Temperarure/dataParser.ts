@@ -1,7 +1,7 @@
 
 import { useTemperatureGroupStore} from "@/store/temperatureGroup";
-import {scheduler} from "../../schedulerPipeline";
 import { TemperatureSettingDataModel } from "@/types/temperature"
+import { scheduler } from '@/api/scheduler/base/scheduler';
 
 const create_store_object = ()=>{
     const store = useTemperatureGroupStore();

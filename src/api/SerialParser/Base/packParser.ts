@@ -5,9 +5,10 @@ import {PageLocationStateEnum} from "@/api/pageLocation";
 
 class StringParser {
     private str: string;
-
-    constructor() {
+    private delimiter: any;
+    constructor(delimiter:any) {
         this.str = '';
+        this.delimiter = delimiter;
     }
 
     appendData(data: string) {
@@ -20,7 +21,7 @@ class StringParser {
     parseFrame(): { ctrlCode: string, data: string } | null {
         while (this.str.length > 4) {
             // Find the frame head
-            if (this.str.slice(0, 4).toLowerCase() !== '55aa') {
+            if (this.str.slice(0, 4).toLowerCase() !== this.delimiter) {
                 this.str = this.str.slice(2);
                 continue;
             }
@@ -54,9 +55,9 @@ class StringParser {
     }
 }
 
-export const seed_purchased_parser = new StringParser();
-export const amplifier_parser = new StringParser();
-export const monitor_parser = new StringParser();
+export const seed_purchased_parser = new StringParser('55aa');
+export const amplifier_parser = new StringParser('55aa');
+export const monitor_parser = new StringParser('55aa');
 
 
 const actions = {
@@ -71,6 +72,9 @@ const actions = {
     },
     [PageLocationStateEnum.SeedPurchased]: (received_data: string) => {
         return amplifier_parser.append_data_parser(received_data)
+    },
+    [PageLocationStateEnum.WaterCooling]: (received_data: string) => {
+        return received_data
     },
 }
 

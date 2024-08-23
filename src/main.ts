@@ -11,7 +11,6 @@ import 'normalize.css' //reset.css
 import './assets/css/dm_sans.css'
 import './assets/css/common.css'
 
-import { scheduler } from './api/schedulerPipeline';
 
 
 // import ElementPlus from 'element-plus'
@@ -25,7 +24,7 @@ const app = createApp(App).use(router).use(store);
 
 // 添加到 Vue 全局属性
 // Provide the scheduler instance
-app.provide('$scheduler', scheduler);
+// app.provide('$scheduler', scheduler);
 
 app.mount('#app');
 

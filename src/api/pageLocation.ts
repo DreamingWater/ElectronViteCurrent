@@ -7,7 +7,8 @@ export const PageModulesNames = {
     'Amplifier' : 'Amplifier',
     'SeedPurchased' : 'SeedPurchased',
     'Others' : 'Others',
-    'Manager' : 'Manager'
+    'Manager' : 'Manager',
+    'WaterCooling' : 'WaterCooling',
 }
 
 export enum PageLocationStateEnum {
@@ -16,7 +17,8 @@ export enum PageLocationStateEnum {
     Amplifier = 2,
     SeedPurchased = 3,
     Others = 4,
-    Manager = 5
+    Manager = 5,
+    WaterCooling = 6,
 }
 
 const Page_Location_State = ref(PageLocationStateEnum.Oscillator);

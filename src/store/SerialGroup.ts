@@ -86,24 +86,27 @@ export const useSerialAmplifierStore = createSerialGroupStore('use-serial-amplif
 export const useSerialTemperaturePPLNStore = createSerialGroupStore('use-serial-temperature-ppln',9600,PageLocationStateEnum.TemperaturePPLN);
 export const useSerialSeedPurchasedStore = createSerialGroupStore('use-serial-seed-purchased',9600,PageLocationStateEnum.SeedPurchased);
 export const useSerialManagerStore = createSerialGroupStore('use-serial-manager',9600,PageLocationStateEnum.Manager);
+export const useSerialWaterCoolingStore = createSerialGroupStore('use-serial-watercooling',9600,PageLocationStateEnum.WaterCooling);
 
 export  const getStoreByPageLocation = (pageLocation: PageLocationStateEnum) => {
     switch (pageLocation) {
         case PageLocationStateEnum.Oscillator:
             // console.log('useSerialOscillatorStore');
-            return {store: useSerialOscillatorStore, flag: false}
+            return {store: useSerialOscillatorStore, flag: 'str'}
         case PageLocationStateEnum.Amplifier:
             // console.log('useSerialAmplifierStore');
-            return {store: useSerialAmplifierStore, flag: true }
+            return {store: useSerialAmplifierStore, flag: '55AA' }
         case PageLocationStateEnum.TemperaturePPLN:
             // console.log('useSerialTemperaturePPLNStore')
-            return {store: useSerialTemperaturePPLNStore, flag: false}
+            return {store: useSerialTemperaturePPLNStore, flag: 'str'}
         case PageLocationStateEnum.SeedPurchased:
             // console.log('useSerialSeedPurchasedStore');
-            return {store: useSerialSeedPurchasedStore, flag: true};
+            return {store: useSerialSeedPurchasedStore, flag: '55AA'};
         case PageLocationStateEnum.Manager:
             // console.log('useSerialSeedPurchasedStore');
-            return {store: useSerialManagerStore, flag: true};
+            return {store: useSerialManagerStore, flag: '55AA'};
+        case PageLocationStateEnum.WaterCooling:
+            return {store: useSerialWaterCoolingStore, flag: '01C0'};
         default:
             throw new Error("Invalid page location");
     }

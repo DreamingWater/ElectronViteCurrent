@@ -15,8 +15,10 @@
     import {onMounted, watch, ref, computed, unref,inject} from 'vue';
     import {getStoreByPageLocation} from "@/store/SerialGroup";
     import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
-    import { serial_data_package_factory, cut_data_package_list } from "@/api/SerialSendPackage/index";
+    import { cut_data_package_list } from "@/api/SerialSendPackage/packageListCutting";
     import {SerialGettingDataModel} from "@/types/serial";
+    import { schedulerSerial } from '@/api/scheduler/ScheSerial/schedulerPipeline';
+
 
     const props = defineProps({
       module_name: { type: null, required: true },
@@ -25,13 +27,13 @@
       data_store: { type: null , required: true},
       proto_type: { type: null, default: 'None-type' },
     });
-    const scheduler = inject('$scheduler');
     const module_enable_working:SerialGettingDataModel = { 'data_type' : 'EnableStatus'};
+    // 如果不连接串口 不启动开关， 就不允许发送
     const cur_module_working_status = computed(() => {
       const store = props.data_store;
       const value = store.getTargetParameter(module_enable_working);
-      return !Boolean(value);        // 不工作就不能发
-      // return false;
+      // return !Boolean(value);        // 不工作就不能发
+      return false;
     });
 
 
@@ -68,9 +70,9 @@
       for(const [index, data_package] of data_package_list.entries()){
         if (data_package[0]['data_type'] == "WorkingWavelength")
         { // 连续发送,解决种子波长调节过程，奇奇怪怪的问题，就是调不了，能发送，但是接收可能不到。
-          scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'continuous');
+          schedulerSerial.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'continuous');
         }else {
-          scheduler.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'interval');
+          schedulerSerial.addSerialSendPackagesTask(data_package,  PageLocationStateEnum[props.module_name],3,null,'interval');
         }
       }
     }

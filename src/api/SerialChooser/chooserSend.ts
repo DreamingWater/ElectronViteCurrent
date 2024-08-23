@@ -1,61 +1,35 @@
-import {each} from "chart.js/helpers";
-import {append_serial_data_parser} from "../SerialParser";
+import { each } from "chart.js/helpers";
+import { append_serial_data_parser } from "../SerialParser";
 import { PageLocationStateEnum  } from "@/api/pageLocation";
-import {getStoreByPageLocation} from "../../store/SerialGroup";
-import {SerialGettingDataModel} from "../../types/serial";
-import {scheduler} from "@/api/schedulerPipeline";
+import { getStoreByPageLocation } from "../../store/SerialGroup";
+import { SerialGettingDataModel } from "../../types/serial";
+import { schedulerSerial } from "@/api/scheduler/ScheSerial/schedulerPipeline";
 // @ts-nocheck
 
-
-
-
-const usedSerialPorts:any = [];          // 本程序以及占用的串口
-let this_revived_times  = 0;            // 本次连接获取数据的次数
 let connected_result:any = null   ;        // 连接的结果
 
-const  chooser_function_for_serial = async (portPath:any, baudRate:9600,hexData=false,name='seedPurchased')=>{
-    const available_ports =  await listAvailablePorts()
-    if(available_ports.length == 0){
-        console.log("No serial ports available")
-        return
+export async function connectAndInitializeSerial(port: string, store:any, flag: any, pageLocation: PageLocationStateEnum) {
+    // 获取指定数据类型的参数
+    const search_key: SerialGettingDataModel = { 'data_type': 'BaudRate' };
+    const baudRate = store.getTargetParameter(search_key);
+    let { port: use_port, parser: use_parser } = await askForSerialConnection(port, baudRate, flag);
+    if (use_port) {
+        append_serial_data_parser(use_parser, pageLocation);
+        schedulerSerial.addSerialSendPackagesTask([], pageLocation, 1, 'internal', 'continuous');
+        store.changeSerialConnectState(use_port, use_parser, true, port);
+        schedulerSerial.addSerialSendPackagesTask([], pageLocation, 2, 'initial', 'continuous');
     }
-
-    // 如果找到合适的端口，则开始尝试打开串口
-    // each(available_ports, async (port:any)=>{
-    //     if(port in usedSerialPorts){
-    //         return
-    //     }
-    //     const sender_buffer = Buffer.from([0xAA,0x55,0xD1,0x00,0x00,0x00,0x0D,0x0A])
-    //
-    //     let use_port:any = null;
-    //     let use_parser:any = null;
-    //     ({ port: use_port, parser: use_parser } = askForSerialConnection(port, 9600,true));
-    //     if(use_port || true ){
-    //         // sendDataBySerial(use_port,send_data);
-    //         use_port.write(sender_buffer);
-    //         // 跟新配置到pinia,连接成功
-    //         this_revived_times = 0; // 重置接收次数
-    //         connected_result = null ; // 默认为不连接
-    //         parser_different_types(use_parser,use_port);
-    //     }
-    // })
 }
-
 
 function connect_target_serial(){
     const connected_store_result = getStoreByPageLocation(connected_result);
     const this_store = connected_store_result.store();
 }
 
-
-
-
 class SerialController {
     private serial_result: boolean = false;
-    private port: any = null;
-    private parser: any = null;
+
     serial_auto_config(name:string){
-        let use_port:any = null, use_parser:any = null;
         const this_page_store = getStoreByPageLocation(PageLocationStateEnum[name]);
         const store = this_page_store.store();
         // PORT
@@ -63,21 +37,7 @@ class SerialController {
             'data_type':'Port',
         } ;
         const PORT = store.getTargetParameter(search_port_key);
-        // BAUDRATE
-        const search_key_baudrate:SerialGettingDataModel = {
-            'data_type':'BaudRate',
-        } ;
-        const baudRate = store.getTargetParameter(search_key_baudrate);
-        // connect the serial port
-        ({ port: this.port, parser: this.parser } = askForSerialConnection(PORT, baudRate,this_page_store.flag));
-        if(this.port) { //  || true
-            //console.log(PORT, baudRate);
-            append_serial_data_parser(this.parser,PageLocationStateEnum[name]);
-            scheduler.addSerialSendPackagesTask([], PageLocationStateEnum[name],1,'internal','continuous');
-            // 保存对象
-            store.changeSerialConnectState(this.port,this.parser,true,PORT);
-            scheduler.addSerialSendPackagesTask([],  PageLocationStateEnum[name],2,'initial','continuous');
-        }
+        connectAndInitializeSerial(PORT, store, this_page_store.flag, PageLocationStateEnum[name]);
     }
     auto_connect_serial(){
         // const PageModulesNames = ['SeedPurchased','Amplifier','TemperaturePPLN','Manager'];  // 串口模块
