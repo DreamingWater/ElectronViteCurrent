@@ -14,6 +14,7 @@ const create_store_object = ()=>{
 
 const actions = {
     'd3': (dataString:string,store:any)=> {
+        console.log('find the status data come from the seeder');
         let data = Buffer.from(dataString, 'hex');
         if(data.length===1){
             return
@@ -132,9 +133,10 @@ export function add_seed_purchased_serial_data_parser(seed_purchased_serial_pars
     seed_purchased_serial_parser.on('data', data => {
         console.log('Received data from port:', data);
         const result = seed_purchased_parser.append_data_parser(data);
-        if(result && actions[result.ctrlCode]){
+        console.log('Received data from port:', result);
+        if(result && actions[result.function_code]){
             const store = create_store_object();
-            actions[result.ctrlCode](result.data,store);
+            actions[result.function_code](result.data,store);
         }
     });
 }

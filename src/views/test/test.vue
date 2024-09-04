@@ -12,7 +12,6 @@
 <script lang="ts" setup>
 import {useTemperatureGroupStore} from "@/store/TemperatureGroup";
 import { TemperatureSettingDataModel,TemperatureGettingDataModel } from '@/types/temperature';
-import {serial_controller} from "@/api/SerialChooser/chooserSend";
 
 
 
@@ -21,7 +20,8 @@ import {serial_controller} from "@/api/SerialChooser/chooserSend";
 
 import { ref, inject } from  'vue'
 import {ConfigManager} from "@/api/Config/configManager";
-
+// import {serialOscillator} from "@/api/scheduler/ScheSerial/ScheOscillator";
+import {HYParseFrameData} from '@/api/SerialParser/Base/HYParser';
 
 const num3 = ref(3);
 
@@ -53,30 +53,33 @@ const do_hanshu = (fun:any,args:any)=>{
   fun('hello','world');
 }
 
-const stop_value_scheducl = ()=>{
-  // const manager = new ConfigManager();
-  // const data = manager.get_serial_store_port('Amplifier');
-  // console.log(data);
-  // do_hanshu();
-  const deal_water_cooling_status = (dataHex: Buffer, store: any) => {
-    console.log(dataHex);
-
-    const target1 = [0xc0, 0x0e, 0x01, 0x03];
-    const target2 = [0x0e, 0x01, 0x03];
-
-    if (dataHex.slice(0, target1.length).every((value, index) => value === target1[index])) {
-      console.log('dealed in 4 datas');
-      console.log(parseInt(dataHex[4].toString(), 16));
-      // setWorkingStatus(store, parseInt(dataHex[4].toString(), 16));
-    } else if (dataHex.slice(0, target2.length).every((value, index) => value === target2[index])) {
-      console.log('dealed in 3 datas');
-      console.log(parseInt(dataHex[3].toString(), 16));
-      // setWorkingStatus(store, parseInt(dataHex[3].toString(), 16));
+function calc_checksum_str(str_data: string): string {
+  function crc_check(data: Buffer): Buffer {
+    let sum = 0;
+    for (let byte of data) {
+      sum += byte;
     }
+    let sum_bytes = Buffer.alloc(2);
+    sum_bytes.writeUInt16LE(sum, 0);
+    return sum_bytes;
   }
+  let data = Buffer.from(str_data, 'hex');
+  let check_data = crc_check(data);
+  return check_data.toString('hex');
+}
 
-  const send_data = Buffer.from([0xC0,0x0E,0x01,0x03,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x88,0x01]);
-  deal_water_cooling_status(send_data,send_data);
+const stop_value_scheducl = ()=>{
+
+  // serialOscillator.SetCurrentTask(0,null,'once');
+  console.log('test')
+  const data_str = '55aac804b004eb009ff1';
+  // const result = HYParseFrameData(data_str);
+
+  let valid_data = 'b004eb00';
+  const da = calc_checksum_str(valid_data);
+console.log(da);
+
+
 }
 </script>
 

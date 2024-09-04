@@ -17,17 +17,16 @@ function rearrangeArraysElements(return_data_list: any[][]): any[][] {
     return elements;
 }
 
-//  return [[1,3,5],[132,323],[12],['a']]
+//  return [[{show_P,set_p,1000},{show_P,set_p,10000}],[{show_cr,set_cr,10}]]
 //packages_data_list =  [[amplifier_channel2show_workingpower_data,amplifier_channel2set_power_data,3000]]
 export const cut_data_package_list = (packages_data_list:[][],store:any, reset:boolean=false) => {
     let return_data_list = [];
-    console.log('cut_data_package_list:',packages_data_list)
+    // console.log('cut_data_package_list:',packages_data_list)
     for(const data_package of packages_data_list) {
         if(data_package.length !== 3) {      // 数据包不符合要求
             console.log('Invalid data package:',data_package);
             continue;
         }
-
         const target_getter_value = store.getTargetParameter(data_package[0]);  //working_data
         let target_setter_value = store.getTargetParameter(data_package[1]);  // set_data
         // console.log('target_setter_value:',target_setter_value)
@@ -42,7 +41,7 @@ export const cut_data_package_list = (packages_data_list:[][],store:any, reset:b
         // 数据包符合要求，且数据发生改变
         if (data_package[2] === 0) {
             let set_package:any= JSON.parse(JSON.stringify(data_package[0]));  // 深拷贝
-            set_package['value'] = data_package[1]['value'];
+            set_package['value'] =  target_setter_value;     //data_package[1]['value'];
             set_package_list.push(set_package);
         }
         // 需要进行数据慢速解析
@@ -55,13 +54,12 @@ export const cut_data_package_list = (packages_data_list:[][],store:any, reset:b
                 set_package_list.push(set_package);
             }
             // 最后一个数据包 如果设定差不足step,或者之前的step最后一个数据不是设定值
-            if(set_package_list.length===0 || set_package_list[set_package_list.length-1]['value']!==data_package[1]['value']){
+            if(set_package_list.length===0 || set_package_list[set_package_list.length-1]['value']!==target_setter_value){
                 let set_package:any= JSON.parse(JSON.stringify(data_package[0]));  // 深拷贝
-                set_package['value'] = data_package[1]['value'];
+                set_package['value'] = target_setter_value;
                 set_package_list.push(set_package);
             }
         }
-
         return_data_list.push(set_package_list);
     }
     return return_data_list

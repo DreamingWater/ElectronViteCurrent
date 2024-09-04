@@ -40,6 +40,7 @@ const get_working_status = computed(() => {
 </template>
 
 <style scoped lang="css">
+
 .watercooling {
   margin: 0;
   width: 100%;
@@ -47,9 +48,8 @@ const get_working_status = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #009FFF;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to right, #ec2F4B, #009FFF);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to right, #ec2F4B, #009FFF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background-image: linear-gradient(to top, #fdcbf1 0%, #fdcbf1 1%, #e6dee9 100%);
+
 }
 
 .loader {
@@ -69,14 +69,14 @@ const get_working_status = computed(() => {
 .loader::before {
   width: inherit;
   height: 0.2em;
-  background-color: hsla(0, 0%, 85%);
+  background-color: hsl(0, 4%, 31%);
 }
 
 .loader::after {
   box-sizing: border-box;
   width: 50%;
   height: inherit;
-  border: 0.2em solid hsla(0, 0%, 85%);
+  border: 0.2em solid hsl(0, 4%, 31%);
   border-radius: 50%;
   left: 25%;
 }
@@ -85,7 +85,7 @@ const get_working_status = computed(() => {
   position: absolute;
   width: 5%;
   height: 10%;
-  background-color: white;
+  background-color: #292121;
   border-radius: 50%;
   bottom: 0.2em;
   left: -5%;

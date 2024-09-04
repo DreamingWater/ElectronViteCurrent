@@ -3,6 +3,7 @@ import { PageLocationStateEnum  } from "@/api/pageLocation";
 import {amplifier_list_package_parser, initial_amplifier_package, schedual_amplifier_package } from "./Amplifier/dataPackage";
 import {seed_purchased_list_package_parser, initial_seed_purchased_package, schedual_seed_purchased_package} from "./SeedPurchased/dataPackage";
 import {schedual_water_cooling_package, water_cooling_package_parser} from "./WaterCooling/dataPackage";
+import {initial_oscillator_package, oscillator_list_package_parser} from "./Oscillator/dataPackage";
 
 
 // initial_data 为真就在包中加入 初始发送包，否则不加入
@@ -11,7 +12,10 @@ import {schedual_water_cooling_package, water_cooling_package_parser} from "./Wa
 function combine_package_with_or_not_initial(packages_data:[],  other_instruct: 'initial' | 'internal' | null,
                                              package_parser:any,initial_package:any,internal_package:any)
 {
-    let result:any[] = package_parser(packages_data);
+
+    let result:any[]=[];
+    if (packages_data !== undefined) {result = package_parser(packages_data);}
+
     // for(const data of result) {
     //     console.log('combined data is:',data['data'].toString('hex')); // 将数据打印出来
     // }
@@ -34,7 +38,11 @@ function combine_package_with_or_not_initial(packages_data:[],  other_instruct: 
 }
 
 const actions = {
-    [PageLocationStateEnum.Oscillator]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => [],
+    [PageLocationStateEnum.Oscillator]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => {
+        return combine_package_with_or_not_initial(packages_data,other_instruct,
+            oscillator_list_package_parser,initial_oscillator_package,
+            null)
+    },
     [PageLocationStateEnum.Amplifier]: (packages_data:[],other_instruct: 'initial' | 'internal' | null) => {
        return combine_package_with_or_not_initial(packages_data,other_instruct,
            amplifier_list_package_parser,initial_amplifier_package,

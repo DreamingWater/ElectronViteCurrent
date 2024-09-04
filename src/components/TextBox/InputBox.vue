@@ -106,7 +106,7 @@ import {reactive, ref, onMounted} from 'vue'
     height: 100%;
     .itxt {
       align-items: center;
-      width: 100px;
+      width: 120px;
 
       //border: 1px solid #ddd;
       color: #555;

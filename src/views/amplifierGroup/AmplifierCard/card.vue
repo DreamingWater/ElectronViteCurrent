@@ -49,9 +49,9 @@
    });
    const min_value = ref(0);
    const valueMap = {
-     'ONE': 10000,
-     'TWO': 20000,
-     'THREE': 50000
+     'ONE': 20000,
+     'TWO': 40000,
+     'THREE': 40000
      
    };
    const max_value:number = computed(()=>{

@@ -85,9 +85,9 @@ export function add_amplifier_serial_data_parser(amplifier_serial_parser:any) {
     amplifier_serial_parser.on('data', (data) => {
         console.log('Received data from port:',data);
         const result = amplifier_parser.append_data_parser(data);
-        if(result && actions[result.ctrlCode]){
+        if(result && actions[result.function_code]){
             const store = create_store_object();
-            actions[result.ctrlCode](result.data, store);
+            actions[result.function_code](result.data, store);
         }
         // console.log('Received data from port:', data.toString('hex'))
         // if(actions[data[2]]){

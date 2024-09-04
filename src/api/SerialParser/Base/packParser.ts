@@ -2,6 +2,8 @@ import {add_amplifier_serial_data_parser} from "../Amplifier/dataParser";
 import {add_temperature_serial_data_parser} from "../Temperarure/dataParser";
 import {add_seed_purchased_serial_data_parser} from "../SeedPurchased/dataParser";
 import {PageLocationStateEnum} from "@/api/pageLocation";
+import {RXParseFrameData} from "./RXParser";
+import { HYParseFrameData } from "./HYParser";
 
 class StringParser {
     private str: string;
@@ -13,41 +15,46 @@ class StringParser {
 
     appendData(data: string) {
         this.str += data;
-        if(this.str.length>300){  // 限制缓存区大小
+        if(this.str.length>500){  // 限制缓存区大小
             this.str =  '';
         }
     }
 
-    parseFrame(): { ctrlCode: string, data: string } | null {
-        while (this.str.length > 4) {
-            // Find the frame head
-            if (this.str.slice(0, 4).toLowerCase() !== this.delimiter) {
-                this.str = this.str.slice(2);
-                continue;
-            }
-
-            const ctrlCode = this.str.slice(4, 6);
-            const dataLength = parseInt(this.str.slice(6, 8), 16);
-
-            if (this.str.length < 8 + dataLength * 2 + 4) {
+    parseFrame(): { function_code: string, data: string } | null {
+        let result;
+        // Find the frame head
+        const delimiterIndex = this.str.toLowerCase().indexOf(this.delimiter);
+        if (delimiterIndex !== 0) { // 在字符串中寻找帧头
+            if (delimiterIndex === -1) {
                 return null;
+            } else {
+                this.str = this.str.slice(delimiterIndex); // 丢弃前面的字符
             }
-
-            const data = this.str.slice(8, 8 + dataLength * 2);
-            // const checksum = this.str.slice(8 + dataLength * 2, 8 + dataLength * 2 + 4);
-            // TODO: Verify checksum
-
-            this.str = this.str.slice(8 + dataLength * 2 + 4);
-
-            return { ctrlCode, data };
         }
+        console.log('this.str is this',this.str);
+        // 执行到这里就说明 已经 find the delimiter
+        if (this.delimiter === '55aa') {
+            result = HYParseFrameData(this.str);
+        } else if (this.delimiter === '5354') {
+            result = RXParseFrameData(this.str);
+        }
+        if (result) {
+            const { valid_frame, function_code, data,valid_data_num } = result;
+            // console.log('valid_frame',valid_frame);
+            if (valid_frame) {
+                this.str = this.str.slice(valid_data_num); // 丢弃一个数据范围
+                return { function_code, data };
+            }else {
 
+            }
+        }
+        this.str = this.str.slice(2); // 丢弃一个数据范围
         return null;
     }
     append_data_parser(data:string){
         this.appendData(data);
         let result = this.parseFrame()
-        console.log(result);
+        // console.log(result);
         if(result){
             return result
         }
@@ -58,6 +65,7 @@ class StringParser {
 export const seed_purchased_parser = new StringParser('55aa');
 export const amplifier_parser = new StringParser('55aa');
 export const monitor_parser = new StringParser('55aa');
+export const oscillator_parser = new StringParser('5354'); // 帧头
 
 
 const actions = {

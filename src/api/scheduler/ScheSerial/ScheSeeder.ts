@@ -1,8 +1,8 @@
-import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
-import {getStoreByPageLocation} from "@/store/SerialGroup";
+import { PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
+import { getStoreByPageLocation} from "@/store/SerialGroup";
 import { serial_data_package_factory } from "@/api/SerialSendPackage/index";
 import { cut_data_package_list } from "@/api/SerialSendPackage/packageListCutting";
-import {SeedPurchasedGettingDataModel, SeedPurchasedSettingDataModel} from "../../../types/seedPurchased";
+import { SeedPurchasedGettingDataModel, SeedPurchasedSettingDataModel} from "../../../types/seedPurchased";
 import { scheduler } from "../base/scheduler";
 
 class SerialSeeder {

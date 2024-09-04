@@ -23,7 +23,7 @@
 
 // @ts-nocheck
 import {ref, reactive, onMounted, watch, computed} from 'vue' ;
-import SwitchView from "@/components/ButtonContent/switchView.vue";
+import SwitchView from "@/components/ButtonContent/SwitchView.vue";
 import ShowInput from "@/components/Items/ShowInput.vue";
 
 import {useAmplifierGroupStore} from "@/store/amplifierGroup";

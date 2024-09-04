@@ -1,6 +1,6 @@
 import { useAmplifierGroupStore } from "@/store/amplifierGroup";
 import { AmplifierSettingDataModel } from "@/types/amplifier";
-import {CommunicationProtocolClass,generate_package_buffer } from "../Base/packConstruct";
+import {CommunicationProtocolClass,HYgenerate_package_buffer } from "../Base/packConstruct";
 
 
 const setStoreData = (store:any,store_setter_key:AmplifierSettingDataModel) => {
@@ -10,7 +10,7 @@ const setStoreData = (store:any,store_setter_key:AmplifierSettingDataModel) => {
 export const schedual_amplifier_package = () => {
     let instruct:any = [];
     // 开启数据上报
-    const data_upload = generate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
+    const data_upload = HYgenerate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
     instruct.push([{ data_type: 'Amplifier-DataUpload', data: data_upload }]);
     return instruct as [];
 }
@@ -21,10 +21,10 @@ export const initial_amplifier_package = () => {
     // const channel1_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x01]))
     // instruct.push([{ data_type: 'Amplifier-ReadChannel1Power', data: channel1_power }])
     // 读取通道2功率
-    const channel2_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x02]))
+    const channel2_power = HYgenerate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x02]))
     instruct.push([{ data_type: 'Amplifier-ReadChannel2Power', data: channel2_power }])
     // 读取通道3功率
-    const channel3_power = generate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x03]))
+    const channel3_power = HYgenerate_package_buffer(Buffer.from([0xC4]), Buffer.from([0x03]))
     instruct.push([{ data_type: 'Amplifier-ReadChannel3Power', data: channel3_power }])
 
     return instruct as Buffer[];
@@ -72,7 +72,7 @@ export const amplifier_list_package_parser = (packages_data:any[])=>{
         // 使用 `data_type` 来调用对应的函数
         if (actions[package_data['data_type']]['function']) {
             setStoreData(store,package_data);
-            result = generate_package_buffer(actions[package_data['data_type']].ctrl_code,actions[package_data['data_type']]['function'](package_data));
+            result = HYgenerate_package_buffer(actions[package_data['data_type']].ctrl_code,actions[package_data['data_type']]['function'](package_data));
 
         }
         if (result) {

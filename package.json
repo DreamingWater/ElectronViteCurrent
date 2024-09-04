@@ -1,6 +1,6 @@
 {
   "name": "LaserController",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "main": "dist-electron/main/index.js",
   "description": "Laser Controller",
   "author": "",

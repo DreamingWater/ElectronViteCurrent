@@ -3,7 +3,7 @@ import { useSeedPurchasedStore } from "@/store/seedPurchased";
 import { SeedPurchasedSettingDataModel } from "@/types/seedPurchased"
 
 
-import {CommunicationProtocolClass,generate_package_buffer } from "../Base/packConstruct";
+import {CommunicationProtocolClass,HYgenerate_package_buffer } from "../Base/packConstruct";
 
 
 
@@ -15,7 +15,7 @@ const setStoreData = (store:any,store_setter_key:SeedPurchasedSettingDataModel) 
 export const schedual_seed_purchased_package = () => {
     let instruct:any = [];
     // 开启数据上报
-    const data_upload = generate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
+    const data_upload = HYgenerate_package_buffer(Buffer.from([0xD3]), Buffer.alloc(0))
     instruct.push([{ data_type: 'Seed-DataUpload', data: data_upload }]);
 
     return instruct as [];
@@ -24,10 +24,10 @@ export const schedual_seed_purchased_package = () => {
 export const initial_seed_purchased_package = () => {
     let instruct:any = [];
     // 读取功率
-    const read_power = generate_package_buffer(Buffer.from([0xC3]), Buffer.alloc(0))
+    const read_power = HYgenerate_package_buffer(Buffer.from([0xC3]), Buffer.alloc(0))
     instruct.push([{ data_type: 'Seed-ReadPower', data: read_power }]);
     // 读取波长
-    const read_wavelength = generate_package_buffer(Buffer.from([0xC8]), Buffer.alloc(0))
+    const read_wavelength = HYgenerate_package_buffer(Buffer.from([0xC8]), Buffer.alloc(0))
     instruct.push([{ data_type: 'Seed-ReadWavelength', data: read_wavelength }]);
 
     return instruct as [];
@@ -89,7 +89,7 @@ export const seed_purchased_list_package_parser = (packages_data:any[])=>{
             console.log(package_data)
             setStoreData(store,package_data);
             // buffer result
-            result = generate_package_buffer(actions[package_data['data_type']].ctrl_code,actions[package_data['data_type']]['function'](package_data));
+            result = HYgenerate_package_buffer(actions[package_data['data_type']].ctrl_code,actions[package_data['data_type']]['function'](package_data));
         }
         if (result) {
             packaged_data_list.push(

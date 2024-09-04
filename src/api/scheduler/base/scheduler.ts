@@ -1,4 +1,7 @@
 
+import {getStoreByPageLocation} from "@/store/SerialGroup";
+import { serial_data_package_factory } from "@/api/SerialSendPackage/index";
+import { cut_data_package_list } from "@/api/SerialSendPackage/packageListCutting";
 
 class SchedulerPipeline {
     private queue: Array<{ name: string, execFunction: (args: object) => any, args: object[], runStatus: { value: number }, interval: number, timeoutId?: NodeJS.Timeout, currentIndex?: number, executionMode: string }> = [];
@@ -33,6 +36,7 @@ class SchedulerPipeline {
     hasTask(name: string): boolean {
         return this.queue.some(task => task.name === name);
     }
+
     private processTask(task: { name: string, execFunction: (args: object) => any, args: object[], runStatus: { value: number }, interval: number, timeoutId?: NodeJS.Timeout, currentIndex: number, executionMode: string }) {
         const result = task.execFunction(task.args[task.currentIndex]);
         task.runStatus.value = 1;
@@ -46,10 +50,10 @@ class SchedulerPipeline {
         if (task.interval > 0 && task.executionMode !== 'once') {
             task.timeoutId = setTimeout(() => {
                 // shut down  如果设置的数据填充结束，就发送shutdown 命令，并等待响应
-                if (task.executionMode === 'shut_interval' && task.currentIndex === task.args.length - 1) {
-                    this.processTask(task);
-                }
-                else {
+                // if (task.executionMode === 'shut_interval' && task.currentIndex === task.args.length - 1) {
+                //     this.processTask(task);
+                // }
+                // else {
                     // Move to the next index, or reset to 0 if we've reached the end of the array
                     task.currentIndex = (task.currentIndex + 1) % task.args.length;
 
@@ -59,12 +63,39 @@ class SchedulerPipeline {
                     } else {
                         this.processTask(task);
                     }
-                }
+                // }
 
             }, task.interval * 1000);
         }
+        else if(task.executionMode === 'once'){
+            this.cancelTask(task.name);
+        }
     }
+    // [{data_type:'SetPower',value:1 }]
+    serial_data_send_task(data: any[], current_page:any, interval: number, other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='once') {
+
+        const store_result = getStoreByPageLocation(current_page);
+        const store = store_result.store();
+
+        // 根据协议进行处理      主要 这里有个序列0
+        const packaged_data = serial_data_package_factory(data, current_page, other_instruct);
+        if (Array.isArray(packaged_data[0])) {
+            // packaged_data 是二维数组
+            for (const data_package of packaged_data) {
+                let this_data_package_name = `${data_package[0]['data_type']}`;
+                scheduler.addTask(this_data_package_name, store.sendSerialData, data_package, interval,executionMode);
+            }
+        } else if(packaged_data.length === 0) {
+            console.log('packaged_data is empty');
+        }
+        else {
+            // packaged_data 是一维数组
+            let this_data_package_name = `${packaged_data[0]['data_type']}`;
+            // console.log('this_data_package_for_send', packaged_data);
+            scheduler.addTask(this_data_package_name, store.sendSerialData, packaged_data, interval,executionMode);
+        }
     }
+}
 
 
 export const scheduler = new SchedulerPipeline();

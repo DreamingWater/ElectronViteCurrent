@@ -50,11 +50,13 @@ export class ProtectionClass {
             if (sampleSeedPower > this.THRESHOLD_Seed) {
                 // 如果 samplePower 低于阈值，不允许设置 setPower
                 // 在这里，你可以添加阻止设置 setPower 的代码
-            } else if(this.AllowCheckAmplifier && (sampleAmplifierTwoParams>this.THRESHOLD_Amplifier || sampleAmplifierThreeParams>this.THRESHOLD_Amplifier) ){
+            } else if(this.AllowCheckAmplifier && (sampleAmplifierOneParams>this.THRESHOLD_Amplifier||sampleAmplifierTwoParams>this.THRESHOLD_Amplifier || sampleAmplifierThreeParams>this.THRESHOLD_Amplifier) ){
                 // this.AllowCheckAmplifier = false;
-//scheduler.hasTask('Amplifier-EnableStatus')
-                if (!(scheduler.hasTask('Amplifier-channel2_shut_down') || scheduler.hasTask('Amplifier-channel3_shut_down')
-                    || scheduler.hasTask('Amplifier-EnableStatus')
+               // console.log('Amplifier-EnableStatus')
+                //console.log(scheduler.hasTask('Amplifier-EnableStatus'))
+1                //scheduler.hasTask('Amplifier-EnableStatus')
+                if (!(scheduler.hasTask('Amplifier-channel1_shut_down') ||
+                        scheduler.hasTask('Amplifier-channel2_shut_down') || scheduler.hasTask('Amplifier-channel3_shut_down')|| scheduler.hasTask('Amplifier-EnableStatus')
                 ))    // 如果没有关闭任务的话，就启动关闭任务
                 {
                     schedulerSerial.addShutdownTask(1,this.amplifierGroupStore,null,'interval',true)     // 这个时间的设置是为了防止在关闭的时候，还有任务在执行
@@ -105,7 +107,8 @@ export class ProtectionClass {
                 if(sampleBackPower < Voltage_Limit) {
                     console.log("检测到电压低于阈值");
                     // 在这里，需要关闭放大器3
-                    if (!scheduler.hasTask('Amplifier-channel3_shut_down') && !scheduler.hasTask('Amplifier-EnableStatus'))    // 如果没有关闭任务的话，就启动关闭任务
+                    if (!scheduler.hasTask('Amplifier-channel3_shut_down') && !scheduler.hasTask('Amplifier-EnableStatus')
+                     && !scheduler.hasTask('Amplifier-channel2_shut_down'))    // 如果没有关闭任务的话，就启动关闭任务
                     {
                         schedulerSerial.addShutdownTask(1,this.amplifierGroupStore,null,'interval',true)     // 这个时间的设置是为了防止在关闭的时候，还有任务在执行
                         Swal.fire({

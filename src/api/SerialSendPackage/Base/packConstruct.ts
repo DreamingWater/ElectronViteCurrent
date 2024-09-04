@@ -41,7 +41,7 @@ export class CommunicationProtocolClass {
 }
 
 
-export const generate_package_buffer = (ctrl_code:Buffer,data:Buffer )=>{
+export const HYgenerate_package_buffer = (ctrl_code:Buffer, data:Buffer )=>{
     let protocol = new CommunicationProtocolClass();
     protocol.ctrl_code = ctrl_code;
     protocol.data_package.data = data; // 储存数据

@@ -104,7 +104,7 @@
   .serial-con{
     display: flex;
     flex-direction: row;
-    align-itegetCurrentStorems: center
+    align-items: center;
   }
   .port_select {
     height: 25px;

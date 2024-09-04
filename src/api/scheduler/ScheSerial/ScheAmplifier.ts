@@ -7,7 +7,7 @@ import { scheduler } from "../base/scheduler";
 
 class SerialAmplifier {
     // change_step 为设置的步长
-    set_amplifier_one_channel_data(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'='TWO', set_power=0,change_step=3000) {
+    set_amplifier_one_channel_data(store:any=null,other_instruct: 'initial' | 'internal' | null=null,channel:'TWO'|'THREE'|'ONE'='TWO', set_power=0,change_step=3000) {
         const amplifier_channel2set_power_data:AmplifierSettingDataModel = {
             data_type: 'PowerCurrent',
             value: set_power,
@@ -44,9 +44,11 @@ class SerialAmplifier {
     ShutdownAmplifierTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval', Two_Step_Shutdown:boolean=false)
     {
 
-        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0,20000);   // 变化步长为20 W
-        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',5000);                     // 变化步长为 5 W
+        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0,10000);   // 变化步长为20 W
+        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',0,5000);                     // 变化步长为 5 W
+        const shut_channel_one_data = this.set_amplifier_one_channel_data(store,other_instruct,'ONE',0,4000);                     // 变化步长为 5 W
 
+        // shutdown the amplifier module
         function shut_down_module(store:any=null,other_instruct: 'initial' | 'internal' | null=null) {
             const module_enable_status:AmplifierSettingDataModel = {
                 data_type: 'EnableStatus',
@@ -65,16 +67,19 @@ class SerialAmplifier {
 
         if (!Two_Step_Shutdown) {
 
-            let amplifier_module_packaged_data = [...shut_channel_three_data, ...shut_channel_two_data, ...amplifier_module_shut_data];
+            let amplifier_module_packaged_data = [...shut_channel_three_data, ...shut_channel_two_data,...shut_channel_one_data, ...amplifier_module_shut_data];
             let amplifier_channel2this_data_package_name = `${amplifier_module_packaged_data[amplifier_module_packaged_data.length-1]['data_type']}`;   // 命名为shutdown
             scheduler.addTask(amplifier_channel2this_data_package_name, this_amplifier_store_result.sendSerialData, amplifier_module_packaged_data, interval,executionMode);
-
+            console.log('shut amplifier two step shutdown')
 
         }else {
-            let amplifier_module_channel2_packaged_data = shut_channel_three_data;
-            let amplifier_module_channel3_packaged_data = [ ...shut_channel_two_data, ...amplifier_module_shut_data];
+
+            let amplifier_module_channel3_packaged_data = [ ...shut_channel_three_data, ...amplifier_module_shut_data];
             scheduler.addTask('Amplifier-channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
-            scheduler.addTask('Amplifier-channel2_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel2_packaged_data, interval,executionMode);
+            scheduler.addTask('Amplifier-channel2_shut_down', this_amplifier_store_result.sendSerialData, shut_channel_two_data, interval,executionMode);
+            // scheduler.addTask('Amplifier-PowerCurrent-TWO', this_amplifier_store_result.sendSerialData, shut_channel_two_data, interval,executionMode);
+            scheduler.addTask('Amplifier-channel1_shut_down', this_amplifier_store_result.sendSerialData, shut_channel_one_data, interval,executionMode);
+            console.log('shut amplifier one step shutdown')
         }
     }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import SwitchView from "@/components/ButtonContent/switchView.vue";
+  import SwitchView from "@/components/ButtonContent/SwitchView.vue";
 </script>
 
 <template>

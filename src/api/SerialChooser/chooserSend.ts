@@ -8,7 +8,7 @@ import { schedulerSerial } from "@/api/scheduler/ScheSerial/schedulerPipeline";
 
 let connected_result:any = null   ;        // 连接的结果
 
-export async function connectAndInitializeSerial(port: string, store:any, flag: any, pageLocation: PageLocationStateEnum) {
+export async function  connectAndInitializeSerial(port: string, store:any, flag: any, pageLocation: PageLocationStateEnum) {
     // 获取指定数据类型的参数
     const search_key: SerialGettingDataModel = { 'data_type': 'BaudRate' };
     const baudRate = store.getTargetParameter(search_key);

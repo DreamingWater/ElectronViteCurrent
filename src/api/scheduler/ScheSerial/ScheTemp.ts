@@ -1,9 +1,8 @@
 
-import {PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
-import {getStoreByPageLocation} from "@/store/SerialGroup";
+import { PageLocationStateEnum, usePageLocationState} from "@/api/pageLocation";
+import { getStoreByPageLocation} from "@/store/SerialGroup";
 import { serial_data_package_factory } from "@/api/SerialSendPackage/index";
-import {TemperatureSettingDataModel} from "../../../types/temperature";
-
+import { TemperatureSettingDataModel} from "@/types/temperature";
 import { scheduler } from "../base/scheduler";
 
 class SerialTemperature {
