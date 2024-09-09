@@ -41,7 +41,7 @@ class StringParser {
         if (result) {
             const { valid_frame, function_code, data,valid_data_num } = result;
             // console.log('valid_frame',valid_frame);
-            if (valid_frame) {
+            if (valid_frame) {     // monitor 的校验位是固定死的
                 this.str = this.str.slice(valid_data_num); // 丢弃一个数据范围
                 return { function_code, data };
             }else {

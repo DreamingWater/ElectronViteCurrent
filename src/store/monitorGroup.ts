@@ -13,6 +13,10 @@ function createMonitorStore(id: string) {
             StoreData: {
                 BackPower: 0,        // 设定激光功率
                 WorkingStatus:0,
+                HeatTemperature : 0,
+                OuterTemperature : 0,
+                HeatHumidity : 0,
+                OuterHumidity : 0,
             } as MonitorType,
         }),
         getters: {

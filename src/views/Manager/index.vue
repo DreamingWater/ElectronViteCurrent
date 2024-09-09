@@ -2,6 +2,7 @@
   <div class="projects-section">
     <div class="section-body">
       <powerMonitor />
+      <humidtyTemperature />
     </div>
 
   </div>
@@ -13,6 +14,7 @@
 // import ListShowCase from "./listShowcase/listShowCase.vue";
 import {computed, onMounted, ref, unref} from 'vue';
 import powerMonitor from './monitor/powerMonitor.vue'
+import humidtyTemperature from './monitor/humidtyTemperature.vue'
 // 页面位置 和 页面 module
 import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
 
