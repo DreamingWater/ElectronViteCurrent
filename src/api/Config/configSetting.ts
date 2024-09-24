@@ -29,3 +29,9 @@ export const update_serial_auto_connect = ()=>{
     set_serial_store_port('Amplifier');
     set_serial_store_port('Manager');
 }
+
+export const read_config_temperature_humidity = () => {
+    const heat_temperature_threshold = config_file_data['HeatTemperature'] ?? 21; // 默认值 20 度
+    const outer_temperature_threshold = config_file_data['OuterTemperature'] ?? 27; // 默认值 26 度
+    return { heat_temperature_threshold, outer_temperature_threshold };
+}

@@ -5,14 +5,15 @@
        </div>
         <div class="section-body">
             <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE" card_name="PreAmplifier"/>
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO" card_name="Amplifier1rt"/>
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="Amplifier2nd"/>
-<!--          <template v-if="showCard" >-->
-<!--            <GiantSquid  @click="toggleShowCard"></GiantSquid>-->
-<!--          </template>-->
-<!--          <template v-else>-->
-<!--            <controlSetting :module_name="ModuleName" name="Amplifier" ></controlSetting>-->
-<!--          </template>-->
+<!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO" card_name="Amplifier1rt"/>-->
+<!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="Amplifier2nd"/>-->
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="PowerAmplifier"/>
+          <template v-if="showCard" >
+            <GiantSquid  @click="toggleShowCard"></GiantSquid>
+          </template>
+          <template v-else>
+            <controlSetting :module_name="ModuleName" name="Amplifier" ></controlSetting>
+          </template>
 
           <!-- <ShowCard CardLabel="LASER_TWO"/> -->
         </div>

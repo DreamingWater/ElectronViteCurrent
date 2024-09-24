@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import {ConfigManager} from "@/api/Config/configManager";
 import {schedulerSerial} from "@/api/scheduler/ScheSerial/schedulerPipeline";
 import { scheduler } from "@/api/scheduler/base/scheduler";
+import {read_config_temperature_humidity} from "../../Config/configSetting";
 
 export class ProtectionClass {
     private seedPurchasedStore: any;
@@ -16,10 +17,19 @@ export class ProtectionClass {
     private AllowCheckAmplifier = true;
     private serial_config_saving :boolean = false;
 
+    // 温度 和 湿度监测
+    private heat_temperature_threshold :number ;
+    private outer_temperature_threshold :number ;
+
     constructor(seedStore: any, amplifierStore: any, managerStore: any) {
         this.seedPurchasedStore = seedStore;
         this.amplifierGroupStore = amplifierStore;
         this.managerStore = managerStore;
+
+        // 读取温度和湿度的配置文件
+        const { heat_temperature_threshold, outer_temperature_threshold } = read_config_temperature_humidity();
+        this.heat_temperature_threshold = heat_temperature_threshold;
+        this.outer_temperature_threshold = outer_temperature_threshold;
     }
 
     checkAmplifierPower() {
@@ -53,8 +63,8 @@ export class ProtectionClass {
             } else if(this.AllowCheckAmplifier && (sampleAmplifierOneParams>this.THRESHOLD_Amplifier||sampleAmplifierTwoParams>this.THRESHOLD_Amplifier || sampleAmplifierThreeParams>this.THRESHOLD_Amplifier) ){
                 // this.AllowCheckAmplifier = false;
                // console.log('Amplifier-EnableStatus')
-                //console.log(scheduler.hasTask('Amplifier-EnableStatus'))
-1                //scheduler.hasTask('Amplifier-EnableStatus')
+                // console.log(scheduler.hasTask('Amplifier-EnableStatus'))
+                //scheduler.hasTask('Amplifier-EnableStatus')
                 if (!(scheduler.hasTask('Amplifier-channel1_shut_down') ||
                         scheduler.hasTask('Amplifier-channel2_shut_down') || scheduler.hasTask('Amplifier-channel3_shut_down')|| scheduler.hasTask('Amplifier-EnableStatus')
                 ))    // 如果没有关闭任务的话，就启动关闭任务
@@ -72,8 +82,8 @@ export class ProtectionClass {
 
     }
     checkManager() {
-        const AllowedAmplifierCurrent = 1100;   // 10 W 功率对应电流为多大
-        const Voltage_Limit = 0.3;   // 此时对应电压，正常情况下电压值应该高于这个值
+        const AllowedAmplifierCurrent = 800;   // 10 W 功率对应电流为多大
+        const Voltage_Limit = 0.4;   // 此时对应电压，正常情况下电压值应该高于这个值
         this.checkIntervalId = setInterval(() => {
 
 
@@ -123,6 +133,42 @@ export class ProtectionClass {
         }, 2000);
     }
 
+    checkTemperature()  {
+        this.checkIntervalId = setInterval(() => {
+            const heat_temperature:MonitorGettingDataModel = {
+                data_type: 'HeatTemperature'
+            };
+            const outer_temperature:MonitorGettingDataModel = {
+                data_type: 'OuterTemperature'
+            };
+            const sample_heat_temperature = this.managerStore.getTargetParameter(heat_temperature);
+            const sample_outer_temperature = this.managerStore.getTargetParameter(outer_temperature);
+
+            // 判断放大器3的状态
+            const get_current3_data:AmplifierGettingDataModel = {
+                data_type: 'PowerCurrent',
+                channel_name:  'THREE',
+                value_model: 'Current'
+            };
+            const sampleAmplifierThreeParams = this.amplifierGroupStore.getTargetParameter(get_current3_data); // 假设这是一个包含三个通道 setPower 的数组
+            console.log('sample_heat_temperature', sample_heat_temperature, 'sample_outer_temperature', sample_outer_temperature, 'this.heat_temperature_threshold', this.heat_temperature_threshold, 'this.outer_temperature_threshold', this.outer_temperature_threshold);
+            // 只有在放大器3开启的情况下才需要检测
+            if ((sample_heat_temperature > this.heat_temperature_threshold || sample_outer_temperature > this.outer_temperature_threshold) && sampleAmplifierThreeParams > 1000) {
+                    // 在这里，需要关闭放大器
+                    if (!scheduler.hasTask('Amplifier-channel3_shut_down') && !scheduler.hasTask('Amplifier-EnableStatus')
+                        && !scheduler.hasTask('Amplifier-channel2_shut_down'))    // 如果没有关闭任务的话，就启动关闭任务
+                    {
+                        schedulerSerial.addShutdownTask(1,this.amplifierGroupStore,null,'interval',true)     // 这个时间的设置是为了防止在关闭的时候，还有任务在执行
+                        Swal.fire({
+                            title: 'Error!',
+                            text: '环境温度异常，请检查！！!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+        }, 4000);
+    }
 
     stopCheck() {
         if (this.checkIntervalId) {

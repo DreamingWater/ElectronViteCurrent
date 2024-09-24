@@ -83,7 +83,7 @@
     const click_sender_circle_ = ()=>{
       if (enable_open_status.value){
         console.log('enable_open_status',enable_open_status.value);
-       // return;       // 没连接串口就不允许启动
+       return;       // 没连接串口就不允许启动
       }
       enable_status.value = enable_status.value === 1 ? 0 : 1;
       const send_value_package = JSON.parse(JSON.stringify(props.data_package));  // 除开关之外的包数据

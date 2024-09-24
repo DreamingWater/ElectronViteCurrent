@@ -21,7 +21,7 @@ const setMenu = ()=> {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
-// setMenu();
+setMenu();
 
 
 
@@ -79,7 +79,7 @@ async function createWindow() {
     height:mainWindowState.height,
     x:mainWindowState.x,
     y:mainWindowState.y,
-    // frame: false, // 隐藏标题栏和窗口控制按钮
+    frame: false, // 隐藏标题栏和窗口控制按钮
     title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {

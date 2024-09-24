@@ -50,7 +50,7 @@
    const min_value = ref(0);
    const valueMap = {
      'ONE': 20000,
-     'TWO': 40000,
+     'TWO': 10,
      'THREE': 40000
      
    };

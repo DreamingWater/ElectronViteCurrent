@@ -44,9 +44,9 @@ class SerialAmplifier {
     ShutdownAmplifierTask( interval: number, store:any=null,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval', Two_Step_Shutdown:boolean=false)
     {
 
-        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0,10000);   // 变化步长为20 W
-        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',0,5000);                     // 变化步长为 5 W
-        const shut_channel_one_data = this.set_amplifier_one_channel_data(store,other_instruct,'ONE',0,4000);                     // 变化步长为 5 W
+        const shut_channel_three_data = this.set_amplifier_one_channel_data(store,other_instruct,'THREE',0,Two_Step_Shutdown?0:5000);   // 变化步长为5 W
+        const shut_channel_two_data = this.set_amplifier_one_channel_data(store,other_instruct,'TWO',0,Two_Step_Shutdown?0:5000);                     // 变化步长为 5 W
+        const shut_channel_one_data = this.set_amplifier_one_channel_data(store,other_instruct,'ONE',0,Two_Step_Shutdown?0:4000);                     // 变化步长为 5 W
 
         // shutdown the amplifier module
         function shut_down_module(store:any=null,other_instruct: 'initial' | 'internal' | null=null) {
@@ -60,7 +60,7 @@ class SerialAmplifier {
             return module_shut_data;
         }
         const amplifier_module_shut_data = shut_down_module(store,other_instruct);
-        console.log('shut amplifier code is ', amplifier_module_shut_data)
+        // console.log('shut amplifier code is ', amplifier_module_shut_data)
 
         const amplifier_store_result = getStoreByPageLocation(PageLocationStateEnum.Amplifier);
         const this_amplifier_store_result = amplifier_store_result.store();
@@ -73,6 +73,7 @@ class SerialAmplifier {
             console.log('shut amplifier two step shutdown')
 
         }else {
+            // scheduler.addTask('Amplifier-EnableStatus', this_amplifier_store_result.sendSerialData, amplifier_module_shut_data, interval,executionMode);
 
             let amplifier_module_channel3_packaged_data = [ ...shut_channel_three_data, ...amplifier_module_shut_data];
             scheduler.addTask('Amplifier-channel3_shut_down', this_amplifier_store_result.sendSerialData, amplifier_module_channel3_packaged_data, interval,executionMode);
