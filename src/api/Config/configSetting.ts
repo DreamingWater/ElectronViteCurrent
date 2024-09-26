@@ -31,7 +31,7 @@ export const update_serial_auto_connect = ()=>{
 }
 
 export const read_config_temperature_humidity = () => {
-    const heat_temperature_threshold = config_file_data['HeatTemperature'] ?? 21; // 默认值 20 度
-    const outer_temperature_threshold = config_file_data['OuterTemperature'] ?? 27; // 默认值 26 度
+    const heat_temperature_threshold = config_file_data['HeatTemperature'] ?? 24.5; // 默认值 20 度
+    const outer_temperature_threshold = config_file_data['OuterTemperature'] ?? 30; // 默认值 26 度
     return { heat_temperature_threshold, outer_temperature_threshold };
 }

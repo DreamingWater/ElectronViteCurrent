@@ -14,7 +14,7 @@ const create_store_object = ()=>{
 
 const actions = {
     'd3': (dataString:string,store:any)=> {
-        console.log('find the status data come from the seeder');
+        //console.log('find the status data come from the seeder');
         let data = Buffer.from(dataString, 'hex');
         if(data.length===1){
             return
@@ -94,7 +94,7 @@ const actions = {
     },
     'c8': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
-        console.log('find the wavelength data come from the seeder')
+       // console.log('find the wavelength data come from the seeder')
         // 读取设置的波长
         if(data.length === 4){
             const read_wavelength = data.readUInt32LE(0) / 10000;
@@ -108,7 +108,7 @@ const actions = {
             }
         }
         if (data.length === 1 && data[0] === 0){
-            console.log('*******************************************************************************************************')
+         //   console.log('*******************************************************************************************************')
             scheduler.cancelTask('Seed-WorkingWavelength');
         }
 
@@ -131,9 +131,9 @@ const actions = {
 export function add_seed_purchased_serial_data_parser(seed_purchased_serial_parser:any) {
     console.log('add_seed_purchased_serial_data_parser');
     seed_purchased_serial_parser.on('data', data => {
-        console.log('Received data from port:', data);
+        //console.log('Received data from port:', data);
         const result = seed_purchased_parser.append_data_parser(data);
-        console.log('Received data from port:', result);
+      //  console.log('Received data from port:', result);
         if(result && actions[result.function_code]){
             const store = create_store_object();
             actions[result.function_code](result.data,store);

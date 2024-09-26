@@ -45,7 +45,7 @@ const actions = {
         }
         store.setTargetParameter(set_oscillator_temperature);
         // 打印方便观测数据
-        console.log(receiveLaserStatus);
+      //  console.log(receiveLaserStatus);
     },
 }
 
@@ -53,7 +53,7 @@ export function add_oscillator_serial_data_parser(oscillator_serial_parser:any) 
     console.log('add_oscillator_serial_data_parser');
 
     oscillator_serial_parser.on('data', (data) => {
-        console.log('Received data from port:',data);
+       // console.log('Received data from port:',data);
         const result = oscillator_parser.append_data_parser(data);
         if(result && actions[result.function_code]){
             const store = create_store_object();

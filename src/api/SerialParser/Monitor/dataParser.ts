@@ -62,11 +62,11 @@ export function add_monitor_serial_data_parser(monitor_serial_parser:any) {
     console.log('add_monitor_serial_data_parser');
 
     monitor_serial_parser.on('data', (data) => {
-        console.log('Received data from port:',data);
+      //  console.log('Received data from port:',data);
         const result = monitor_parser.append_data_parser(data);
         if(result && actions[result.function_code]){
             const store = create_store_object();
-            console.log('parse the data is :',result);
+           // console.log('parse the data is :',result);
             actions[result.function_code](result.data, store);
         }
     });

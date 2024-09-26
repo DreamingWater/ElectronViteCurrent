@@ -22,8 +22,7 @@ function setCloseWindow (){
 }
 
 ipcRenderer.on('time_reload', (event, time_reload) => {
-    // console.log('time_reload', time_reload);
-    //document.getElementById('time_reload').value = time_reload;
+    // console.log('time_reload_set value from electorn', time_reload);
+    // document.getElementById('time_reload').value = time_reload;
     localStorage.setItem('time_reload', time_reload);
-
 });

@@ -37,6 +37,8 @@ class SerialController {
             'data_type':'Port',
         } ;
         const PORT = store.getTargetParameter(search_port_key);
+        // console.log('auto Connect the serial port:',PORT);
+        // console.log('shutdown the serial connect action');
         connectAndInitializeSerial(PORT, store, this_page_store.flag, PageLocationStateEnum[name]);
     }
     auto_connect_serial(){
@@ -46,11 +48,32 @@ class SerialController {
             this.serial_auto_config(name);
         })
     }
+
     auto_connect_serial_when_dead(name:string){
         const value = localStorage.getItem('time_reload');
-        console.log('time_reload',value);
-        if(value != '0' ){
-            this.auto_connect_serial();
+        function isValidUTC(dateString: string): boolean {
+            // Regular expression to validate UTC date format
+            const utcRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z$/;
+            return utcRegex.test(dateString);
+        }
+        function getTimeDifferenceInSeconds(time1: string, time2: string): number {
+            const date1 = new Date(time1);
+            const date2 = new Date(time2);
+            const differenceInMilliseconds = Math.abs(date2.getTime() - date1.getTime());
+            const differenceInSeconds = differenceInMilliseconds / 1000;
+            return differenceInSeconds;
+        }
+
+// Example usage:
+//         const value = '2023-10-01T12:00:00Z'; // Example UTC time from backend
+        const currentUTCTime = new Date().toISOString();
+        // console.log('time_reload', value);
+        // console.log('currentUTCTime', currentUTCTime);
+        if (isValidUTC(value)) {
+            const timeDifference = getTimeDifferenceInSeconds(value, currentUTCTime);
+            if (timeDifference > 10) {       // 开机时间大约是5s左右，我这里设置10s后如果渲染页面刷新就启动串口重新连接
+                this.auto_connect_serial();
+            }
         }
     }
     //

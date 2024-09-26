@@ -31,7 +31,7 @@ class StringParser {
                 this.str = this.str.slice(delimiterIndex); // 丢弃前面的字符
             }
         }
-        console.log('this.str is this',this.str);
+       // console.log('this.str is this',this.str);
         // 执行到这里就说明 已经 find the delimiter
         if (this.delimiter === '55aa') {
             result = HYParseFrameData(this.str);

@@ -62,7 +62,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                         this.Serial_Data.SerialObject.write(data);
                     }catch (e) {console.log(e);}
                 }
-                console.log('模拟串口发送：',data.toString('hex'));
+               // console.log('模拟串口发送：',data.toString('hex'));
             },
             // 成功连接、断开串口后配置store
             changeSerialConnectState(serial_object:any, serial_parser:any, isOpen_value: boolean, port:string) {

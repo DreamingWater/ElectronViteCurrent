@@ -29,7 +29,7 @@ const regexHandlers = {
         } else {
             store.setTargetParameter({'data_type':'EnableStatus', value: 1} as TemperatureSettingDataModel);
         }
-        console.log(`采样温度：${sample_temperature}-设定温度：${working_temperature}`);
+      //  console.log(`采样温度：${sample_temperature}-设定温度：${working_temperature}`);
         scheduler.cancelTask('TemperaturePPLN-DataUpload');
         },
     'P:(.*?) I:(.*?) D:(.*?)$': (result:any,store:any) => {  // P:50 I:15 D:20
@@ -37,13 +37,13 @@ const regexHandlers = {
         store.setTargetParameter({ 'data_type':'WorkingProportional', value: result[1]} as TemperatureSettingDataModel);
         store.setTargetParameter({ 'data_type':'WorkingIntegral', value: result[2]} as TemperatureSettingDataModel);
         store.setTargetParameter({ 'data_type':'WorkingDerivative', value: result[3]} as TemperatureSettingDataModel);
-        console.log(`pid数据:${data_p}-${data_i}-${data_d}`);
+        //console.log(`pid数据:${data_p}-${data_i}-${data_d}`);
         scheduler.cancelTask('TemperaturePPLN-ReadPID');
     },
     'M(.*?)': (result:any,store:any) => {
         if(result) {
             store.setTargetParameter({'data_type':'HeaterCoolerStatus', value: result[1]} as TemperatureSettingDataModel);
-            console.log('返回工作模式:', result[1]);
+         //   console.log('返回工作模式:', result[1]);
             // scheduler.cancelTask('TemperaturePPLN-ReadCOOLER');
         }
     }
@@ -61,7 +61,7 @@ const dealData = (data:any, store:any) => {
 export function add_temperature_serial_data_parser(temperature_serial_parser:any) {
     console.log('add_temperature_serial_data_parser');
     temperature_serial_parser.on('data', data => {
-        console.log('Received data from port:', data);
+       // console.log('Received data from port:', data);
         const temperature_store = create_store_object();
         dealData(data,temperature_store);
     });

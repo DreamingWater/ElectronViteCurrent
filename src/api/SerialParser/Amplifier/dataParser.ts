@@ -54,7 +54,7 @@ const actions = {
         }
         store.setTargetParameter(set_amplifier_enableStatus);
         // 打印方便观测数据
-        console.log(receiveLaserStatus);
+       // console.log(receiveLaserStatus);
     },
     'c4': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
@@ -74,7 +74,7 @@ const actions = {
         }else if(data[0] === 3){
             scheduler.cancelTask('Amplifier-ReadChannel3Power');
         }
-        console.log(set_amplifier_working_power)
+       // console.log(set_amplifier_working_power)
         store.setTargetParameter(set_amplifier_working_power);
     }
 }
@@ -83,7 +83,7 @@ export function add_amplifier_serial_data_parser(amplifier_serial_parser:any) {
     console.log('add_amplifier_serial_data_parser');
 
     amplifier_serial_parser.on('data', (data) => {
-        console.log('Received data from port:',data);
+        // console.log('Received data from port:',data);
         const result = amplifier_parser.append_data_parser(data);
         if(result && actions[result.function_code]){
             const store = create_store_object();

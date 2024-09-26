@@ -32,6 +32,7 @@
     import { update_serial_config } from "@/api/Config/configSetting";
     import { useMonitorStore } from "@/store/monitorGroup";
     import { serial_controller } from "@/api/SerialChooser/chooserSend";
+    import { onMounted } from "vue";
 
 
     const amplifier_store = useAmplifierGroupStore();       // store
@@ -46,11 +47,12 @@
 
     update_serial_config();     // 开机的时候自动读取config文件的内容
     //   localStorage.getItem('time_reload');
-    serial_controller.auto_connect_serial_when_dead()
-  // onMounted(()=>{
-      //   add_script('/src/preload/serialControl.ts')
-      //   add_script('/src/preload/render.js')
-      // })
+
+    onMounted(()=>{
+         setTimeout(()=>{
+           serial_controller.auto_connect_serial_when_dead();
+         },2000)
+        })
 </script>
 
 <style lang="css" scoped>

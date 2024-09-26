@@ -48,7 +48,8 @@ if (!app.requestSingleInstanceLock()) {
 // Read more on https://www.electronjs.org/docs/latest/tutorial/security
 // process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true'
 let child:any;
-let time_reload:number = 0;
+const currentUTCTime = new Date().toISOString(); // 获取软件启动的当前时间
+
 let win: BrowserWindow | null = null
 // let win: BrowserWindow | null = null
 let startWin: BrowserWindow | null = null
@@ -132,12 +133,12 @@ async function createWindow() {
     console.error('Render process crashed:', details);
     // 可以选择在这里重启渲染进程
     win.reload();
-    time_reload += 1;
+
     // 监听窗口加载完成事件
 
   });
   win.webContents.on('did-finish-load', () => {
-    win.webContents.send('time_reload', time_reload);
+    win.webContents.send('time_reload', currentUTCTime);
   });
   // win.webContents.on('will-navigate', (event, url) => { }) #344
 }

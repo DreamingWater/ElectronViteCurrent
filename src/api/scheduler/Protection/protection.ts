@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import {ConfigManager} from "@/api/Config/configManager";
 import {schedulerSerial} from "@/api/scheduler/ScheSerial/schedulerPipeline";
 import { scheduler } from "@/api/scheduler/base/scheduler";
-import {read_config_temperature_humidity} from "../../Config/configSetting";
+import {read_config_temperature_humidity, update_serial_auto_connect} from "../../Config/configSetting";
 
 export class ProtectionClass {
     private seedPurchasedStore: any;
@@ -58,6 +58,25 @@ export class ProtectionClass {
             const sampleAmplifierThreeParams = this.amplifierGroupStore.getTargetParameter(get_current3_data); // 假设这是一个包含三个通道 setPower 的数组
 
             if (sampleSeedPower > this.THRESHOLD_Seed) {
+                // 如果放大器先开2 再开一的话也不行
+                if(sampleAmplifierOneParams<this.THRESHOLD_Amplifier && sampleAmplifierThreeParams>this.THRESHOLD_Amplifier){
+                    if (!(scheduler.hasTask('Amplifier-channel1_shut_down') ||
+                        scheduler.hasTask('Amplifier-channel2_shut_down') || scheduler.hasTask('Amplifier-channel3_shut_down')|| scheduler.hasTask('Amplifier-EnableStatus')
+                    ))    // 如果没有关闭任务的话，就启动关闭任务
+                    {
+                        schedulerSerial.addShutdownTask(1,this.amplifierGroupStore,null,'interval',true)     // 这个时间的设置是为了防止在关闭的时候，还有任务在执行
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Open pre-amplifier first!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                }
+                // if(sampleAmplifierOneParams>this.THRESHOLD_Amplifier){
+                //     update_serial_auto_connect();
+                //     console.log('write config to serial file...')
+                // }
                 // 如果 samplePower 低于阈值，不允许设置 setPower
                 // 在这里，你可以添加阻止设置 setPower 的代码
             } else if(this.AllowCheckAmplifier && (sampleAmplifierOneParams>this.THRESHOLD_Amplifier||sampleAmplifierTwoParams>this.THRESHOLD_Amplifier || sampleAmplifierThreeParams>this.THRESHOLD_Amplifier) ){
@@ -106,7 +125,7 @@ export class ProtectionClass {
                         'Amplifier': manager.get_serial_store_port('Amplifier'),
                         'Manager': manager.get_serial_store_port('Manager'),
                     });
-                    console.log('Updated the serial config');
+                    console.log('Updated the serial config file:', result);
                 }
 
                 // 第三级 开光之后 才需要启动检测
@@ -151,7 +170,7 @@ export class ProtectionClass {
                 value_model: 'Current'
             };
             const sampleAmplifierThreeParams = this.amplifierGroupStore.getTargetParameter(get_current3_data); // 假设这是一个包含三个通道 setPower 的数组
-            console.log('sample_heat_temperature', sample_heat_temperature, 'sample_outer_temperature', sample_outer_temperature, 'this.heat_temperature_threshold', this.heat_temperature_threshold, 'this.outer_temperature_threshold', this.outer_temperature_threshold);
+            // console.log('sample_heat_temperature', sample_heat_temperature, 'sample_outer_temperature', sample_outer_temperature, 'this.heat_temperature_threshold', this.heat_temperature_threshold, 'this.outer_temperature_threshold', this.outer_temperature_threshold);
             // 只有在放大器3开启的情况下才需要检测
             if ((sample_heat_temperature > this.heat_temperature_threshold || sample_outer_temperature > this.outer_temperature_threshold) && sampleAmplifierThreeParams > 1000) {
                     // 在这里，需要关闭放大器
