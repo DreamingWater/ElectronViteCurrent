@@ -19,7 +19,7 @@ class SerialOscillator {
         }]
         const packaged_heart_data = serial_data_package_factory(heart_package, PageLocationStateEnum.Oscillator, other_instruct);
         let heart_package_name = `${packaged_heart_data[packaged_heart_data.length-1]['data_type']}`;
-        // console.log('packaged_heart_data',packaged_heart_data);
+        // console.log('packaged_heart_data',packaged_heart_data.toString('hex'));
         scheduler.addTask(heart_package_name, serial_store.sendSerialData, packaged_heart_data, interval,executionMode);
     }
 

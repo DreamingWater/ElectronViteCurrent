@@ -1,16 +1,13 @@
 class TransportData {
     length: Buffer;
     data: Buffer;
-    constructor() {
-        this.length = Buffer.alloc(0);
-        this.data = Buffer.alloc(0);
+    constructor(package_data?: Buffer) {
+        this.data = package_data || Buffer.alloc(0);
+        this.length = Buffer.alloc(2);
+        this.length.writeUInt16LE(this.data.length, 0);
     }
     combined_data(): Buffer {
         return Buffer.concat([this.length, this.data]);
-    }
-    deal_data(): void {
-        this.length = Buffer.alloc(2);
-        this.length.writeUInt16LE(this.data.length, 0);
     }
 }
 
@@ -19,11 +16,11 @@ class TransportFunction  {
     function_code: Buffer;
     function_index: Buffer;
     package_data: TransportData;
-    constructor() {
+    constructor(valid_data: Buffer) {
         this.function_data_length = Buffer.alloc(2);
         this.function_code = Buffer.alloc(2);
         this.function_index = Buffer.alloc(2);
-        this.package_data = new TransportData();
+        this.package_data = new TransportData(valid_data);
     }
     combined_data(): Buffer {
         this.deal_data()
@@ -35,7 +32,8 @@ class TransportFunction  {
     deal_data(): void {
         this.function_data_length = Buffer.alloc(2);
         let packed_data = this.package_data.combined_data();
-        this.function_data_length.writeUInt16LE(packed_data.length+6, 0); // function 包长度
+        // console.log('packed_data used is',packed_data.toString('hex'));
+        this.function_data_length.writeUInt16LE(packed_data.length+4, 0); // function 包长度
         // Increment function_index
         let index = this.function_index.readUInt16LE(0);
         this.function_index.writeUInt16LE(index + 1, 0);
@@ -45,20 +43,20 @@ class TransportFunction  {
 export class RXProtocolClass {
     frame_head: Buffer;
     protocol_version: Buffer;
-    data_package: TransportData;
+    package_valid_data: Buffer;
     mac_address: Buffer;
     function_code: Buffer;
     function_code_sequence: Buffer;
     frame_tail: Buffer;
 
-    constructor() {
+    constructor(valid_data: Buffer) {
         this.frame_head = Buffer.from([0x53, 0x54]);   // 帧数 头
-        this.protocol_version =  Buffer.from([0x53, 0x54]);   // 协议版本
-        this.data_package = new TransportData();
-        this.mac_address = Buffer.from([0xEE,0xEE,0xEE,0xEE,0xEE,0xEE]);   // MAC 地址
+        this.protocol_version =  Buffer.from([0x01, 0x00]);   // 协议版本
+        this.package_valid_data = valid_data;  // 数据包
+        this.mac_address = Buffer.from([0xE1,0xE2,0xE3,0xE4,0xE5,0xE6]);   // MAC 地址
         this.function_code = Buffer.alloc(2);  // 功能码2Byte
         this.function_code_sequence = Buffer.alloc(2);  // 功能码序号2Byte
-        this.frame_tail = Buffer.from([0x45, 0x46]);  // 帧尾
+        this.frame_tail = Buffer.from([0x45, 0x44]);  // 帧尾
     }
     crc_check(data: Buffer): Buffer {
         let crc = 0;
@@ -81,11 +79,11 @@ export class RXProtocolClass {
         crcBytes.writeUInt16LE(crc, 0);
         return crcBytes;
     }
-    combine_data(control_code:Buffer, function_code:Buffer ,valid_data:Buffer): Buffer {
-        let function_data_package = new TransportFunction();
+    combine_data(control_code:Buffer, function_code:Buffer): Buffer {
+        let function_data_package = new TransportFunction(this.package_valid_data );
         function_data_package.function_code = function_code;
-        function_data_package.package_data.data = valid_data;
         let packaged_function_data = function_data_package.combined_data();
+        // console.log('packaged_function_data',packaged_function_data.toString('hex'));
         let data_for_crc_before = Buffer.concat([
             this.frame_head,
             this.protocol_version,
@@ -102,7 +100,7 @@ export class RXProtocolClass {
 }
 
 export const RX_generate_package_buffer = (control_code:Buffer,function_code:Buffer,data:Buffer )=>{
-    let protocol = new RXProtocolClass();
-    let result:Buffer = protocol.combine_data(control_code,function_code,data);
+    let protocol = new RXProtocolClass(data);
+    let result:Buffer = protocol.combine_data(control_code,function_code);
     return result
 }

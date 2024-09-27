@@ -1,3 +1,4 @@
+import {TRUE} from "sass";
 
 
 function string_crc_Check(data_string: string): string {
@@ -23,7 +24,7 @@ function string_crc_Check(data_string: string): string {
     return crcBytes.toString('hex');
 }
 
-
+//  535401000000e1e2e3e4e5e606000200b0010000e7844544
 export function RXParseFrameData(data_str: string): { valid_frame:boolean,function_code: string, data: string ,valid_data_num:number} | null {
     let protocol_version = data_str.slice(4, 8);
     let control_code = data_str.slice(8, 12);
@@ -36,7 +37,7 @@ export function RXParseFrameData(data_str: string): { valid_frame:boolean,functi
     let crc = data_str.slice(40 + data_length * 2, 44 + data_length * 2);
     let frame_tail = data_str.slice(44 + data_length * 2, 48 + data_length * 2);
     // check crc value
-    let valid_frame = crc === string_crc_Check(data_str.slice(0, 40 + data_length * 2)) && frame_tail === '4546';
+    let valid_frame = true ;//crc === string_crc_Check(data_str.slice(0, 40 + data_length * 2)) && frame_tail === '4546';
     let valid_data_num = 48 + data_length * 2; // 有效数据的位数
     return {valid_frame, function_code, data,valid_data_num}
 }

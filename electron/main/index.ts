@@ -3,7 +3,7 @@ import { release } from 'node:os'
 import { join } from 'node:path'
 import windowStateKeeper from 'electron-window-state'
 // 调试
-//import { installExtension, VUEJS_DEVTOOLS } from '@tomjs/electron-devtools-installer';
+import { installExtension, VUEJS_DEVTOOLS ,VUEJS_DEVTOOLS_BETA} from '@tomjs/electron-devtools-installer';
 
 //
 // ├─┬ dist-electron
@@ -21,7 +21,7 @@ const setMenu = ()=> {
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
 }
-setMenu();
+// setMenu();
 
 
 
@@ -80,7 +80,7 @@ async function createWindow() {
     height:mainWindowState.height,
     x:mainWindowState.x,
     y:mainWindowState.y,
-    frame: false, // 隐藏标题栏和窗口控制按钮
+    // frame: false, // 隐藏标题栏和窗口控制按钮
     title: 'LaserController',
     // icon: join(process.env.PUBLIC, 'favicon.ico'),
     webPreferences: {
@@ -153,15 +153,15 @@ async function  loadingWindow() {
     resizable: false,
     webPreferences: { experimentalFeatures: true },
   });
-  
+
   //startWin.loadURL('http://baidu.com');
   startWin.loadURL(join(process.env.PUBLIC, 'loader.html'));
   startWin.show();
   startWin.setAlwaysOnTop(true);
 
- 
 
-  
+
+
   // 延迟2秒可以根据情况后续调快，= =，就相当于个，sleep吧，就那种。 = =。。。
   setTimeout(() => {
 
@@ -171,9 +171,9 @@ async function  loadingWindow() {
 }
 // 程序开始时候启动loading 效果
 app.whenReady().then(() => {
-  // installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
-  //     .then(ext => console.log(`Added Extension:  ${ext.name}`))
-  //     .catch(err => console.log('An error occurred: ', err));
+  installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
+      .then(ext => console.log(`Added Extension:  ${ext.name}`))
+      .catch(err => console.log('An error occurred: ', err));
   loadingWindow();
 })
 

@@ -48,11 +48,11 @@
     update_serial_config();     // 开机的时候自动读取config文件的内容
     //   localStorage.getItem('time_reload');
 
-    onMounted(()=>{
-         setTimeout(()=>{
-           serial_controller.auto_connect_serial_when_dead();
-         },2000)
-        })
+    // onMounted(()=>{
+    //      setTimeout(()=>{
+    //        serial_controller.auto_connect_serial_when_dead();
+    //      },2000)
+    //     })
 </script>
 
 <style lang="css" scoped>

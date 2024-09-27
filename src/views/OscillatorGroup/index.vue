@@ -2,6 +2,7 @@
   <div class="projects-section">
     <div class="section-body">
       <oscillatorView />
+
     </div>
   </div>
 </template>
@@ -10,6 +11,7 @@
 
 import {computed, onMounted, ref, unref} from 'vue';
 import oscillatorView from './oscillatorView.vue'
+
 // 页面位置 和 页面 module
 import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
 

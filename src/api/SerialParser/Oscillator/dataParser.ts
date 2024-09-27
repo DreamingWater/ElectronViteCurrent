@@ -18,6 +18,7 @@ const actions = {
         if(dataString.length === 0){
             // 需要回复💓
         }
+        console.log('心跳功能');
        serialOscillator.HeartReplyTask(0,null,'once');
     },
     // 正常数据上报
@@ -53,8 +54,9 @@ export function add_oscillator_serial_data_parser(oscillator_serial_parser:any) 
     console.log('add_oscillator_serial_data_parser');
 
     oscillator_serial_parser.on('data', (data) => {
-       // console.log('Received data from port:',data);
+       console.log('Received data from port:',data);
         const result = oscillator_parser.append_data_parser(data);
+        console.log('result',result);
         if(result && actions[result.function_code]){
             const store = create_store_object();
             actions[result.function_code](result.data, store);

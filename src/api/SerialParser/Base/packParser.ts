@@ -66,7 +66,7 @@ export const seed_purchased_parser = new StringParser('55aa');
 export const amplifier_parser = new StringParser('55aa');
 export const monitor_parser = new StringParser('55aa');
 export const oscillator_parser = new StringParser('5354'); // 帧头
-
+// 535401000000e1e2e3e4e5e606000200980100006a364544
 
 const actions = {
     [PageLocationStateEnum.Oscillator]: (received_data: string) => {

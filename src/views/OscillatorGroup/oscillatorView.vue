@@ -11,6 +11,7 @@
       </div>
       <template v-if="swichLineOff">
         <!--        <ShowFoldLine  :childname="CardLabel" property="temprature"/>-->
+<!--       -->
       </template>
 
       <div class="project-box-content-header" v-if="!swichLineOff">
@@ -21,17 +22,20 @@
           <ChargeView :childname="CardLabel"> </ChargeView>
         </div>
       </div>
+      <settingCard  module_name="oscillator"/>
 
     </div>
+
   </div>
 </template>
 <script lang='ts' setup>
 import ChargeView from '@/components/showContent/ChargeCard.vue'
 import TempratureView from '@/components/showContent/TemperatureDisk.vue'
 // import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
+import settingCard from '@/views/OscillatorGroup/SettingCard/index.vue'
 import { ref } from 'vue';
 
-const CardLabel = 'cardnale';
+const CardLabel = '振荡器';
 
 const swichLineOff = ref(false);
 </script>
@@ -47,11 +51,11 @@ button, a {
 
 .project-box-wrapper {
   height: 100%;
-  height: 100%;
+  width: 100%;
 }
 .project-box{
-  height: 100%;
-  height: 100%;
+  //height: 100%;
+  width: 100%;
 }
 
 .project-boxes.jsGridView .project-box-wrapper {

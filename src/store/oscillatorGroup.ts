@@ -13,7 +13,7 @@ function createOscillatorStore(id: string) {
                 WorkingCurrent: 20000,
 
                 SamplingTemperature: 0,
-                SamplingCurrent: 0,
+                SamplingCurrent: 10,
                 SamplingTemperatureList:[0,0,0,0],
                 StepTemperature: 0.1,  // 温度的调节步长
                 StepCurrent: 0.1,      // 电流的调节步长

@@ -23,6 +23,7 @@ export const initial_oscillator_package = () => {
     syn_time_buffer.writeUInt32LE(1000, 0);
     const synchronization = RX_generate_package_buffer(Buffer.from([0x00,0x00]), Buffer.from([0x01,0x00]),syn_time_buffer)
     instruct.push([{ data_type: 'Oscillator-Synchronization', data: synchronization }])
+    console.log(synchronization.toString('hex'))
 
     //开启数据上报
     const data_report_time_buffer = Buffer.alloc(4);
@@ -34,7 +35,7 @@ export const initial_oscillator_package = () => {
     // 实时控制
     const realtime_control = RX_generate_package_buffer(Buffer.from([0x00,0x00]), Buffer.from([0x01, 0x02]),Buffer.from([0x01]))
     instruct.push([{ data_type: 'Oscillator-RealtimeControl', data: realtime_control }])
-
+    console.log('oscillator_list_package_sender',instruct);
     return instruct as Buffer[];
 }
 

@@ -18,11 +18,11 @@
 
 <script lang='ts' setup>
                   import ChargeView from '@/components/showContent/ChargeCard.vue'
-import TempratureView from '@/components/showContent/TemperatureDisk.vue'
+// import TempratureView from '@/components/showContent/TemperatureDisk.vue'
 import InputView from  '@/components/component/InputView.vue'
-import SwitchButtonView from  '@/components/component/switchview.vue'
+// import SwitchButtonView from  '@/components/component/switchview.vue'
 import SendButtonView from  '@/components/component/SendButtonView.vue'
-import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
+// import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
 import SwitchButtons from  '@/components/component/switchinput.vue'
 import { ref } from 'vue';
 

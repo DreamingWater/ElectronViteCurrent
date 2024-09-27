@@ -56,6 +56,9 @@ function askForSerialConnection(portPath, baudRate, hexData = 'str') {
         parser = port.pipe(new ReadlineParser({ delimiter: Buffer.from([0x55, 0xAA]), includeDelimiter: true, encoding: "hex" }));
     } else if(hexData === '01C0') {
         parser = port.pipe(new ReadlineParser({ delimiter: Buffer.from([0x01, 0xC0]), includeDelimiter: true, encoding: "hex" }));
+    }else if(hexData === '4544') {
+        console.log('oscillator enabled');
+        parser = port.pipe(new ReadlineParser({ delimiter: Buffer.from([0x45, 0x44]), includeDelimiter: true, encoding: "hex" }));
     }
 
     return { port, parser };
