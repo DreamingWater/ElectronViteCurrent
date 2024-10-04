@@ -1,43 +1,42 @@
 <template>
   <div class="project-box-wrapper">
     <div class="project-box" style="background-color: #fee4cb;">
-      <div class="project-box-header">
-        <span>{{ CardLabel }}</span>
-        <div class="more-wrapper">
-          <div class="project-btn-more">
-            <!--            <SwitchButtonView @getValue="changeSwitchValue" :childname="CardLabel"/>-->
-          </div>
-        </div>
-      </div>
-      <template v-if="swichLineOff">
-        <!--        <ShowFoldLine  :childname="CardLabel" property="temprature"/>-->
-<!--       -->
-      </template>
-
-      <div class="project-box-content-header" v-if="!swichLineOff">
-        <div class="temprature-show">
-          <TempratureView :childname="CardLabel" :temperature_value="10"/>
-        </div>
-        <div class="current-show">
-          <ChargeView :childname="CardLabel"> </ChargeView>
-        </div>
-      </div>
-      <settingCard  module_name="oscillator"/>
+      <Cardhead :module_name="module_name" :name="CardLabel" />
+      <settingCard  :module_name="module_name"/>
 
     </div>
 
   </div>
 </template>
+
 <script lang='ts' setup>
-import ChargeView from '@/components/showContent/ChargeCard.vue'
-import TempratureView from '@/components/showContent/TemperatureDisk.vue'
-// import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
-import settingCard from '@/views/OscillatorGroup/SettingCard/index.vue'
-import { ref } from 'vue';
+  import ChargeView from '@/components/showContent/ChargeCard.vue'
+  import TempratureView from '@/components/showContent/TemperatureDisk.vue'
+  import Cardhead from "@/views/OscillatorGroup/CardHead/cardhead.vue";
 
-const CardLabel = '振荡器';
+  // import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
+  import settingCard from '@/views/OscillatorGroup/SettingCard/index.vue'
+  import { ref } from 'vue';
 
-const swichLineOff = ref(false);
+  const CardLabel = 'Oscillator';
+
+  const swichLineOff = ref(false);
+
+  import { useOscillatorGroupStore } from "@/store/oscillatorGroup";
+  import {
+    OscillatorSettingDataModel,
+    OscillatorGettingDataModel} from '@/types/oscillator';
+
+  const oscillator_store = useOscillatorGroupStore();
+
+  const props = defineProps({
+    module_name: { type: null, required: true },
+    name: { type: String, default: 'None-name' },
+  });
+  // @ts-nocheck
+
+
+
 </script>
 
 <style lang="css" scoped>
@@ -71,27 +70,7 @@ button, a {
 .project-boxes.jsListView .project-box > * {
   margin-right: 24px;
 }
-.project-boxes.jsListView .more-wrapper {
-  position: absolute;
-  right: 16px;
-  top: 16px;
-}
 
-.project-boxes.jsListView .project-box-header {
-  order: 2;
-}
-.project-boxes.jsListView .project-box-footer {
-  order: 3;
-  padding-top: 0;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-.project-boxes.jsListView .project-box-footer:after {
-  display: none;
-}
-.project-boxes.jsListView .participants {
-  margin-bottom: 8px;
-}
 
 .project-boxes.jsListView .project-box-header > span {
   position: absolute;
@@ -99,10 +78,7 @@ button, a {
   left: 16px;
   font-size: 12px;
 }
-.project-boxes.jsListView .box-progress-wrapper {
-  order: 3;
-  flex: 1;
-}
+
 
 .project-box {
   --main-color-card: #dbf6fd;
@@ -120,8 +96,8 @@ button, a {
 .project-box-header span {
   color: #4A4A4A;
   opacity: 0.7;
-  font-size: 14px;
-  line-height: 16px;
+  font-size: 24px;
+  line-height: 48px;
 }
 
 
@@ -132,9 +108,6 @@ button, a {
 
 .project-btn-more {
   padding: 0;
-  height: 14px;
-  width: 24px;
-  height: 24px;
   position: relative;
   background-color: transparent;
   border: none;
@@ -226,7 +199,6 @@ button, a {
 }
 </style>
 
-
 <style lang="scss" scoped>
 // swith 选择框
 $primary-light: #8abdff;
@@ -298,6 +270,7 @@ $greyDark: #9baacf;
   }
 }
 </style>
+
 <style scoped lang="scss">
 
 .project-box-content-header {

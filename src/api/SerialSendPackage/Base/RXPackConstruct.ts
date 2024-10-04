@@ -16,10 +16,10 @@ class TransportFunction  {
     function_code: Buffer;
     function_index: Buffer;
     package_data: TransportData;
-    constructor(valid_data: Buffer) {
+    constructor(valid_function_code:Buffer, valid_function_index:Buffer,valid_data: Buffer) {
         this.function_data_length = Buffer.alloc(2);
-        this.function_code = Buffer.alloc(2);
-        this.function_index = Buffer.alloc(2);
+        this.function_code = valid_function_code;
+        this.function_index = valid_function_index;
         this.package_data = new TransportData(valid_data);
     }
     combined_data(): Buffer {
@@ -35,8 +35,8 @@ class TransportFunction  {
         // console.log('packed_data used is',packed_data.toString('hex'));
         this.function_data_length.writeUInt16LE(packed_data.length+4, 0); // function 包长度
         // Increment function_index
-        let index = this.function_index.readUInt16LE(0);
-        this.function_index.writeUInt16LE(index + 1, 0);
+        // let index = this.function_index.readUInt16LE(0);
+        // this.function_index.writeUInt16LE(index + 1, 0);
     }
 }
 
@@ -46,16 +46,17 @@ export class RXProtocolClass {
     package_valid_data: Buffer;
     mac_address: Buffer;
     function_code: Buffer;
-    function_code_sequence: Buffer;
+    function_code_index: Buffer;
     frame_tail: Buffer;
 
-    constructor(valid_data: Buffer) {
+    constructor(function_index:number,valid_data: Buffer) {
         this.frame_head = Buffer.from([0x53, 0x54]);   // 帧数 头
         this.protocol_version =  Buffer.from([0x01, 0x00]);   // 协议版本
         this.package_valid_data = valid_data;  // 数据包
         this.mac_address = Buffer.from([0xE1,0xE2,0xE3,0xE4,0xE5,0xE6]);   // MAC 地址
         this.function_code = Buffer.alloc(2);  // 功能码2Byte
-        this.function_code_sequence = Buffer.alloc(2);  // 功能码序号2Byte
+        this.function_code_index = Buffer.alloc(2);  // 功能码序号2Byte
+        this.function_code_index.writeUInt16LE(function_index);
         this.frame_tail = Buffer.from([0x45, 0x44]);  // 帧尾
     }
     crc_check(data: Buffer): Buffer {
@@ -79,9 +80,9 @@ export class RXProtocolClass {
         crcBytes.writeUInt16LE(crc, 0);
         return crcBytes;
     }
+
     combine_data(control_code:Buffer, function_code:Buffer): Buffer {
-        let function_data_package = new TransportFunction(this.package_valid_data );
-        function_data_package.function_code = function_code;
+        let function_data_package = new TransportFunction( function_code, this.function_code_index,  this.package_valid_data );
         let packaged_function_data = function_data_package.combined_data();
         // console.log('packaged_function_data',packaged_function_data.toString('hex'));
         let data_for_crc_before = Buffer.concat([
@@ -99,8 +100,8 @@ export class RXProtocolClass {
     }
 }
 
-export const RX_generate_package_buffer = (control_code:Buffer,function_code:Buffer,data:Buffer )=>{
-    let protocol = new RXProtocolClass(data);
+export const RX_generate_package_buffer = (control_code:Buffer,function_code:Buffer,function_index:number,data:Buffer )=>{
+    let protocol = new RXProtocolClass(function_index,data);
     let result:Buffer = protocol.combine_data(control_code,function_code);
     return result
 }

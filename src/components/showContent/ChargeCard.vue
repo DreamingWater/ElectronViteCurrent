@@ -1,7 +1,9 @@
 <template>
   <div class="g-container">
     <div class="g-number">
-      <span class="value">{{ show_current_value }}</span>
+      <span class="value">
+        <ValueShow :name="props.name" :proto_type="props.proto_type" :data_store="props.data_store" :store_getter_key="props.store_getter_key" />
+      </span>
       <span class="unit">mA</span>
     </div>
     <div class="g-contrast">
@@ -30,24 +32,17 @@
 
 
 <script  setup>
-import { onMounted,ref,watch } from 'vue';
-// import { useTemCurStore } from "@/store/TenCurData";
-// const store = useTemCurStore();       // store
-
-const show_current_value = ref(0); // 用于显示的current
+import ValueShow from "@/components/showContent/ValueShow.vue";
 // 父子接口
 const props = defineProps({
-  childname: {type:String, default:'Laser_One'}
+  name:  { type: String, default: 'None-name' },
+  proto_type: { type: null, default: 'None-type' },
+  data_store: { type: null , required: true},
+  store_getter_key:{type:null,required:true},
 });
 
-
-// watch(() => store.getLatestCurrent(props.childname),
-//     (newVal, oldVal) => {
-//       show_current_value.value = newVal;   //更新值
-//     }
-// );
-
 </script>
+
 
 
 <style lang="scss" scoped>

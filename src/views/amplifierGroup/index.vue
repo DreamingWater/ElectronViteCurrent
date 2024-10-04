@@ -4,10 +4,11 @@
           <Cardhead :module_name="ModuleName" name="Amplifier" ></Cardhead>
        </div>
         <div class="section-body">
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE" card_name="PreAmplifier"/>
-<!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO" card_name="Amplifier1rt"/>-->
-<!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="Amplifier2nd"/>-->
-            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="PowerAmplifier"/>
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="ONE" card_name="PreAmplifier"  :max_value="AmplifierConfig.ONE" v-if="channel_one" />
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="TWO" card_name="Amplifier1rt" :max_value="AmplifierConfig.TWO" v-if="channel_two"/>
+            <!--            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="Amplifier2nd"/>-->
+            <AmplifierCard :module_name="ModuleName" name="Amplifier" proto_type="THREE" card_name="PowerAmplifier"  :max_value="AmplifierConfig.THREE" v-if="channel_three" />
+
           <template v-if="showCard" >
             <GiantSquid  @click="toggleShowCard"></GiantSquid>
           </template>
@@ -28,14 +29,25 @@
     import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
     const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
     const showCard= ref(true);     // 显示卡片还是显示pid的参数框框
-    import { onMounted,ref } from 'vue';
+    import { onMounted,ref ,computed} from 'vue';
+    import get_control_config_based_version from "@/api/Versions/VersionControl";
 
     const ModuleName = ref(PageModulesNames.Amplifier);
+    const AmplifierConfig = ref(null);
+    const channel_one = computed(()=>AmplifierConfig.value?.ONE);
+    const channel_two = computed(()=>AmplifierConfig.value?.TWO);
+    const channel_three = computed(()=>AmplifierConfig.value?.THREE);
     const toggleShowCard = () => {
       showCard.value = !showCard.value;
     }
     onMounted (()=>{
       setCurrentPageLocationState(PageLocationStateEnum.Amplifier); // set current page location as amplifier
+      // 获取控制目标的sms，然后配置放大器页面
+      const target_config_object = get_control_config_based_version(localStorage.getItem('control_device_sms'));
+      if(target_config_object){
+        AmplifierConfig.value = target_config_object.Amplifier;
+        //console.log('AmplifierConfig',AmplifierConfig.value);
+      }
     })
 </script>
 <style lang="scss" scoped>

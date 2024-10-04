@@ -9,13 +9,14 @@ import { useOscillatorGroupStore} from "@/store/oscillatorGroup";
 
 class SerialOscillator {
 
-    HeartReplyTask( interval: number,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval'){
+    HeartReplyTask(heart_index:number, interval: number,other_instruct: 'initial' | 'internal' | null=null,executionMode: 'once' | 'interval' | 'continuous'='interval'){
         const store_result = getStoreByPageLocation(PageLocationStateEnum.Oscillator);
         const serial_store = store_result.store();
 
         const heart_package = [{
-            data_type: 'HeartReply',
-            value:1,
+            data_type: 'HeartReplyIndex',
+            value:heart_index,
+            function_index:heart_index,
         }]
         const packaged_heart_data = serial_data_package_factory(heart_package, PageLocationStateEnum.Oscillator, other_instruct);
         let heart_package_name = `${packaged_heart_data[packaged_heart_data.length-1]['data_type']}`;

@@ -40,9 +40,8 @@
     const manager_store = useMonitorStore();
 
     const protection_process = new ProtectionClass(seed_store,amplifier_store,manager_store);
-    protection_process.checkAmplifierPower();    // 种子光开启之后才能开放大
-    protection_process.checkManager();           // 防止放大部分光纤断掉
-    protection_process.checkTemperature();       // 温度过高的时候自动关闭
+    protection_process.checkAmplifierEnableOrder();    // 种子光开启之后才能开放大
+    protection_process.checkAmplifierWorking();           // 防止放大部分光纤断掉
 
 
     update_serial_config();     // 开机的时候自动读取config文件的内容

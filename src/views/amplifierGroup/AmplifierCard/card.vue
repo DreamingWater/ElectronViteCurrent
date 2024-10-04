@@ -45,25 +45,14 @@
      name: { type: String, default: 'None-name' },
      proto_type:{type: String, default: 'None-type'},  // proto_type 可以是 ONE TWO THREE
      card_name: { type: String, default: 'None-name' },
-
+     max_value: { type: Number, default: 1000 },
    });
    const min_value = ref(0);
-   const valueMap = {
-     'ONE': 20000,
-     'TWO': 10,
-     'THREE': 40000
-     
-   };
-   const max_value:number = computed(()=>{
-     return valueMap[props.proto_type]
-   });
 
    import { useAmplifierGroupStore } from "@/store/amplifierGroup";
    import {
      AmplifierSettingDataModel,
      AmplifierGettingDataModel,
-     DataTypeModel,
-     AmplifierChannelModel, CurrentPowerValueModel
    } from '@/types/amplifier';
 
    const amplifier_store = useAmplifierGroupStore();       // store

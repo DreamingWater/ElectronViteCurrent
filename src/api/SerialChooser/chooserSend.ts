@@ -17,7 +17,7 @@ export async function  connectAndInitializeSerial(port: string, store:any, flag:
         append_serial_data_parser(use_parser, pageLocation);
         schedulerSerial.addSerialSendPackagesTask([], pageLocation, 1, 'internal', 'continuous');
         store.changeSerialConnectState(use_port, use_parser, true, port);
-        schedulerSerial.addSerialSendPackagesTask([], pageLocation, 2, 'initial', 'continuous');
+        schedulerSerial.addSerialSendPackagesTask([], pageLocation, 4, 'initial', 'interval');
     }
 }
 

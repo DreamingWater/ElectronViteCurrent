@@ -2,45 +2,24 @@
   <div class="box-progress-wrapper">
     <p class="box-progress-header">Control Section</p>
     <div class="control-pannel">
-      <div class="temprature-control">
-        <div class="control-pannel-header">
-          <div class="control-pannel-name">Temprature</div>
-          <div class="conrol-pannel-label">
-<!--            <SwitchButtons :childname="CardLabel" property="temprature"/>-->
-          </div>
-        </div>
-        <div class="icon-control">
-          <div class="input-control">
-            <InputBox  :data_store="oscillator_store" :store_setting_key="set_power_data" :store_getter_key="show_power_data" :min_value="min_value" :max_value="max_value"/>
-          </div>
-        </div>
-        <div class="click_circle">
-          <SendAirPlane name="oscillator-temperature" :proto_type='proto_type' :module_name="module_name" :data_store="oscillator_store" :data_package="packaged_send_data"/>
-        </div>
-      </div>
-      <div class="current-control">
-        <div class="control-pannel-header">
-          <div class="control-pannel-name"> Current</div>
-          <div class="conrol-pannel-label">
-<!--            <SwitchButtons :childname="CardLabel" property="current"/>-->
-          </div>
-        </div>
-        <div class="icon-control">
-          <InputBox  :data_store="oscillator_store" :store_setting_key="set_power_data" :store_getter_key="show_power_data" :min_value="min_value" :max_value="max_value"/>
-        </div>
-        <div class="click_circle">
-          <SendAirPlane name="oscillator-temperature" :proto_type='proto_type' :module_name="module_name" :data_store="oscillator_store" :data_package="packaged_send_data"/>
-        </div>
-      </div>
+      <SetCard  :module_name=module_name name="temperature" proto_type="Temp" :data_store="oscillator_store" :store_setting_key="set_temperature_data"
+                  :store_getter_key="show_temperature_data"  :packaged_send_data="packaged_send_temperature_data"   />
+      <SetCard  :module_name=module_name name="current" proto_type="Current" :data_store="oscillator_store" :store_setting_key="set_current_data"
+                :store_getter_key="show_current_data"  :packaged_send_data="packaged_send_current_data"   />
+
     </div>
   </div>
 
 </template>
 
+
+
+
 <script lang='ts' setup>
+import SetCard from "@/views/OscillatorGroup/SettingCard/SetCard.vue";
 // import ChargeView from '@/components/showContent/ChargeCard.vue'
 // import TempratureView from '@/components/showContent/TemperatureDisk.vue'
-import InputBox from  '@/components/TextBox/InputBox.vue'
+// import InputBox from  '@/components/TextBox/InputBox.vue'
 // import ShowFoldLine from '@/components/animation/ShowFoldLine.vue'
 // import SwitchButtons from  '@/components/component/switchinput.vue'
 import { ref } from 'vue';
@@ -65,27 +44,35 @@ import { useOscillatorGroupStore } from "@/store/oscillatorGroup";
 import {
   OscillatorSettingDataModel,
   OscillatorGettingDataModel} from '@/types/oscillator';
-import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
+
 
 const oscillator_store = useOscillatorGroupStore();
 
 
 // @ts-nocheck
-const set_power_data:OscillatorSettingDataModel = {
+const set_temperature_data:OscillatorSettingDataModel = {
   data_type: 'SetTemperature',
   value: 0,
 };
-const show_power_data:OscillatorGettingDataModel = {
+const show_temperature_data:OscillatorGettingDataModel = {
   data_type: 'WorkingTemperature',
 };
-
+const set_current_data:OscillatorSettingDataModel = {
+  data_type: 'SetCurrent',
+  value: 0,
+};
+const show_current_data:OscillatorGettingDataModel = {
+  data_type: 'WorkingCurrent',
+};
 // @ts-nocheck
 
-const packaged_send_data = ref([
-  [show_power_data,set_power_data,30]
+const packaged_send_current_data = ref([
+  [show_current_data,set_current_data,0]
 ])
 
-
+const packaged_send_temperature_data = ref([
+  [show_temperature_data,set_temperature_data,0]
+])
 
 
 
@@ -284,82 +271,15 @@ $greyDark: #9baacf;
   position: relative;
   height: 200px;
   justify-content: space-around;
-  .temprature-show {
-    float: left;
-  }
-
-  .current-show {
-    float: right;
-  }
 }
+
 .control-pannel{
-  margin-top: 15px;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  position: relative;
-  justify-content: space-around;
-  .control-pannel-header{
+
+    margin-top: 15px;
     text-align: center;
     display: flex;
     flex-direction: row;
     position: relative;
-    justify-content: space-between;
-    background-color: rgb(243, 206, 213);
-    border: 1px dashed rgb(252, 178, 109);
-    border-radius: 3px;
-    .control-pannel-name{
-      font-size: 30px;
-      font-family:cursive;
-      color: rgb(245, 106, 175);
-      font-style: italic;
-      float: left;
-      margin-left: 5px;
-    }
-    .conrol-pannel-label{
-      float: right;
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  .temprature-control{
-    float: left;
-    width: 45%;
-    background-color:rgb(254, 228, 210);
-    border: 1px solid rgb(233, 240, 181);
-    border-radius: 3px;
-  }
-  .current-control{
-    float: right;
-    width: 45%;
-    background-color:rgb(254, 228, 210);
-    border: 1px solid rgb(233, 240, 181);
-    border-radius: 3px;
-  }
-  .icon-control{
-    margin-top: 15px;
-    display: flex;
-    justify-content: center;
-    text-align: center;
-  }
+    justify-content: space-around;
 }
-.click_circle {
-  height: 40px;
-  display: flex;
-  flex-direction: row;
-  margin: 10px auto;
-  justify-content: space-around;
-}
-
-// circle wave
-
-.days-left {
-  font-size: 12px;
-  border-radius: 20px;
-  flex-shrink: 0;
-  padding: 0px 16px;
-  text-align: center;
-}
-
 </style>

@@ -11,19 +11,23 @@ const create_store_object = ()=>{
 }
 
 const actions = {
+    // Monitor 检测
     'ee': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
-        if( data.length === 1){
+        if( data.length < 5){
+            console.log('data length is not enough in receiving the monitor data');
             return
         }
+        // 已经读取到现在的设备信息
+        localStorage.set('control_device_sms',dataString.slice(0,8));
         // 读取设置的功率
         const set_monitor_power :MonitorSettingDataModel = {
             data_type: 'BackPower',
-            value:parseFloat((data.readUInt16LE(0) / 4096 * 3.3).toFixed(2)), // 电压值
-
+            value:parseFloat((data.readUInt16LE(4) / 4096 * 3.3).toFixed(2)), // 电压值
         }
         store.setTargetParameter(set_monitor_power);
     },
+    // 温度湿度检测
     'ef': (dataString:string,store:any)=> {
         let data = Buffer.from(dataString, 'hex');
         if( data.length === 1){

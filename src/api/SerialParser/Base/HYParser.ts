@@ -16,8 +16,9 @@ function calc_checksum_str(str_data: string): string {
     return check_data.toString('hex');
 }
 
-export function HYParseFrameData(data_str: string): {valid_frame:boolean, function_code: string, data: string,valid_data_num:number } | null {
+export function HYParseFrameData(data_str: string): {valid_frame:boolean, function_code: string, function_index:string, data: string,valid_data_num:number } | null {
     const function_code = data_str.slice(4, 6);
+
     const dataLength = parseInt(data_str.slice(6, 8), 16);
 
     if (data_str.length < 8 + dataLength * 2 + 4) {
@@ -33,7 +34,8 @@ export function HYParseFrameData(data_str: string): {valid_frame:boolean, functi
 
     let valid_frame = true;      // check_data === calculated_check_data;
     let valid_data_num = 8 + dataLength * 2 + 4;
-    return {valid_frame, function_code, data ,valid_data_num};
+    const function_index:string = "";
+    return {valid_frame, function_code, function_index, data ,valid_data_num};
     // 55aac804b004eb009ff1
     }
 

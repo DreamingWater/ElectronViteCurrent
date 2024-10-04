@@ -20,7 +20,7 @@ class StringParser {
         }
     }
 
-    parseFrame(): { function_code: string, data: string } | null {
+    parseFrame(): { function_code: string, function_index:string, data: string } | null {
         let result;
         // Find the frame head
         const delimiterIndex = this.str.toLowerCase().indexOf(this.delimiter);
@@ -39,11 +39,11 @@ class StringParser {
             result = RXParseFrameData(this.str);
         }
         if (result) {
-            const { valid_frame, function_code, data,valid_data_num } = result;
+            const { valid_frame, function_code,function_index, data,valid_data_num } = result;
             // console.log('valid_frame',valid_frame);
             if (valid_frame) {     // monitor 的校验位是固定死的
                 this.str = this.str.slice(valid_data_num); // 丢弃一个数据范围
-                return { function_code, data };
+                return { function_code, function_index, data };
             }else {
 
             }

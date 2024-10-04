@@ -39,7 +39,7 @@ class SchedulerPipeline {
 
     private processTask(task: { name: string, execFunction: (args: object) => any, args: object[], runStatus: { value: number }, interval: number, timeoutId?: NodeJS.Timeout, currentIndex: number, executionMode: string }) {
         const result = task.execFunction(task.args[task.currentIndex]);
-        task.runStatus.value = 1;
+         task.runStatus.value = 1;
 
         // If the task function returns a value, use it as the new args
         if (result !== undefined) {
@@ -56,8 +56,9 @@ class SchedulerPipeline {
                 // else {
                     // Move to the next index, or reset to 0 if we've reached the end of the array
                     task.currentIndex = (task.currentIndex + 1) % task.args.length;
+                // console.log('deal one task:', task.name, task.currentIndex, task.args[task.currentIndex],task.args,task.executionMode);
 
-                    // If we've looped through all args, cancel the task
+                // If we've looped through all args, cancel the task
                     if (task.currentIndex === 0 && task.args.length >= 1 && task.executionMode === 'interval') {
                         this.cancelTask(task.name);
                     } else {
@@ -83,6 +84,7 @@ class SchedulerPipeline {
             // packaged_data 是二维数组
             for (const data_package of packaged_data) {
                 let this_data_package_name = `${data_package[0]['data_type']}`;
+
                 scheduler.addTask(this_data_package_name, store.sendSerialData, data_package, interval,executionMode);
             }
         } else if(packaged_data.length === 0) {

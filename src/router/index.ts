@@ -3,8 +3,9 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router= createRouter({
   routes: [
+    { path: '/', component:() =>  import('@/views/OscillatorGroup/index.vue') },
     // { path: '/', component:() => import('@/views/Manager/index.vue') },
-    { path: '/', component:() => import('@/views/OscillatorGroup/index.vue') },
+    { path: '/oscillator', component:() => import('@/views/OscillatorGroup/index.vue') },
     { path: '/creater', component: () => import('@/views/seedPurchased/index.vue') },
     { path: '/amplifier', component: () => import('@/views/amplifierGroup/index.vue') },
     { path: '/test', component: () => import('@/views/test/test.vue') },

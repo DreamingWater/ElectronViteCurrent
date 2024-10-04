@@ -60,7 +60,7 @@ function createSerialGroupStore(id: string,baudRate:number,target:PageLocationSt
                 if (this.Serial_Data.SerialObject) {
                     try {
                         this.Serial_Data.SerialObject.write(data);
-                        console.log(data.toString('hex'));
+
                     }catch (e) {console.log(e);}
                 }
                // console.log('模拟串口发送：',data.toString('hex'));
@@ -92,7 +92,7 @@ export const useSerialWaterCoolingStore = createSerialGroupStore('use-serial-wat
 export  const getStoreByPageLocation = (pageLocation: PageLocationStateEnum) => {
     switch (pageLocation) {
         case PageLocationStateEnum.Oscillator:
-            // console.log('useSerialOscillatorStore');
+            console.log('useSerialOscillatorStore');
             return {store: useSerialOscillatorStore, flag: '4544'}
         case PageLocationStateEnum.Amplifier:
             // console.log('useSerialAmplifierStore');

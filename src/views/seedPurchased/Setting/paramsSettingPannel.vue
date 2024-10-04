@@ -22,20 +22,35 @@
 
 <script lang='ts' setup>
   // @ts-nocheck
-  import { ref } from 'vue' ;
+  import {ref, onMounted, computed} from 'vue' ;
   import SendAirPlane from "@/components/ButtonContent/SendAirPlane.vue";
   import ShowInput from "@/components/Items/ShowInput.vue";
-  import { shown_setting_power_wavelength, packaged_setting_power_wavelength} from '@/views/seedPurchased/setParams'
+  import {
+    shown_setting_power_wavelength,
+    packaged_setting_power_wavelength,
+    SeedPurchasedConfig
+  } from '@/views/seedPurchased/setParams'
 
   import { useSeedPurchasedStore } from "@/store/seedPurchased";
-    const seed_purchased_store = useSeedPurchasedStore();       // store
-
-
+  import get_control_config_based_version from "@/api/Versions/VersionControl";
+  const seed_purchased_store = useSeedPurchasedStore();       // store
   const props = defineProps({
     module_name: { type: null, required: true },
     name: { type: String, default: 'none-Name' },
   });
 
+
+
+
+
+
+onMounted(()=>{
+  const target_config_object = get_control_config_based_version(localStorage.getItem('control_device_sms'));
+  if(target_config_object){
+    SeedPurchasedConfig.value = target_config_object.SeedPurchased;
+    console.log('AmplifierConfig',SeedPurchasedConfig.value);
+  }
+})
 
 
 </script>

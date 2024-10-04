@@ -1,22 +1,25 @@
 <template>
-  <div :id="`${childname}-temprature-container`" class="temprature-container"></div>
+  <div :id="`${name}-temprature-container`" class="temprature-container"></div>
 </template>
 
 <script  setup>
 import * as echarts from 'echarts';
 import { onMounted, watch } from 'vue';
-// import { useTemCurStore } from "@/store/TenCurData";
+
 // 父子接口
 const props = defineProps({
-  childname: { type: String, default: 'Laser_One' },
-  temperature_value: { type: Number, default: 0 },
+  name:  { type: String, default: 'None-name' },
+  proto_type: { type: null, default: 'None-type' },
+  data_store: { type: null , required: true},
+  store_getter_key:{type:null,required:true},
 });
+
 const Min_value = 0;  // 最小值
 const Max_value = 60;  // 最大值
-// const store = useTemCurStore();       // store
+
 let myChart;
 onMounted (()=>{
-  const this_canvas_name = props.childname + '-temprature-container';
+  const this_canvas_name = props.name + '-temprature-container';
   var dom = document.getElementById(this_canvas_name);
   myChart = echarts.init(dom, null, {
     renderer: 'canvas',
@@ -144,29 +147,33 @@ onMounted (()=>{
   window.addEventListener('resize', myChart.resize);
 })
 
-// watch(() => store.getLatestTemprature(props.childname),
-//     (newVal, oldVal) => {
-//       window.console.log('store changed in temprature');
-//       myChart.setOption({
-//         series: [
-//           {
-//             data: [
-//               {
-//                 value: newVal
-//               }
-//             ]
-//           },
-//           {
-//             data: [
-//               {
-//                 value: newVal
-//               }
-//             ]
-//           }
-//         ]
-//       });
-//     }
-// );
+// name:  { type: String, default: 'None-name' },
+// proto_type: { type: null, default: 'None-type' },
+// data_store: { type: null , required: true},
+// store_getter_key:{type:null,required:true},
+
+watch(() => props.data_store.getTargetParameter(props.store_getter_key),
+    (newVal, oldVal) => {
+      myChart.setOption({
+        series: [
+          {
+            data: [
+              {
+                value: newVal
+              }
+            ]
+          },
+          {
+            data: [
+              {
+                value: newVal
+              }
+            ]
+          }
+        ]
+      });
+    }
+);
 
 </script>
 

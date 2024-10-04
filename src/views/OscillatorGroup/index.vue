@@ -1,26 +1,25 @@
 <template>
   <div class="projects-section">
     <div class="section-body">
-      <oscillatorView />
-
+      <oscillatorView :module_name="ModuleName"/>
     </div>
   </div>
 </template>
 
 <script setup>
 
-import {computed, onMounted, ref, unref} from 'vue';
-import oscillatorView from './oscillatorView.vue'
+  import {computed, onMounted, ref, unref} from 'vue';
+  import oscillatorView from './oscillatorView.vue'
 
-// 页面位置 和 页面 module
-import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
+  // 页面位置 和 页面 module
+  import { PageLocationStateEnum, usePageLocationState,PageModulesNames } from '@/api/pageLocation'
 
-const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
+  const { setCurrentPageLocationState, getCurrentPageLocationState} = usePageLocationState();
 
-const ModuleName = ref(PageModulesNames.Manager);
-onMounted (()=>{
-  setCurrentPageLocationState(PageLocationStateEnum.Oscillator); // set current page location as Manager
-})
+  const ModuleName = ref(PageModulesNames.Oscillator);
+  onMounted (()=>{
+    setCurrentPageLocationState(PageLocationStateEnum.Oscillator); // set current page location as Manager
+  })
 </script>
 
 

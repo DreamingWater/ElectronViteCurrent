@@ -83,16 +83,16 @@
     const click_sender_circle_ = ()=>{
       if (enable_open_status.value){
         console.log('enable_open_status',enable_open_status.value);
-       return;       // 没连接串口就不允许启动
+       // return;       // 没连接串口就不允许启动
       }
       enable_status.value = enable_status.value === 1 ? 0 : 1;
       const send_value_package = JSON.parse(JSON.stringify(props.data_package));  // 除开关之外的包数据
       const enable_data_package = props.store_key;    // 开关的包数据
       enable_data_package.value = enable_status.value // 修改开关状态
       send_value_package?.push(enable_data_package)   // 将开关启动的数据传递进去
-      console.log('send_value_package',send_value_package);
+      // console.log('send_value_package',send_value_package);
       if (enable_status.value === 1){
-        schedulerSerial.addSerialSendPackagesTask(send_value_package, current_page_location,0,null,'once');
+        schedulerSerial.addSerialSendPackagesTask(send_value_package, current_page_location,1,null,'interval');
       }else {
         console.log('shut down the module task from the close button!!!!!!')
         schedulerSerial.addShutdownTask(2,props.data_store,null,'interval');

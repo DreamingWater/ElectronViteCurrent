@@ -47,20 +47,28 @@ const getPorts = async () => {
 };
 
 const connect = () => {
-  ({ port: use_port, parser: use_parser } = askForSerialConnection('COM12', 9600,true));
+  ({ port: use_port, parser: use_parser } = askForSerialConnection('COM6', 115200 ,'4544'));
   console.log(use_parser);
 };
 
 const sendDataFunc = () => {
   // sendDataBySerial(use_port,sendData.value);
   // sendData.value = '';
-  const send_data = Buffer.from([0xAA,0x55,0xD1,0x00,0x00,0x00,0x0d,0x0a]);
+  // const hexString = '535401000000e1e2e3e4e5e60a00010001000400e8030000ec8f4544';
+  // const send_data = Buffer.concat([Buffer.from(hexString, 'hex'), Buffer.from('\n')]);
+// '535401000000e1e2e3e4e5e60a00010001000400e8030000ec8f4544'
+  const hexString = '535401000000e1e2e3e4e5e60a00010001000400e8030000ec8f4544';
+  const send_data = Buffer.from(hexString, 'hex');
+  // console.log(buffer);
+  // console.log(buffer);
+  // const send_data = Buffer.from([0xAA,0x55,0xD1,0x00,0x00,0x00,0x0d,0x0a]);
   // sendDataBySerial(use_port,send_data);
   use_port.write(send_data);
+  console.log('send data:',send_data);
 };
 
 const disconnect = () => {
-  closePort(use_port);
+ use_port.close();
 };
 
 
