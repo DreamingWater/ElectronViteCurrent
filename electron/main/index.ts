@@ -3,7 +3,7 @@ import { release } from 'node:os'
 import { join } from 'node:path'
 import windowStateKeeper from 'electron-window-state'
 // 调试
-import { installExtension, VUEJS_DEVTOOLS ,VUEJS_DEVTOOLS_BETA} from '@tomjs/electron-devtools-installer';
+// import { installExtension, VUEJS_DEVTOOLS ,VUEJS_DEVTOOLS_BETA} from '@tomjs/electron-devtools-installer';
 
 //
 // ├─┬ dist-electron
@@ -171,9 +171,9 @@ async function  loadingWindow() {
 }
 // 程序开始时候启动loading 效果
 app.whenReady().then(() => {
-  installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
-      .then(ext => console.log(`Added Extension:  ${ext.name}`))
-      .catch(err => console.log('An error occurred: ', err));
+  // installExtension(VUEJS_DEVTOOLS) // equals to installExtension("nhdogjmejiglipccpnnnanhbledajbpd")
+  //     .then(ext => console.log(`Added Extension:  ${ext.name}`))
+  //     .catch(err => console.log('An error occurred: ', err));
   loadingWindow();
 })
 

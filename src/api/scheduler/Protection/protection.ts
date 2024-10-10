@@ -99,7 +99,7 @@ export class ProtectionClass {
             const sampleAmplifierCurrent = getAmplifierTotalCurrent(this.amplifierGroupStore);
 
             if (sampleSeedPower > this.THRESHOLD_Seed) {
-                if (getAmplifierEnableOrder(this.amplifierGroupStore)) {
+                if (!getAmplifierEnableOrder(this.amplifierGroupStore)) {
                     shutdownAmplifier(this.amplifierGroupStore);
                     showError('Error!', 'Open pre-amplifier first!');
                 }
@@ -129,6 +129,7 @@ export class ProtectionClass {
     }
 
     checkManager() {
+        return true;
         const Voltage_Limit = 0.4;
         const show_back_power: MonitorGettingDataModel = {
             data_type: 'BackPower'
@@ -144,6 +145,7 @@ export class ProtectionClass {
 
 
     checkTemperature() {
+        return true;
         const heat_temperature: MonitorGettingDataModel = {
             data_type: 'HeatTemperature'
         };

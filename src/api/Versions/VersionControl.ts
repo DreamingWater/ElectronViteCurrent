@@ -24,7 +24,6 @@ const VersionControlManager = {
     'eeeeee02': {
         'Amplifier': {
             'ONE':20000,
-            'THREE':40000,
         },
         'SeedPurchased': {
             'POWER': 40000,
@@ -38,7 +37,7 @@ const get_control_config_based_version = (version: string) => {
     if (version in VersionControlManager) {
         return VersionControlManager[version];
     } else {
-        return VersionControlManager['eeeeee01'];
+        return VersionControlManager['eeeeee02'];
     }
 }
 export default get_control_config_based_version;

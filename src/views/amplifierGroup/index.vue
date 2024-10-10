@@ -44,6 +44,7 @@
       setCurrentPageLocationState(PageLocationStateEnum.Amplifier); // set current page location as amplifier
       // 获取控制目标的sms，然后配置放大器页面
       const target_config_object = get_control_config_based_version(localStorage.getItem('control_device_sms'));
+      console.log(target_config_object);
       if(target_config_object){
         AmplifierConfig.value = target_config_object.Amplifier;
         //console.log('AmplifierConfig',AmplifierConfig.value);
